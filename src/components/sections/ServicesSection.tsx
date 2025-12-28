@@ -18,49 +18,41 @@ const services = [
     icon: Tv,
     title: "TV Mounting",
     description: "Professional wall mounting for any TV size. Includes cable management and optimal positioning.",
-    price: "From $99",
   },
   {
     icon: Wifi,
     title: "Network Setup",
     description: "Complete home network installation, router configuration, and WiFi optimization.",
-    price: "From $79",
   },
   {
     icon: Speaker,
     title: "Audio Systems",
     description: "Surround sound, speaker placement, and audio system configuration for the perfect sound.",
-    price: "From $149",
   },
   {
     icon: Monitor,
     title: "Computer Setup",
     description: "Desktop and laptop setup, software installation, and peripheral configuration.",
-    price: "From $69",
   },
   {
     icon: Smartphone,
     title: "Smart Home",
     description: "Smart device installation, app setup, and voice assistant integration.",
-    price: "From $89",
   },
   {
     icon: Home,
     title: "Home Theater",
     description: "Complete entertainment system setup with projector, screen, and audio integration.",
-    price: "From $299",
   },
   {
     icon: Camera,
     title: "Security Systems",
     description: "Camera installation, DVR setup, and remote viewing configuration.",
-    price: "From $149",
   },
   {
     icon: Lightbulb,
     title: "Smart Lighting",
     description: "Smart bulb installation, dimmer switches, and automated lighting scenes.",
-    price: "From $79",
   },
 ];
 
@@ -119,10 +111,9 @@ export function ServicesSection() {
                 <service.icon className="w-6 h-6 text-primary" />
               </div>
               <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
-              <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {service.description}
               </p>
-              <span className="text-primary font-semibold">{service.price}</span>
             </motion.div>
           ))}
         </motion.div>
