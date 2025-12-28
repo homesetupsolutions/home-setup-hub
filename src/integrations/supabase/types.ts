@@ -113,13 +113,6 @@ export type Database = {
             referencedRelation: "appointments"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "messages_appointment_id_fkey"
-            columns: ["appointment_id"]
-            isOneToOne: false
-            referencedRelation: "staff_appointments_view"
-            referencedColumns: ["id"]
-          },
         ]
       }
       profiles: {
@@ -284,74 +277,11 @@ export type Database = {
             referencedRelation: "appointments"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "work_photos_appointment_id_fkey"
-            columns: ["appointment_id"]
-            isOneToOne: false
-            referencedRelation: "staff_appointments_view"
-            referencedColumns: ["id"]
-          },
         ]
       }
     }
     Views: {
-      staff_appointments_view: {
-        Row: {
-          address: string | null
-          created_at: string | null
-          customer_email: string | null
-          customer_id: string | null
-          customer_name: string | null
-          customer_phone: string | null
-          duration_minutes: number | null
-          id: string | null
-          notes: string | null
-          scheduled_at: string | null
-          service_name: string | null
-          service_price: number | null
-          square_booking_id: string | null
-          staff_id: string | null
-          status: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          address?: never
-          created_at?: string | null
-          customer_email?: never
-          customer_id?: string | null
-          customer_name?: never
-          customer_phone?: never
-          duration_minutes?: number | null
-          id?: string | null
-          notes?: string | null
-          scheduled_at?: string | null
-          service_name?: string | null
-          service_price?: number | null
-          square_booking_id?: string | null
-          staff_id?: string | null
-          status?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          address?: never
-          created_at?: string | null
-          customer_email?: never
-          customer_id?: string | null
-          customer_name?: never
-          customer_phone?: never
-          duration_minutes?: number | null
-          id?: string | null
-          notes?: string | null
-          scheduled_at?: string | null
-          service_name?: string | null
-          service_price?: number | null
-          square_booking_id?: string | null
-          staff_id?: string | null
-          status?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       get_user_role: {

@@ -102,7 +102,45 @@ Deno.serve(async (req) => {
       );
     }
 
-    const { action, customerId, limit = 50, cursor } = await req.json();
+    const raw = await req.json().catch(() => null);
+    if (!raw || typeof raw !== 'object') {
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON body' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const allowedActions = new Set([
+      'list_customers',
+      'get_customer',
+      'search_customers',
+      'list_bookings',
+      'get_booking',
+      'list_payments',
+    ]);
+
+    const action = typeof raw.action === 'string' ? raw.action : '';
+    if (!allowedActions.has(action)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid action' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const limitRaw = raw.limit ?? 50;
+    const limit = Number.isInteger(limitRaw) ? Number(limitRaw) : 50;
+    if (limit < 1 || limit > 100) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid limit (1-100)' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const customerId = typeof raw.customerId === 'string' && raw.customerId.length <= 128 ? raw.customerId : undefined;
+    const bookingId = typeof raw.bookingId === 'string' && raw.bookingId.length <= 128 ? raw.bookingId : undefined;
+    const cursor = typeof raw.cursor === 'string' && raw.cursor.length <= 500 ? raw.cursor : undefined;
+    const query = typeof raw.query === 'string' && raw.query.length <= 200 ? raw.query : undefined;
+
     console.log('Processing action:', action, 'customerId:', customerId);
 
     const squareBaseUrl = 'https://connect.squareup.com/v2';
@@ -173,7 +211,6 @@ Deno.serve(async (req) => {
       }
 
       case 'get_booking': {
-        const { bookingId } = await req.json();
         if (!bookingId) throw new Error('Booking ID required');
         
         const response = await fetch(`${squareBaseUrl}/bookings/${bookingId}`, { headers });
@@ -210,8 +247,6 @@ Deno.serve(async (req) => {
       }
 
       case 'search_customers': {
-        const { query } = await req.json();
-        
         const searchBody = {
           limit,
           query: {
