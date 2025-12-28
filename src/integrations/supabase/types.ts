@@ -77,6 +77,48 @@ export type Database = {
         }
         Relationships: []
       }
+      call_logs: {
+        Row: {
+          created_at: string
+          customer_id: string | null
+          customer_name: string | null
+          direction: string
+          duration_seconds: number | null
+          ended_at: string | null
+          id: string
+          notes: string | null
+          phone_number: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id?: string | null
+          customer_name?: string | null
+          direction: string
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          notes?: string | null
+          phone_number: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string | null
+          customer_name?: string | null
+          direction?: string
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          notes?: string | null
+          phone_number?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           appointment_id: string | null
