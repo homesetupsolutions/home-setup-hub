@@ -10,7 +10,7 @@ const navLinks = [
   { label: "Services", path: "/#services", staffOnly: false },
   { label: "About", path: "/#about", staffOnly: false },
   { label: "Book Now", path: "/book", staffOnly: false },
-  { label: "Docs", path: "/docs", staffOnly: true },
+  { label: "Staff Portal", path: "/staff", staffOnly: true },
   { label: "Contact", path: "/#contact", staffOnly: false },
 ];
 
