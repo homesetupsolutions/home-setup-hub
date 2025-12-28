@@ -34,6 +34,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StaffManagement from "@/components/staff/StaffManagement";
 import SiteSettings from "@/components/staff/SiteSettings";
 import SMSServices from "@/components/staff/SMSServices";
+import { CustomersTab } from "@/components/admin/CustomersTab";
+import { BookingsTab } from "@/components/admin/BookingsTab";
+import { PaymentsTab } from "@/components/admin/PaymentsTab";
 
 const staffResources = [
   {
@@ -245,24 +248,36 @@ const StaffPortal = () => {
 
             {/* Main Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className={`grid w-full mb-8 ${isAdmin ? 'grid-cols-4' : 'grid-cols-2'}`}>
+              <TabsList className={`grid w-full mb-8 ${isAdmin ? 'grid-cols-7' : 'grid-cols-4'}`}>
                 <TabsTrigger value="resources" className="gap-2">
                   <BookOpen className="h-4 w-4" />
                   <span className="hidden sm:inline">Resources</span>
                 </TabsTrigger>
+                <TabsTrigger value="customers" className="gap-2">
+                  <Users className="h-4 w-4" />
+                  <span className="hidden sm:inline">Customers</span>
+                </TabsTrigger>
+                <TabsTrigger value="bookings" className="gap-2">
+                  <Calendar className="h-4 w-4" />
+                  <span className="hidden sm:inline">Bookings</span>
+                </TabsTrigger>
                 <TabsTrigger value="sms" className="gap-2">
                   <MessageSquare className="h-4 w-4" />
-                  <span className="hidden sm:inline">SMS Services</span>
+                  <span className="hidden sm:inline">SMS</span>
                 </TabsTrigger>
                 {isAdmin && (
                   <>
+                    <TabsTrigger value="payments" className="gap-2">
+                      <CreditCard className="h-4 w-4" />
+                      <span className="hidden sm:inline">Payments</span>
+                    </TabsTrigger>
                     <TabsTrigger value="staff" className="gap-2">
                       <UserCog className="h-4 w-4" />
-                      <span className="hidden sm:inline">Staff Management</span>
+                      <span className="hidden sm:inline">Staff</span>
                     </TabsTrigger>
                     <TabsTrigger value="settings" className="gap-2">
                       <Settings className="h-4 w-4" />
-                      <span className="hidden sm:inline">Site Settings</span>
+                      <span className="hidden sm:inline">Settings</span>
                     </TabsTrigger>
                   </>
                 )}
@@ -349,12 +364,24 @@ const StaffPortal = () => {
                 </Card>
               </TabsContent>
 
+              <TabsContent value="customers">
+                <CustomersTab />
+              </TabsContent>
+
+              <TabsContent value="bookings">
+                <BookingsTab />
+              </TabsContent>
+
               <TabsContent value="sms">
                 <SMSServices />
               </TabsContent>
 
               {isAdmin && (
                 <>
+                  <TabsContent value="payments">
+                    <PaymentsTab />
+                  </TabsContent>
+
                   <TabsContent value="staff">
                     <StaffManagement />
                   </TabsContent>
