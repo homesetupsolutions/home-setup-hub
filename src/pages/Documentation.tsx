@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { 
   Book, 
   Shield, 
@@ -19,10 +20,15 @@ import {
   FileText,
   CheckCircle,
   ArrowRight,
-  HelpCircle
+  HelpCircle,
+  Download
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
+const handleDownload = () => {
+  window.print();
+};
 
 const Documentation = () => {
   return (
@@ -40,8 +46,14 @@ const Documentation = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Documentation</h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <div className="flex items-center justify-center gap-4 flex-wrap">
+              <h1 className="text-4xl md:text-5xl font-bold">Documentation</h1>
+              <Button onClick={handleDownload} variant="outline" className="gap-2 print:hidden">
+                <Download className="h-4 w-4" />
+                Download PDF
+              </Button>
+            </div>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mt-4">
               Everything you need to know about using Home Setup Solutions
             </p>
           </motion.div>
