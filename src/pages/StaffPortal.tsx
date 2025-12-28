@@ -151,10 +151,10 @@ const StaffPortal = () => {
     if (!checkingRole && isStaff === false) {
       toast({
         title: "Access Denied",
-        description: "This area is restricted to staff members only.",
+        description: "This area is restricted to staff members only. Redirecting to customer portal...",
         variant: "destructive",
       });
-      navigate("/");
+      navigate("/portal");
     }
   }, [isStaff, checkingRole, navigate, toast]);
 

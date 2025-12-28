@@ -30,10 +30,10 @@ export default function Admin() {
     if (!loading && user && !isAdmin) {
       toast({
         title: 'Access Denied',
-        description: 'You do not have admin privileges.',
+        description: 'You do not have admin privileges. Redirecting to customer portal...',
         variant: 'destructive',
       });
-      navigate('/');
+      navigate('/portal');
     }
   }, [user, loading, isAdmin, navigate, toast]);
 
