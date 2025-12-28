@@ -29,7 +29,7 @@ const contactMethods = [
     icon: Clock,
     title: "Business Hours",
     description: "Mon-Sat",
-    value: "8AM - 8PM",
+    value: "9AM - 9PM",
     href: null,
   },
 ];
