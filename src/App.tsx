@@ -10,6 +10,7 @@ import Book from "./pages/Book";
 import Policy from "./pages/Policy";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import Documentation from "./pages/Documentation";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/policy" element={<Policy />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/docs" element={<Documentation />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
