@@ -1,1 +1,4 @@
 project_id = "adkpgzxnlxzfojemgsof"
+
+[functions.square-crm]
+verify_jwt = false
