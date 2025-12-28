@@ -5,11 +5,12 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Loader2, LogOut, Users, Calendar, CreditCard, RefreshCw } from 'lucide-react';
+import { Loader2, LogOut, Users, Calendar, CreditCard, Phone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { CustomersTab } from '@/components/admin/CustomersTab';
 import { BookingsTab } from '@/components/admin/BookingsTab';
 import { PaymentsTab } from '@/components/admin/PaymentsTab';
+import { PhoneTab } from '@/components/admin/PhoneTab';
 
 export default function Admin() {
   const { user, loading, isAdmin, signOut } = useAuth();
@@ -87,7 +88,7 @@ export default function Admin() {
             transition={{ duration: 0.3 }}
           >
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3 max-w-md">
+              <TabsList className="grid w-full grid-cols-4 max-w-lg">
                 <TabsTrigger value="customers" className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
                   <span className="hidden sm:inline">Customers</span>
@@ -99,6 +100,10 @@ export default function Admin() {
                 <TabsTrigger value="payments" className="flex items-center gap-2">
                   <CreditCard className="h-4 w-4" />
                   <span className="hidden sm:inline">Payments</span>
+                </TabsTrigger>
+                <TabsTrigger value="phone" className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" />
+                  <span className="hidden sm:inline">Phone</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -112,6 +117,10 @@ export default function Admin() {
 
               <TabsContent value="payments">
                 <PaymentsTab />
+              </TabsContent>
+
+              <TabsContent value="phone">
+                <PhoneTab />
               </TabsContent>
             </Tabs>
           </motion.div>

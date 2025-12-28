@@ -4,10 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, RefreshCw, Search, User, Mail, Phone } from 'lucide-react';
+import { Loader2, RefreshCw, Search, User, Mail, Phone, PhoneCall } from 'lucide-react';
 import { listCustomers, searchCustomers, SquareCustomer } from '@/lib/squareCRM';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
+import { use3CX } from '@/hooks/use3CX';
 
 export function CustomersTab() {
   const [customers, setCustomers] = useState<SquareCustomer[]>([]);
@@ -15,6 +16,13 @@ export function CustomersTab() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searching, setSearching] = useState(false);
   const { toast } = useToast();
+  const { initiateCall } = use3CX();
+
+  const handleClickToCall = (customer: SquareCustomer) => {
+    if (!customer.phone_number) return;
+    const customerName = `${customer.given_name || ''} ${customer.family_name || ''}`.trim() || 'Unknown';
+    initiateCall(customer.phone_number, customer.id, customerName);
+  };
 
   const fetchCustomers = async () => {
     setLoading(true);
@@ -137,10 +145,14 @@ export function CustomersTab() {
                     </TableCell>
                     <TableCell>
                       {customer.phone_number ? (
-                        <div className="flex items-center gap-2 text-sm">
-                          <Phone className="h-3 w-3 text-muted-foreground" />
+                        <button
+                          onClick={() => handleClickToCall(customer)}
+                          className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 hover:underline transition-colors group"
+                          title="Click to call"
+                        >
+                          <PhoneCall className="h-3 w-3 group-hover:animate-pulse" />
                           {customer.phone_number}
-                        </div>
+                        </button>
                       ) : (
                         <span className="text-muted-foreground">—</span>
                       )}
