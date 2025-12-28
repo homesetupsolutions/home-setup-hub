@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Phone, MessageSquare } from "lucide-react";
+import { Menu, X, Phone, MessageSquare, User, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -15,6 +16,7 @@ const navLinks = [
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { user, isAdmin } = useAuth();
 
   const handleNavClick = (path: string) => {
     setIsOpen(false);
@@ -68,6 +70,32 @@ export function Header() {
               <Phone className="w-4 h-4" />
               <span>833-230-2933</span>
             </a>
+            
+            {/* Login Buttons */}
+            {user ? (
+              <Link to={isAdmin ? "/admin" : "/auth"}>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <User className="w-4 h-4" />
+                  {isAdmin ? "Admin Panel" : "My Account"}
+                </Button>
+              </Link>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link to="/auth?type=customer">
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <User className="w-4 h-4" />
+                    Customer Login
+                  </Button>
+                </Link>
+                <Link to="/auth?type=staff">
+                  <Button variant="ghost" size="sm" className="gap-2">
+                    <Briefcase className="w-4 h-4" />
+                    Staff Login
+                  </Button>
+                </Link>
+              </div>
+            )}
+            
             <Link to="/book">
               <Button variant="hero" size="lg">
                 Book Now
@@ -124,6 +152,32 @@ export function Header() {
                   <MessageSquare className="w-5 h-5" />
                   <span>Text Us</span>
                 </a>
+                
+                {/* Mobile Login Buttons */}
+                {user ? (
+                  <Link to={isAdmin ? "/admin" : "/auth"} className="block">
+                    <Button variant="outline" className="w-full gap-2">
+                      <User className="w-4 h-4" />
+                      {isAdmin ? "Admin Panel" : "My Account"}
+                    </Button>
+                  </Link>
+                ) : (
+                  <>
+                    <Link to="/auth?type=customer" className="block">
+                      <Button variant="outline" className="w-full gap-2">
+                        <User className="w-4 h-4" />
+                        Customer Login
+                      </Button>
+                    </Link>
+                    <Link to="/auth?type=staff" className="block">
+                      <Button variant="ghost" className="w-full gap-2">
+                        <Briefcase className="w-4 h-4" />
+                        Staff Login
+                      </Button>
+                    </Link>
+                  </>
+                )}
+                
                 <Link to="/book" className="block">
                   <Button variant="hero" size="lg" className="w-full">
                     Book Now
