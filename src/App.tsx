@@ -11,6 +11,7 @@ import Policy from "./pages/Policy";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Documentation from "./pages/Documentation";
+import StaffPortal from "./pages/StaffPortal";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/docs" element={<Documentation />} />
+              <Route path="/staff" element={<StaffPortal />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
