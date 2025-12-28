@@ -91,11 +91,11 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:info@homesetupsolutions.ca"
+                  href="mailto:customerservice@homesetupsolutions.ca"
                   className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   <Mail className="w-4 h-4" />
-                  <span>info@homesetupsolutions.ca</span>
+                  <span>customerservice@homesetupsolutions.ca</span>
                 </a>
               </li>
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
