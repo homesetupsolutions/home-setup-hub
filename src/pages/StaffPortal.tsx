@@ -21,12 +21,19 @@ import {
   CreditCard,
   Shield,
   ChevronRight,
-  Home
+  Home,
+  MessageSquare,
+  UserCog,
+  Palette
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import StaffManagement from "@/components/staff/StaffManagement";
+import SiteSettings from "@/components/staff/SiteSettings";
+import SMSServices from "@/components/staff/SMSServices";
 
 const staffResources = [
   {
@@ -80,13 +87,14 @@ const quickLinks = [
 ];
 
 const StaffPortal = () => {
-  const { user, loading, signOut } = useAuth();
+  const { user, loading, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isStaff, setIsStaff] = useState<boolean | null>(null);
   const [checkingRole, setCheckingRole] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [profile, setProfile] = useState<{ full_name: string | null; email: string } | null>(null);
+  const [activeTab, setActiveTab] = useState("resources");
 
   useEffect(() => {
     if (!loading && !user) {
@@ -235,84 +243,128 @@ const StaffPortal = () => {
               </p>
             </div>
 
-            {/* Resource Cards Grid */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
-              {staffResources.map((resource, index) => (
-                <motion.div
-                  key={resource.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <Link to={resource.path}>
-                    <Card className="h-full hover:shadow-lg transition-all duration-300 hover:border-primary/50 group cursor-pointer">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center justify-between">
-                          <div className={`p-3 rounded-lg ${resource.color}`}>
-                            <resource.icon className="h-6 w-6" />
-                          </div>
-                          <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <CardTitle className="text-lg mb-1">{resource.title}</CardTitle>
-                        <CardDescription>{resource.description}</CardDescription>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
+            {/* Main Tabs */}
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className={`grid w-full mb-8 ${isAdmin ? 'grid-cols-4' : 'grid-cols-2'}`}>
+                <TabsTrigger value="resources" className="gap-2">
+                  <BookOpen className="h-4 w-4" />
+                  <span className="hidden sm:inline">Resources</span>
+                </TabsTrigger>
+                <TabsTrigger value="sms" className="gap-2">
+                  <MessageSquare className="h-4 w-4" />
+                  <span className="hidden sm:inline">SMS Services</span>
+                </TabsTrigger>
+                {isAdmin && (
+                  <>
+                    <TabsTrigger value="staff" className="gap-2">
+                      <UserCog className="h-4 w-4" />
+                      <span className="hidden sm:inline">Staff Management</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="settings" className="gap-2">
+                      <Settings className="h-4 w-4" />
+                      <span className="hidden sm:inline">Site Settings</span>
+                    </TabsTrigger>
+                  </>
+                )}
+              </TabsList>
 
-            {/* Quick Links Section */}
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-              <div className="flex flex-wrap gap-3">
-                {quickLinks.map((link) => (
-                  <Link key={link.title} to={link.path}>
-                    <Button variant="outline" className="gap-2">
-                      <link.icon className="h-4 w-4" />
-                      {link.title}
-                    </Button>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Downloads Section */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
-                  Downloadable Resources
-                </CardTitle>
-                <CardDescription>
-                  Download guides and documentation for offline use
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-3">
-                  <a href="/docs/customer-guide.md" download>
-                    <Button variant="secondary" size="sm" className="gap-2">
-                      <FileText className="h-4 w-4" />
-                      Customer Guide
-                    </Button>
-                  </a>
-                  <a href="/docs/admin-guide.md" download>
-                    <Button variant="secondary" size="sm" className="gap-2">
-                      <FileText className="h-4 w-4" />
-                      Admin Guide
-                    </Button>
-                  </a>
-                  <a href="/docs/technical-docs.md" download>
-                    <Button variant="secondary" size="sm" className="gap-2">
-                      <FileText className="h-4 w-4" />
-                      Technical Docs
-                    </Button>
-                  </a>
+              <TabsContent value="resources">
+                {/* Resource Cards Grid */}
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
+                  {staffResources.map((resource, index) => (
+                    <motion.div
+                      key={resource.title}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                    >
+                      <Link to={resource.path}>
+                        <Card className="h-full hover:shadow-lg transition-all duration-300 hover:border-primary/50 group cursor-pointer">
+                          <CardHeader className="pb-3">
+                            <div className="flex items-center justify-between">
+                              <div className={`p-3 rounded-lg ${resource.color}`}>
+                                <resource.icon className="h-6 w-6" />
+                              </div>
+                              <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                            </div>
+                          </CardHeader>
+                          <CardContent>
+                            <CardTitle className="text-lg mb-1">{resource.title}</CardTitle>
+                            <CardDescription>{resource.description}</CardDescription>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    </motion.div>
+                  ))}
                 </div>
-              </CardContent>
-            </Card>
+
+                {/* Quick Links Section */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+                  <div className="flex flex-wrap gap-3">
+                    {quickLinks.map((link) => (
+                      <Link key={link.title} to={link.path}>
+                        <Button variant="outline" className="gap-2">
+                          <link.icon className="h-4 w-4" />
+                          {link.title}
+                        </Button>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Downloads Section */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <FileText className="h-5 w-5" />
+                      Downloadable Resources
+                    </CardTitle>
+                    <CardDescription>
+                      Download guides and documentation for offline use
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-3">
+                      <a href="/docs/customer-guide.md" download>
+                        <Button variant="secondary" size="sm" className="gap-2">
+                          <FileText className="h-4 w-4" />
+                          Customer Guide
+                        </Button>
+                      </a>
+                      <a href="/docs/admin-guide.md" download>
+                        <Button variant="secondary" size="sm" className="gap-2">
+                          <FileText className="h-4 w-4" />
+                          Admin Guide
+                        </Button>
+                      </a>
+                      <a href="/docs/technical-docs.md" download>
+                        <Button variant="secondary" size="sm" className="gap-2">
+                          <FileText className="h-4 w-4" />
+                          Technical Docs
+                        </Button>
+                      </a>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="sms">
+                <SMSServices />
+              </TabsContent>
+
+              {isAdmin && (
+                <>
+                  <TabsContent value="staff">
+                    <StaffManagement />
+                  </TabsContent>
+
+                  <TabsContent value="settings">
+                    <SiteSettings />
+                  </TabsContent>
+                </>
+              )}
+            </Tabs>
           </motion.div>
         </main>
 
