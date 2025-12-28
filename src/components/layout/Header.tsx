@@ -76,10 +76,10 @@ export function Header() {
             
             {/* Login Buttons */}
             {user ? (
-              <Link to={isAdmin ? "/admin" : "/auth"}>
+              <Link to={isAdmin ? "/admin" : "/portal"}>
                 <Button variant="outline" size="sm" className="gap-2">
                   <User className="w-4 h-4" />
-                  {isAdmin ? "Admin Panel" : "My Account"}
+                  {isAdmin ? "Admin Panel" : "My Portal"}
                 </Button>
               </Link>
             ) : (
@@ -160,10 +160,10 @@ export function Header() {
                 
                 {/* Mobile Login Buttons */}
                 {user ? (
-                  <Link to={isAdmin ? "/admin" : "/auth"} className="block">
+                  <Link to={isAdmin ? "/admin" : "/portal"} className="block">
                     <Button variant="outline" className="w-full gap-2">
                       <User className="w-4 h-4" />
-                      {isAdmin ? "Admin Panel" : "My Account"}
+                      {isAdmin ? "Admin Panel" : "My Portal"}
                     </Button>
                   </Link>
                 ) : (

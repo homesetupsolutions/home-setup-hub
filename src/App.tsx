@@ -12,6 +12,7 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Documentation from "./pages/Documentation";
 import StaffPortal from "./pages/StaffPortal";
+import CustomerPortal from "./pages/CustomerPortal";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/admin" element={<Admin />} />
               <Route path="/docs" element={<Documentation />} />
               <Route path="/staff" element={<StaffPortal />} />
+              <Route path="/portal" element={<CustomerPortal />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
