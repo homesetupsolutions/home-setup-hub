@@ -19,25 +19,20 @@ export function CTASection() {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto text-center"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 text-primary text-sm font-medium mb-6">
-            <Sparkles className="w-4 h-4" />
-            <span>Limited Time Offer</span>
-          </div>
-
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-            Get 15% Off Your{" "}
-            <span className="text-gradient-orange">First Booking</span>
+            Ready to Get{" "}
+            <span className="text-gradient-orange">Started?</span>
           </h2>
 
           <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
-            Book your first home setup service today and receive 15% off. 
-            Professional installation at an unbeatable price.
+            Book your home setup service today. 
+            Professional installation by certified technicians.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/book">
               <Button variant="hero" size="xl" className="group">
-                Claim Your Discount
+                Book Now
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
@@ -47,10 +42,6 @@ export function CTASection() {
               </Button>
             </a>
           </div>
-
-          <p className="mt-8 text-sm text-muted-foreground">
-            *Discount applied automatically at checkout. Valid for new customers only.
-          </p>
         </motion.div>
       </div>
     </section>
