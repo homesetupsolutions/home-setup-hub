@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
 const navLinks = [
-  { label: "Home", path: "/" },
-  { label: "Services", path: "/#services" },
-  { label: "About", path: "/#about" },
-  { label: "Book Now", path: "/book" },
-  { label: "Docs", path: "/docs" },
-  { label: "Contact", path: "/#contact" },
+  { label: "Home", path: "/", staffOnly: false },
+  { label: "Services", path: "/#services", staffOnly: false },
+  { label: "About", path: "/#about", staffOnly: false },
+  { label: "Book Now", path: "/book", staffOnly: false },
+  { label: "Docs", path: "/docs", staffOnly: true },
+  { label: "Contact", path: "/#contact", staffOnly: false },
 ];
 
 export function Header() {
@@ -46,20 +46,22 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                onClick={() => handleNavClick(link.path)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  location.pathname === link.path
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks
+              .filter((link) => !link.staffOnly || (link.staffOnly && user && isAdmin))
+              .map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={() => handleNavClick(link.path)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                    location.pathname === link.path
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
           </nav>
 
           {/* Contact Actions */}
@@ -124,20 +126,22 @@ export function Header() {
             className="md:hidden bg-background border-b border-border"
           >
             <div className="container mx-auto px-4 py-4 space-y-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  onClick={() => handleNavClick(link.path)}
-                  className={`block px-4 py-3 rounded-lg text-base font-medium transition-all ${
-                    location.pathname === link.path
-                      ? "text-primary bg-primary/10"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks
+                .filter((link) => !link.staffOnly || (link.staffOnly && user && isAdmin))
+                .map((link) => (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    onClick={() => handleNavClick(link.path)}
+                    className={`block px-4 py-3 rounded-lg text-base font-medium transition-all ${
+                      location.pathname === link.path
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               <div className="pt-4 space-y-3">
                 <a
                   href="tel:8332302933"

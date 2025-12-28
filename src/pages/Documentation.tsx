@@ -1,8 +1,12 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Book, 
   Shield, 
@@ -21,16 +25,76 @@ import {
   CheckCircle,
   ArrowRight,
   HelpCircle,
-  Download
+  Download,
+  Loader2
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-
-const handleDownload = () => {
-  window.print();
-};
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const Documentation = () => {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isStaff, setIsStaff] = useState<boolean | null>(null);
+  const [checkingRole, setCheckingRole] = useState(true);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      toast({
+        title: "Access Denied",
+        description: "Please log in to access the staff portal.",
+        variant: "destructive",
+      });
+      navigate("/auth?type=staff");
+    }
+  }, [user, loading, navigate, toast]);
+
+  useEffect(() => {
+    const checkStaffRole = async () => {
+      if (!user) return;
+      
+      const { data, error } = await supabase.rpc('get_user_role', { _user_id: user.id });
+      
+      if (error) {
+        console.error('Error checking role:', error);
+        setIsStaff(false);
+      } else {
+        setIsStaff(data === 'staff' || data === 'admin');
+      }
+      setCheckingRole(false);
+    };
+
+    if (user) {
+      checkStaffRole();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!checkingRole && isStaff === false) {
+      toast({
+        title: "Access Denied",
+        description: "This area is restricted to staff members only.",
+        variant: "destructive",
+      });
+      navigate("/");
+    }
+  }, [isStaff, checkingRole, navigate, toast]);
+
+  if (loading || checkingRole) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!user || isStaff === false) {
+    return null;
+  }
   return (
     <Layout>
       <Helmet>
