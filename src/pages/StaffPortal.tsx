@@ -37,6 +37,7 @@ import SMSServices from "@/components/staff/SMSServices";
 import { CustomersTab } from "@/components/admin/CustomersTab";
 import { BookingsTab } from "@/components/admin/BookingsTab";
 import { PaymentsTab } from "@/components/admin/PaymentsTab";
+import { TodaysAppointments } from "@/components/staff/TodaysAppointments";
 
 const staffResources = [
   {
@@ -248,18 +249,14 @@ const StaffPortal = () => {
 
             {/* Main Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className={`grid w-full mb-8 ${isAdmin ? 'grid-cols-7' : 'grid-cols-4'}`}>
+              <TabsList className={`grid w-full mb-8 ${isAdmin ? 'grid-cols-7' : 'grid-cols-3'}`}>
                 <TabsTrigger value="resources" className="gap-2">
                   <BookOpen className="h-4 w-4" />
                   <span className="hidden sm:inline">Resources</span>
                 </TabsTrigger>
-                <TabsTrigger value="customers" className="gap-2">
-                  <Users className="h-4 w-4" />
-                  <span className="hidden sm:inline">Customers</span>
-                </TabsTrigger>
-                <TabsTrigger value="bookings" className="gap-2">
+                <TabsTrigger value="today" className="gap-2">
                   <Calendar className="h-4 w-4" />
-                  <span className="hidden sm:inline">Bookings</span>
+                  <span className="hidden sm:inline">Today</span>
                 </TabsTrigger>
                 <TabsTrigger value="sms" className="gap-2">
                   <MessageSquare className="h-4 w-4" />
@@ -267,6 +264,10 @@ const StaffPortal = () => {
                 </TabsTrigger>
                 {isAdmin && (
                   <>
+                    <TabsTrigger value="customers" className="gap-2">
+                      <Users className="h-4 w-4" />
+                      <span className="hidden sm:inline">Customers</span>
+                    </TabsTrigger>
                     <TabsTrigger value="payments" className="gap-2">
                       <CreditCard className="h-4 w-4" />
                       <span className="hidden sm:inline">Payments</span>
@@ -364,17 +365,19 @@ const StaffPortal = () => {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="customers">
-                <CustomersTab />
-              </TabsContent>
-
-              <TabsContent value="bookings">
-                <BookingsTab />
+              <TabsContent value="today">
+                <TodaysAppointments />
               </TabsContent>
 
               <TabsContent value="sms">
                 <SMSServices />
               </TabsContent>
+
+              {isAdmin && (
+                <TabsContent value="customers">
+                  <CustomersTab />
+                </TabsContent>
+              )}
 
               {isAdmin && (
                 <>
