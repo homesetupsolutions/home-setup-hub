@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
@@ -9,46 +9,64 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Shield } from 'lucide-react';
+import { Loader2, Shield, User } from 'lucide-react';
 import { z } from 'zod';
 
-const authSchema = z.object({
+const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
+const customerSignupSchema = z.object({
+  email: z.string().email('Please enter a valid email'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  fullName: z.string().min(2, 'Please enter your full name'),
+  phone: z.string().min(10, 'Please enter a valid phone number').regex(/^[\d\s\-\(\)\+]+$/, 'Please enter a valid phone number'),
+});
+
 export default function Auth() {
+  const [searchParams] = useSearchParams();
+  const authType = searchParams.get('type') || 'customer';
+  const isCustomer = authType === 'customer';
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('login');
-  const { user, loading, signIn, signUp } = useAuth();
+  const { user, loading, isAdmin, signIn, signUp } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
     if (!loading && user) {
-      navigate('/admin');
+      // Redirect based on user role
+      if (isAdmin) {
+        navigate('/admin');
+      } else {
+        navigate('/portal');
+      }
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, isAdmin, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const validation = authSchema.safeParse({ email, password });
-      if (!validation.success) {
-        toast({
-          title: 'Validation Error',
-          description: validation.error.errors[0].message,
-          variant: 'destructive',
-        });
-        setIsLoading(false);
-        return;
-      }
-
       if (activeTab === 'login') {
+        const validation = loginSchema.safeParse({ email, password });
+        if (!validation.success) {
+          toast({
+            title: 'Validation Error',
+            description: validation.error.errors[0].message,
+            variant: 'destructive',
+          });
+          setIsLoading(false);
+          return;
+        }
+
         const { error } = await signIn(email, password);
         if (error) {
           let message = error.message;
@@ -65,10 +83,34 @@ export default function Auth() {
             title: 'Welcome back!',
             description: 'Successfully logged in.',
           });
-          navigate('/admin');
         }
       } else {
-        const { error } = await signUp(email, password);
+        // Signup
+        if (isCustomer) {
+          const validation = customerSignupSchema.safeParse({ email, password, fullName, phone });
+          if (!validation.success) {
+            toast({
+              title: 'Validation Error',
+              description: validation.error.errors[0].message,
+              variant: 'destructive',
+            });
+            setIsLoading(false);
+            return;
+          }
+        } else {
+          const validation = loginSchema.safeParse({ email, password });
+          if (!validation.success) {
+            toast({
+              title: 'Validation Error',
+              description: validation.error.errors[0].message,
+              variant: 'destructive',
+            });
+            setIsLoading(false);
+            return;
+          }
+        }
+
+        const { error } = await signUp(email, password, isCustomer ? { fullName, phone } : undefined);
         if (error) {
           let message = error.message;
           if (error.message.includes('User already registered')) {
@@ -85,6 +127,9 @@ export default function Auth() {
             description: 'Your account has been created. You can now log in.',
           });
           setActiveTab('login');
+          // Reset form
+          setFullName('');
+          setPhone('');
         }
       }
     } catch (error) {
@@ -109,8 +154,8 @@ export default function Auth() {
   return (
     <>
       <Helmet>
-        <title>Admin Login | Home Setup Solutions</title>
-        <meta name="description" content="Admin portal login for Home Setup Solutions." />
+        <title>{isCustomer ? 'Customer Login' : 'Staff Login'} | Home Setup Solutions</title>
+        <meta name="description" content={isCustomer ? "Customer portal login for Home Setup Solutions." : "Staff portal login for Home Setup Solutions."} />
       </Helmet>
       
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -123,11 +168,19 @@ export default function Auth() {
           <Card className="border-border bg-card">
             <CardHeader className="text-center">
               <div className="mx-auto mb-4 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Shield className="h-6 w-6 text-primary" />
+                {isCustomer ? (
+                  <User className="h-6 w-6 text-primary" />
+                ) : (
+                  <Shield className="h-6 w-6 text-primary" />
+                )}
               </div>
-              <CardTitle className="text-2xl font-bold text-foreground">Admin Portal</CardTitle>
+              <CardTitle className="text-2xl font-bold text-foreground">
+                {isCustomer ? 'Customer Portal' : 'Staff Portal'}
+              </CardTitle>
               <CardDescription className="text-muted-foreground">
-                Access the CRM and management dashboard
+                {isCustomer 
+                  ? 'View your appointments and book services' 
+                  : 'Access the staff management dashboard'}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -138,12 +191,43 @@ export default function Auth() {
                 </TabsList>
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Customer signup fields */}
+                  {activeTab === 'signup' && isCustomer && (
+                    <>
+                      <div className="space-y-2">
+                        <Label htmlFor="fullName">Full Name *</Label>
+                        <Input
+                          id="fullName"
+                          type="text"
+                          placeholder="John Smith"
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          required
+                          disabled={isLoading}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="phone">Phone Number *</Label>
+                        <Input
+                          id="phone"
+                          type="tel"
+                          placeholder="(555) 123-4567"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          required
+                          disabled={isLoading}
+                        />
+                      </div>
+                    </>
+                  )}
+                  
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
                       type="email"
-                      placeholder="admin@example.com"
+                      placeholder="you@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -192,9 +276,15 @@ export default function Auth() {
                 </form>
               </Tabs>
               
-              <div className="mt-6 text-center">
-                <a href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              <div className="mt-6 text-center space-y-2">
+                <a href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors block">
                   ← Back to Home
+                </a>
+                <a 
+                  href={isCustomer ? '/auth?type=staff' : '/auth?type=customer'} 
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors block"
+                >
+                  {isCustomer ? 'Staff login →' : '← Customer login'}
                 </a>
               </div>
             </CardContent>

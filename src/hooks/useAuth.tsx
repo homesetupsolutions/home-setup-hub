@@ -2,13 +2,19 @@ import { useState, useEffect, createContext, useContext, ReactNode } from 'react
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
+interface SignUpMetadata {
+  fullName?: string;
+  phone?: string;
+}
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
   isAdmin: boolean;
+  isStaff: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signUp: (email: string, password: string, metadata?: SignUpMetadata) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -19,6 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isStaff, setIsStaff] = useState(false);
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -28,13 +35,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session?.user ?? null);
         setLoading(false);
 
-        // Defer admin check with setTimeout to prevent deadlock
+        // Defer role check with setTimeout to prevent deadlock
         if (session?.user) {
           setTimeout(() => {
-            checkAdminRole(session.user.id);
+            checkRoles(session.user.id);
           }, 0);
         } else {
           setIsAdmin(false);
+          setIsStaff(false);
         }
       }
     );
@@ -46,29 +54,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
       
       if (session?.user) {
-        checkAdminRole(session.user.id);
+        checkRoles(session.user.id);
       }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  const checkAdminRole = async (userId: string) => {
+  const checkRoles = async (userId: string) => {
     try {
-      const { data, error } = await supabase.rpc('has_role', {
+      // Check admin role
+      const { data: adminData, error: adminError } = await supabase.rpc('has_role', {
         _user_id: userId,
         _role: 'admin'
       });
       
-      if (error) {
-        console.error('Error checking admin role:', error);
+      if (adminError) {
+        console.error('Error checking admin role:', adminError);
         setIsAdmin(false);
       } else {
-        setIsAdmin(!!data);
+        setIsAdmin(!!adminData);
+      }
+
+      // Check staff role
+      const { data: staffData, error: staffError } = await supabase.rpc('has_role', {
+        _user_id: userId,
+        _role: 'staff'
+      });
+      
+      if (staffError) {
+        console.error('Error checking staff role:', staffError);
+        setIsStaff(false);
+      } else {
+        setIsStaff(!!staffData);
       }
     } catch (error) {
-      console.error('Error checking admin role:', error);
+      console.error('Error checking roles:', error);
       setIsAdmin(false);
+      setIsStaff(false);
     }
   };
 
@@ -80,13 +103,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error };
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, metadata?: SignUpMetadata) => {
     const redirectUrl = `${window.location.origin}/`;
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: redirectUrl,
+        data: metadata ? {
+          full_name: metadata.fullName,
+          phone: metadata.phone,
+        } : undefined,
       },
     });
     return { error };
@@ -95,10 +122,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     await supabase.auth.signOut();
     setIsAdmin(false);
+    setIsStaff(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, isAdmin, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, isAdmin, isStaff, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );
