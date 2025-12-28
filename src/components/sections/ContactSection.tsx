@@ -22,8 +22,8 @@ const contactMethods = [
     icon: Mail,
     title: "Email Us",
     description: "We'll reply within 24h",
-    value: "info@homesetupsolutions.ca",
-    href: "mailto:info@homesetupsolutions.ca",
+    value: "customerservice@homesetupsolutions.ca",
+    href: "mailto:customerservice@homesetupsolutions.ca",
   },
   {
     icon: Clock,
