@@ -5,12 +5,14 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Loader2, LogOut, Users, Calendar, CreditCard, Phone } from 'lucide-react';
+import { Loader2, LogOut, Users, Calendar, CreditCard, MessageSquare, UserCog, Settings } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { CustomersTab } from '@/components/admin/CustomersTab';
 import { BookingsTab } from '@/components/admin/BookingsTab';
 import { PaymentsTab } from '@/components/admin/PaymentsTab';
-import { PhoneTab } from '@/components/admin/PhoneTab';
+import SMSServices from '@/components/staff/SMSServices';
+import StaffManagement from '@/components/staff/StaffManagement';
+import SiteSettings from '@/components/staff/SiteSettings';
 
 export default function Admin() {
   const { user, loading, isAdmin, signOut } = useAuth();
@@ -88,7 +90,7 @@ export default function Admin() {
             transition={{ duration: 0.3 }}
           >
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4 max-w-lg">
+              <TabsList className="grid w-full grid-cols-6 max-w-2xl">
                 <TabsTrigger value="customers" className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
                   <span className="hidden sm:inline">Customers</span>
@@ -101,9 +103,17 @@ export default function Admin() {
                   <CreditCard className="h-4 w-4" />
                   <span className="hidden sm:inline">Payments</span>
                 </TabsTrigger>
-                <TabsTrigger value="phone" className="flex items-center gap-2">
-                  <Phone className="h-4 w-4" />
-                  <span className="hidden sm:inline">Phone</span>
+                <TabsTrigger value="sms" className="flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4" />
+                  <span className="hidden sm:inline">SMS</span>
+                </TabsTrigger>
+                <TabsTrigger value="staff" className="flex items-center gap-2">
+                  <UserCog className="h-4 w-4" />
+                  <span className="hidden sm:inline">Staff</span>
+                </TabsTrigger>
+                <TabsTrigger value="settings" className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  <span className="hidden sm:inline">Settings</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -119,8 +129,16 @@ export default function Admin() {
                 <PaymentsTab />
               </TabsContent>
 
-              <TabsContent value="phone">
-                <PhoneTab />
+              <TabsContent value="sms">
+                <SMSServices />
+              </TabsContent>
+
+              <TabsContent value="staff">
+                <StaffManagement />
+              </TabsContent>
+
+              <TabsContent value="settings">
+                <SiteSettings />
               </TabsContent>
             </Tabs>
           </motion.div>
