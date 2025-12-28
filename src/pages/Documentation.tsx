@@ -46,16 +46,30 @@ const Documentation = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <div className="flex items-center justify-center gap-4 flex-wrap">
-              <h1 className="text-4xl md:text-5xl font-bold">Documentation</h1>
-              <Button onClick={handleDownload} variant="outline" className="gap-2 print:hidden">
-                <Download className="h-4 w-4" />
-                Download PDF
-              </Button>
-            </div>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mt-4">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Documentation</h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
               Everything you need to know about using Home Setup Solutions
             </p>
+            <div className="flex items-center justify-center gap-3 flex-wrap print:hidden">
+              <a href="/docs/customer-guide.md" download>
+                <Button variant="outline" className="gap-2">
+                  <Download className="h-4 w-4" />
+                  Customer Guide
+                </Button>
+              </a>
+              <a href="/docs/admin-guide.md" download>
+                <Button variant="outline" className="gap-2">
+                  <Download className="h-4 w-4" />
+                  Admin Guide
+                </Button>
+              </a>
+              <a href="/docs/technical-docs.md" download>
+                <Button variant="outline" className="gap-2">
+                  <Download className="h-4 w-4" />
+                  Technical Docs
+                </Button>
+              </a>
+            </div>
           </motion.div>
 
           <Tabs defaultValue="customer" className="w-full">
