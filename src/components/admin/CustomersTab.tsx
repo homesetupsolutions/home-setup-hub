@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, RefreshCw, Search, User, Mail, Phone, PhoneCall } from 'lucide-react';
+import { Loader2, RefreshCw, Search, User, Mail, Phone, PhoneCall, ChevronDown, Users } from 'lucide-react';
 import { listCustomers, searchCustomers, SquareCustomer } from '@/lib/squareCRM';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
@@ -13,8 +13,12 @@ import { use3CX } from '@/hooks/use3CX';
 export function CustomersTab() {
   const [customers, setCustomers] = useState<SquareCustomer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searching, setSearching] = useState(false);
+  const [cursor, setCursor] = useState<string | undefined>(undefined);
+  const [hasMore, setHasMore] = useState(false);
+  const [totalLoaded, setTotalLoaded] = useState(0);
   const { toast } = useToast();
   const { initiateCall } = use3CX();
 
@@ -24,11 +28,33 @@ export function CustomersTab() {
     initiateCall(customer.phone_number, customer.id, customerName);
   };
 
-  const fetchCustomers = async () => {
+  // Fetch ALL customers by paginating through the entire list
+  const fetchAllCustomers = useCallback(async () => {
     setLoading(true);
+    setCustomers([]);
+    setCursor(undefined);
+    setTotalLoaded(0);
+    
     try {
-      const result = await listCustomers(50);
-      setCustomers(result.customers);
+      let allCustomers: SquareCustomer[] = [];
+      let nextCursor: string | undefined = undefined;
+      
+      // Keep fetching until no more pages
+      do {
+        const result = await listCustomers(100, nextCursor);
+        allCustomers = [...allCustomers, ...result.customers];
+        nextCursor = result.cursor;
+        setTotalLoaded(allCustomers.length);
+      } while (nextCursor);
+      
+      setCustomers(allCustomers);
+      setHasMore(false);
+      setCursor(undefined);
+      
+      toast({
+        title: 'Customers Loaded',
+        description: `Successfully loaded ${allCustomers.length} customers from Square`,
+      });
     } catch (error) {
       toast({
         title: 'Error',
@@ -37,6 +63,52 @@ export function CustomersTab() {
       });
     } finally {
       setLoading(false);
+    }
+  }, [toast]);
+
+  // Initial load - fetch first page quickly, then load all
+  const fetchCustomers = useCallback(async (loadAll = false) => {
+    if (loadAll) {
+      return fetchAllCustomers();
+    }
+    
+    setLoading(true);
+    try {
+      const result = await listCustomers(100);
+      setCustomers(result.customers);
+      setCursor(result.cursor);
+      setHasMore(!!result.cursor);
+      setTotalLoaded(result.customers.length);
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to load customers',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [toast, fetchAllCustomers]);
+
+  // Load more customers
+  const loadMore = async () => {
+    if (!cursor || loadingMore) return;
+    
+    setLoadingMore(true);
+    try {
+      const result = await listCustomers(100, cursor);
+      setCustomers(prev => [...prev, ...result.customers]);
+      setCursor(result.cursor);
+      setHasMore(!!result.cursor);
+      setTotalLoaded(prev => prev + result.customers.length);
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to load more customers',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoadingMore(false);
     }
   };
 
@@ -70,15 +142,29 @@ export function CustomersTab() {
       <CardHeader>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <CardTitle className="text-xl font-semibold text-foreground">Customers</CardTitle>
+            <CardTitle className="text-xl font-semibold text-foreground flex items-center gap-2">
+              <Users className="h-5 w-5" />
+              Customers
+              {totalLoaded > 0 && (
+                <Badge variant="secondary" className="ml-2">
+                  {totalLoaded} loaded
+                </Badge>
+              )}
+            </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Manage your Square customers
+              Complete list of all Square customers
             </CardDescription>
           </div>
-          <Button variant="outline" size="sm" onClick={fetchCustomers} disabled={loading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => fetchCustomers(false)} disabled={loading}>
+              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
+            <Button variant="default" size="sm" onClick={() => fetchCustomers(true)} disabled={loading}>
+              {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Users className="h-4 w-4 mr-2" />}
+              Load All
+            </Button>
+          </div>
         </div>
         
         <div className="flex gap-2 mt-4">
@@ -166,6 +252,25 @@ export function CustomersTab() {
                 ))}
               </TableBody>
             </Table>
+            
+            {/* Load More Button */}
+            {hasMore && (
+              <div className="flex justify-center py-4 border-t">
+                <Button 
+                  variant="outline" 
+                  onClick={loadMore} 
+                  disabled={loadingMore}
+                  className="gap-2"
+                >
+                  {loadingMore ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                  Load More Customers
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </CardContent>

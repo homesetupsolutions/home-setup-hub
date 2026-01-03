@@ -61,8 +61,12 @@ async function callSquareCRM<T>(action: string, params: Record<string, unknown> 
   return data as T;
 }
 
-export async function listCustomers(limit = 50, cursor?: string) {
+export async function listCustomers(limit = 100, cursor?: string) {
   return callSquareCRM<{ customers: SquareCustomer[]; cursor?: string }>('list_customers', { limit, cursor });
+}
+
+export async function listCustomerPayments(customerId: string, limit = 100, cursor?: string) {
+  return callSquareCRM<{ payments: SquarePayment[]; cursor?: string }>('list_customer_payments', { customerId, limit, cursor });
 }
 
 export async function getCustomer(customerId: string) {

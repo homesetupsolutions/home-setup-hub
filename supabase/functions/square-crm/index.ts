@@ -117,6 +117,7 @@ Deno.serve(async (req) => {
       'list_bookings',
       'get_booking',
       'list_payments',
+      'list_customer_payments',
       'list_catalog_items',
     ]);
 
@@ -128,11 +129,11 @@ Deno.serve(async (req) => {
       );
     }
 
-    const limitRaw = raw.limit ?? 50;
-    const limit = Number.isInteger(limitRaw) ? Number(limitRaw) : 50;
-    if (limit < 1 || limit > 100) {
+    const limitRaw = raw.limit ?? 100;
+    const limit = Number.isInteger(limitRaw) ? Number(limitRaw) : 100;
+    if (limit < 1 || limit > 1000) {
       return new Response(
-        JSON.stringify({ error: 'Invalid limit (1-100)' }),
+        JSON.stringify({ error: 'Invalid limit (1-1000)' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -244,6 +245,45 @@ Deno.serve(async (req) => {
           cursor: data.cursor,
         };
         console.log('Fetched', result.payments.length, 'payments');
+        break;
+      }
+
+      case 'list_customer_payments': {
+        if (!customerId) throw new Error('Customer ID required');
+        
+        // Fetch all payments for a specific customer
+        let allPayments: SquarePayment[] = [];
+        let nextCursor: string | undefined = cursor;
+        
+        // Get payments and filter by customer
+        do {
+          const params = new URLSearchParams({ limit: '100' });
+          if (nextCursor) params.append('cursor', nextCursor);
+          
+          const response = await fetch(`${squareBaseUrl}/payments?${params}`, { headers });
+          const data = await response.json();
+          
+          if (!response.ok) {
+            console.error('Square API error:', data);
+            throw new Error(data.errors?.[0]?.detail || 'Failed to fetch payments');
+          }
+          
+          // Filter to only this customer's payments
+          const customerPayments = (data.payments || []).filter(
+            (p: any) => p.customer_id === customerId
+          );
+          allPayments = [...allPayments, ...customerPayments];
+          nextCursor = data.cursor;
+          
+          // Stop if we have enough or hit max iterations
+          if (allPayments.length >= limit) break;
+        } while (nextCursor);
+        
+        result = {
+          payments: allPayments.slice(0, limit),
+          cursor: nextCursor,
+        };
+        console.log('Fetched', result.payments.length, 'payments for customer', customerId);
         break;
       }
 
