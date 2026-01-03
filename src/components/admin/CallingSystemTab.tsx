@@ -197,13 +197,9 @@ export function CallingSystemTab() {
   };
 
   const startCall = async (phone: string, name?: string) => {
-    const cleanPhone = formatPhoneFor3CX(phone);
     setCallStarted(true);
     setCurrentStep(1);
     setCallOutcome(null);
-    
-    // Open phone dialer
-    window.open(`tel:${cleanPhone}`, '_self');
     
     toast({
       title: 'Call Started',
