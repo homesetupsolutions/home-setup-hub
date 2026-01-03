@@ -4,13 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, RefreshCw, Search, User, Mail, Phone, PhoneCall, ChevronDown, Users } from 'lucide-react';
+import { Loader2, RefreshCw, Search, User, Mail, PhoneCall, ChevronDown, ChevronUp, Users } from 'lucide-react';
 import { listCustomers, searchCustomers, SquareCustomer } from '@/lib/squareCRM';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { use3CX } from '@/hooks/use3CX';
 
-const MAX_CUSTOMERS = 2000;
+const PAGE_SIZE = 100;
 
 export function CustomersTab() {
   const [customers, setCustomers] = useState<SquareCustomer[]>([]);
@@ -20,7 +20,6 @@ export function CustomersTab() {
   const [searching, setSearching] = useState(false);
   const [cursor, setCursor] = useState<string | undefined>(undefined);
   const [hasMore, setHasMore] = useState(false);
-  const [totalLoaded, setTotalLoaded] = useState(0);
   const { toast } = useToast();
   const { initiateCall } = use3CX();
 
@@ -30,39 +29,17 @@ export function CustomersTab() {
     initiateCall(customer.phone_number, customer.id, customerName);
   };
 
-  // Fetch customers up to MAX_CUSTOMERS limit
-  const fetchAllCustomers = useCallback(async () => {
+  // Fetch first page of customers
+  const fetchCustomers = useCallback(async () => {
     setLoading(true);
     setCustomers([]);
     setCursor(undefined);
-    setTotalLoaded(0);
     
     try {
-      let allCustomers: SquareCustomer[] = [];
-      let nextCursor: string | undefined = undefined;
-      
-      // Keep fetching until no more pages or max reached
-      do {
-        const result = await listCustomers(100, nextCursor);
-        allCustomers = [...allCustomers, ...result.customers];
-        nextCursor = result.cursor;
-        setTotalLoaded(allCustomers.length);
-        
-        // Stop if we've reached the max
-        if (allCustomers.length >= MAX_CUSTOMERS) {
-          allCustomers = allCustomers.slice(0, MAX_CUSTOMERS);
-          break;
-        }
-      } while (nextCursor);
-      
-      setCustomers(allCustomers);
-      setHasMore(false);
-      setCursor(undefined);
-      
-      toast({
-        title: 'Customers Loaded',
-        description: `Loaded ${allCustomers.length} customers (max ${MAX_CUSTOMERS})`,
-      });
+      const result = await listCustomers(PAGE_SIZE);
+      setCustomers(result.customers);
+      setCursor(result.cursor);
+      setHasMore(!!result.cursor);
     } catch (error) {
       toast({
         title: 'Error',
@@ -74,41 +51,16 @@ export function CustomersTab() {
     }
   }, [toast]);
 
-  // Initial load - fetch first page quickly, then load all
-  const fetchCustomers = useCallback(async (loadAll = false) => {
-    if (loadAll) {
-      return fetchAllCustomers();
-    }
-    
-    setLoading(true);
-    try {
-      const result = await listCustomers(100);
-      setCustomers(result.customers);
-      setCursor(result.cursor);
-      setHasMore(!!result.cursor);
-      setTotalLoaded(result.customers.length);
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to load customers',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, [toast, fetchAllCustomers]);
-
-  // Load more customers
+  // Load next page of customers
   const loadMore = async () => {
     if (!cursor || loadingMore) return;
     
     setLoadingMore(true);
     try {
-      const result = await listCustomers(100, cursor);
+      const result = await listCustomers(PAGE_SIZE, cursor);
       setCustomers(prev => [...prev, ...result.customers]);
       setCursor(result.cursor);
       setHasMore(!!result.cursor);
-      setTotalLoaded(prev => prev + result.customers.length);
     } catch (error) {
       toast({
         title: 'Error',
@@ -127,6 +79,9 @@ export function CustomersTab() {
     }
 
     setSearching(true);
+    setCursor(undefined);
+    setHasMore(false);
+    
     try {
       const result = await searchCustomers(searchQuery);
       setCustomers(result.customers);
@@ -141,6 +96,11 @@ export function CustomersTab() {
     }
   };
 
+  // Scroll to top
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   useEffect(() => {
     fetchCustomers();
   }, []);
@@ -153,26 +113,20 @@ export function CustomersTab() {
             <CardTitle className="text-xl font-semibold text-foreground flex items-center gap-2">
               <Users className="h-5 w-5" />
               Customers
-              {totalLoaded > 0 && (
+              {customers.length > 0 && (
                 <Badge variant="secondary" className="ml-2">
-                  {totalLoaded} loaded
+                  {customers.length} shown
                 </Badge>
               )}
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Complete list of all Square customers
+              Browse Square CRM customers (paginated)
             </CardDescription>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => fetchCustomers(false)} disabled={loading}>
-              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
-            </Button>
-            <Button variant="default" size="sm" onClick={() => fetchCustomers(true)} disabled={loading}>
-              {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Users className="h-4 w-4 mr-2" />}
-              Load All
-            </Button>
-          </div>
+          <Button variant="outline" size="sm" onClick={fetchCustomers} disabled={loading}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
         </div>
         
         <div className="flex gap-2 mt-4">
@@ -261,24 +215,40 @@ export function CustomersTab() {
               </TableBody>
             </Table>
             
-            {/* Load More Button */}
-            {hasMore && (
-              <div className="flex justify-center py-4 border-t">
+            {/* Pagination Controls */}
+            <div className="flex justify-between items-center py-4 border-t">
+              {customers.length > PAGE_SIZE && (
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={scrollToTop}
+                  className="gap-2"
+                >
+                  <ChevronUp className="h-4 w-4" />
+                  Back to Top
+                </Button>
+              )}
+              
+              {hasMore ? (
                 <Button 
                   variant="outline" 
                   onClick={loadMore} 
                   disabled={loadingMore}
-                  className="gap-2"
+                  className="gap-2 ml-auto"
                 >
                   {loadingMore ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <ChevronDown className="h-4 w-4" />
                   )}
-                  Load More Customers
+                  Load More ({PAGE_SIZE})
                 </Button>
-              </div>
-            )}
+              ) : (
+                <span className="text-sm text-muted-foreground ml-auto">
+                  End of list
+                </span>
+              )}
+            </div>
           </div>
         )}
       </CardContent>
