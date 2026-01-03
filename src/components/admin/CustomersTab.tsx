@@ -172,8 +172,8 @@ export function CustomersTab() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {customers.map((customer) => (
-                  <TableRow key={customer.id}>
+                {customers.map((customer, index) => (
+                  <TableRow key={`${customer.id}-${index}`}>
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
