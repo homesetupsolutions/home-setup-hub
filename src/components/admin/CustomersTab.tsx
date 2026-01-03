@@ -133,7 +133,7 @@ export function CustomersTab() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search by email or phone..."
+              placeholder="Search by phone (403 555 1234) or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -144,6 +144,11 @@ export function CustomersTab() {
             {searching ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Search'}
           </Button>
         </div>
+        {searchQuery && customers.length > 0 && (
+          <p className="text-xs text-muted-foreground mt-2">
+            Found {customers.length} matching customers
+          </p>
+        )}
       </CardHeader>
       <CardContent>
         {loading ? (

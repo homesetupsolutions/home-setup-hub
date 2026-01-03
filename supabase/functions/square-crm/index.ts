@@ -288,33 +288,99 @@ Deno.serve(async (req) => {
       }
 
       case 'search_customers': {
-        const searchBody = {
-          limit,
-          query: {
-            filter: {
-              email_address: query ? { fuzzy: query } : undefined,
-              phone_number: query ? { fuzzy: query } : undefined,
+        if (!query) {
+          result = { customers: [], cursor: undefined };
+          break;
+        }
+        
+        // Normalize the query - remove spaces, dashes, parentheses for phone matching
+        const normalizedQuery = query.trim();
+        const phoneQuery = normalizedQuery.replace(/[\s\-\(\)\+]/g, '');
+        
+        // Check if it looks like a phone number (mostly digits)
+        const isPhoneSearch = /^\d{7,}$/.test(phoneQuery) || /^\d/.test(phoneQuery.replace(/\D/g, ''));
+        
+        // Check if it looks like an email
+        const isEmailSearch = normalizedQuery.includes('@') || /^[a-zA-Z]/.test(normalizedQuery);
+        
+        let allCustomers: SquareCustomer[] = [];
+        
+        // Search by phone if it looks like a phone number
+        if (isPhoneSearch || !isEmailSearch) {
+          // Try with different phone formats
+          const phoneVariants = [
+            phoneQuery,
+            `+1${phoneQuery}`,
+            phoneQuery.slice(-10), // Last 10 digits
+          ];
+          
+          for (const phoneVariant of phoneVariants) {
+            if (phoneVariant.length < 3) continue;
+            
+            const phoneSearchBody = {
+              limit: Math.min(limit, 50),
+              query: {
+                filter: {
+                  phone_number: { fuzzy: phoneVariant },
+                },
+              },
+            };
+            
+            const phoneResponse = await fetch(`${squareBaseUrl}/customers/search`, {
+              method: 'POST',
+              headers,
+              body: JSON.stringify(phoneSearchBody),
+            });
+            
+            if (phoneResponse.ok) {
+              const phoneData = await phoneResponse.json();
+              const phoneCustomers = phoneData.customers || [];
+              // Add unique customers
+              for (const c of phoneCustomers) {
+                if (!allCustomers.find(existing => existing.id === c.id)) {
+                  allCustomers.push(c);
+                }
+              }
+            }
+            
+            if (allCustomers.length >= limit) break;
+          }
+        }
+        
+        // Search by email/name if it looks like text
+        if (isEmailSearch || allCustomers.length < limit) {
+          const emailSearchBody = {
+            limit: Math.min(limit, 50),
+            query: {
+              filter: {
+                email_address: { fuzzy: normalizedQuery },
+              },
             },
-          },
-        };
-        
-        const response = await fetch(`${squareBaseUrl}/customers/search`, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify(searchBody),
-        });
-        const data = await response.json();
-        
-        if (!response.ok) {
-          console.error('Square API error:', data);
-          throw new Error(data.errors?.[0]?.detail || 'Failed to search customers');
+          };
+          
+          const emailResponse = await fetch(`${squareBaseUrl}/customers/search`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(emailSearchBody),
+          });
+          
+          if (emailResponse.ok) {
+            const emailData = await emailResponse.json();
+            const emailCustomers = emailData.customers || [];
+            // Add unique customers
+            for (const c of emailCustomers) {
+              if (!allCustomers.find(existing => existing.id === c.id)) {
+                allCustomers.push(c);
+              }
+            }
+          }
         }
         
         result = {
-          customers: data.customers || [],
-          cursor: data.cursor,
+          customers: allCustomers.slice(0, limit),
+          cursor: undefined, // No pagination for combined search
         };
-        console.log('Search returned', result.customers.length, 'customers');
+        console.log('Search for', query, 'returned', result.customers.length, 'customers');
         break;
       }
 
