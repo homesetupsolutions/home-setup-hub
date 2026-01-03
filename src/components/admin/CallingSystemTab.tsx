@@ -31,58 +31,65 @@ import { listCustomers, searchCustomers, SquareCustomer } from '@/lib/squareCRM'
 import { format, addDays, setHours, setMinutes } from 'date-fns';
 import { cn } from '@/lib/utils';
 
-// Call script steps
+// Call script steps - Home Setup Solutions (Evan, Calgary)
 const CALL_SCRIPT = [
   {
     step: 1,
     title: "Introduction",
-    script: "Hi, this is [Your Name] from Realtor Group Cleaners. Am I speaking with [Customer Name]?",
+    script: "Hi, is this [Customer Name]?",
     responses: ["Yes, speaking", "No, wrong number", "Who is this?"],
     nextStep: { "Yes, speaking": 2, "No, wrong number": -1, "Who is this?": 2 }
   },
   {
     step: 2,
-    title: "Purpose",
-    script: "Great! I'm calling because we provide professional cleaning services for realtors and property managers. Do you have any properties that need cleaning soon?",
-    responses: ["Yes, I need cleaning", "Maybe, tell me more", "Not interested"],
-    nextStep: { "Yes, I need cleaning": 3, "Maybe, tell me more": 3, "Not interested": -2 }
+    title: "Permission",
+    script: "Hey [Customer Name], this is Evan with Home Setup Solutions here in Calgary. Did I catch you with a quick minute?",
+    responses: ["Sure, go ahead", "Not really", "What's this about?"],
+    nextStep: { "Sure, go ahead": 3, "Not really": 3, "What's this about?": 3 }
   },
   {
     step: 3,
-    title: "Service Details",
-    script: "Perfect! We offer move-out cleans, deep cleans, and regular maintenance. What type of property is it? (House, Apartment, Condo)",
-    responses: ["House", "Apartment", "Condo", "Other"],
-    nextStep: { "House": 4, "Apartment": 4, "Condo": 4, "Other": 4 }
+    title: "Value Pitch",
+    script: "Perfect. I help with deep cleaning, handyman touch-ups, and heavy lifting – things like move-out cleans, drywall patches, furniture moving – so you don't have to spend weekends doing it yourself or risk hurting your back.",
+    responses: ["Tell me more", "Not interested", "Already have someone"],
+    nextStep: { "Tell me more": 4, "Not interested": -2, "Already have someone": -4 }
   },
   {
     step: 4,
-    title: "Size & Location",
-    script: "Got it! How many bedrooms and bathrooms? And what's the address?",
-    responses: ["Info provided", "Need to check", "Rather not say"],
-    nextStep: { "Info provided": 5, "Need to check": 5, "Rather not say": 5 },
-    collectInfo: ["address", "bedrooms", "bathrooms"]
+    title: "Qualify",
+    script: "Quick question: are you mostly handling that stuff yourself right now, or do you have someone helping?",
+    responses: ["Doing it myself", "Have some help", "Looking for help"],
+    nextStep: { "Doing it myself": 5, "Have some help": 5, "Looking for help": 5 }
   },
   {
     step: 5,
-    title: "Scheduling",
-    script: "When would you like us to come? We have availability this week and next.",
-    responses: ["This week", "Next week", "Specific date"],
-    nextStep: { "This week": 6, "Next week": 6, "Specific date": 6 },
-    showCalendar: true
+    title: "Service Selection",
+    script: "Got it. So what I offer is deep cleans, move-out cleans, post-reno cleanup, furniture moving – I come in, knock it out, send you photos when done. What kind of job do you need help with?",
+    responses: ["Deep clean", "Move-out clean", "Heavy lifting", "Multiple services"],
+    nextStep: { "Deep clean": 6, "Move-out clean": 6, "Heavy lifting": 6, "Multiple services": 6 },
+    collectInfo: ["address", "bedrooms", "bathrooms"]
   },
   {
     step: 6,
-    title: "Confirm Booking",
-    script: "Let me confirm: [Service] at [Address] on [Date] at [Time]. Does that work for you?",
-    responses: ["Yes, book it!", "Change date", "Change service", "Cancel"],
-    nextStep: { "Yes, book it!": 7, "Change date": 5, "Change service": 3, "Cancel": -2 }
+    title: "Scheduling",
+    script: "Nice. The first step is just a quick 10-15 minute estimate so you know exactly what it'd cost – no pressure to decide on the spot. Would this week or next week work better for you?",
+    responses: ["This week", "Next week", "Specific date", "Need to think about it"],
+    nextStep: { "This week": 7, "Next week": 7, "Specific date": 7, "Need to think about it": -5 },
+    showCalendar: true
   },
   {
     step: 7,
+    title: "Confirm Booking",
+    script: "Let me confirm: [Service] at [Address] on [Date] at [Time]. Does that work for you?",
+    responses: ["Yes, book it!", "Change date", "Change service", "Cancel"],
+    nextStep: { "Yes, book it!": 8, "Change date": 6, "Change service": 5, "Cancel": -2 }
+  },
+  {
+    step: 8,
     title: "Complete",
-    script: "Excellent! You're all booked. We'll send you a confirmation text. Is there anything else I can help with?",
+    script: "Awesome! You're all booked. I'll send you a confirmation text with my number. If anything changes, just text me. Is there anything else I can help with?",
     responses: ["No, thank you", "Yes, one more thing"],
-    nextStep: { "No, thank you": -3, "Yes, one more thing": 2 },
+    nextStep: { "No, thank you": -3, "Yes, one more thing": 4 },
     isComplete: true
   }
 ];
@@ -90,8 +97,10 @@ const CALL_SCRIPT = [
 const SERVICES = [
   { id: 'move-out', name: 'Move-Out Clean', duration: 180, price: 250 },
   { id: 'deep-clean', name: 'Deep Clean', duration: 120, price: 175 },
-  { id: 'regular', name: 'Regular Maintenance', duration: 90, price: 125 },
-  { id: 'post-construction', name: 'Post-Construction', duration: 240, price: 350 },
+  { id: 'post-reno', name: 'Post-Reno Cleanup', duration: 180, price: 275 },
+  { id: 'heavy-lifting', name: 'Heavy Lifting / Furniture Moving', duration: 90, price: 125 },
+  { id: 'handyman', name: 'Handyman Touch-ups', duration: 60, price: 95 },
+  { id: 'pre-listing', name: 'Pre-Listing Prep (Realtors)', duration: 150, price: 225 },
 ];
 
 const TIME_SLOTS = [
