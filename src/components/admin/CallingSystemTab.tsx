@@ -31,8 +31,11 @@ import { listCustomers, searchCustomers, listCatalogItems, SquareCustomer, Squar
 import { format, addDays, setHours, setMinutes } from 'date-fns';
 import { cn } from '@/lib/utils';
 
-// Call script steps - Home Setup Solutions (Evan, Calgary)
-const CALL_SCRIPT = [
+// Script type
+type ScriptType = 'customer' | 'realtor';
+
+// Call script steps - Home Setup Solutions (Evan, Calgary) - CUSTOMER VERSION
+const CUSTOMER_SCRIPT = [
   {
     step: 1,
     title: "Introduction",
@@ -43,14 +46,14 @@ const CALL_SCRIPT = [
   {
     step: 2,
     title: "Introduction",
-    script: "Great! This is Evan calling from Home Setup Solutions in Calgary. I help homeowners and realtors with deep cleaning, handyman work, and heavy lifting. Do you have a quick minute to chat?",
+    script: "Great! This is Evan calling from Home Setup Solutions in Calgary. I help homeowners with deep cleaning, handyman work, and heavy lifting. Do you have a quick minute to chat?",
     responses: ["Sure, go ahead", "Not right now", "What services do you offer?"],
     nextStep: { "Sure, go ahead": 3, "Not right now": -5, "What services do you offer?": 3 }
   },
   {
     step: 3,
     title: "Value Pitch",
-    script: "Perfect. I help with deep cleaning, handyman touch-ups, and heavy lifting – things like move-out cleans, drywall patches, furniture moving – so you don't have to spend weekends doing it yourself or risk hurting your back.",
+    script: "I handle things like move-out cleans, deep cleans, drywall patches, furniture moving, and smart home setups – so you don't have to spend your weekends doing it yourself.",
     responses: ["Tell me more", "Not interested", "Already have someone"],
     nextStep: { "Tell me more": 4, "Not interested": -2, "Already have someone": -4 }
   },
@@ -64,15 +67,15 @@ const CALL_SCRIPT = [
   {
     step: 5,
     title: "Service Selection",
-    script: "Got it. So what I offer is deep cleans, move-out cleans, post-reno cleanup, furniture moving – I come in, knock it out, send you photos when done. What kind of job do you need help with?",
-    responses: ["Deep clean", "Move-out clean", "Heavy lifting", "Multiple services"],
-    nextStep: { "Deep clean": 6, "Move-out clean": 6, "Heavy lifting": 6, "Multiple services": 6 },
+    script: "Perfect. I offer deep cleans, move-out cleans, post-reno cleanup, furniture moving, WiFi setup, and smart home installation. What kind of job do you need help with?",
+    responses: ["Cleaning", "Heavy lifting", "Tech setup", "Multiple services"],
+    nextStep: { "Cleaning": 6, "Heavy lifting": 6, "Tech setup": 6, "Multiple services": 6 },
     collectInfo: ["address", "bedrooms", "bathrooms"]
   },
   {
     step: 6,
     title: "Scheduling",
-    script: "Nice. The first step is just a quick 10-15 minute estimate so you know exactly what it'd cost – no pressure to decide on the spot. Would this week or next week work better for you?",
+    script: "Great! Let's get you on the schedule. Would this week or next week work better for you?",
     responses: ["This week", "Next week", "Specific date", "Need to think about it"],
     nextStep: { "This week": 7, "Next week": 7, "Specific date": 7, "Need to think about it": -5 },
     showCalendar: true
@@ -87,12 +90,80 @@ const CALL_SCRIPT = [
   {
     step: 8,
     title: "Complete",
-    script: "Awesome! You're all booked. I'll send you a confirmation text with my number. If anything changes, just text me. Is there anything else I can help with?",
+    script: "You're all set! I'll send you a confirmation text with my number. If anything changes, just text me. Is there anything else I can help with?",
     responses: ["No, thank you", "Yes, one more thing"],
     nextStep: { "No, thank you": -3, "Yes, one more thing": 4 },
     isComplete: true
   }
 ];
+
+// Call script steps - Home Setup Solutions (Evan, Calgary) - REALTOR VERSION
+const REALTOR_SCRIPT = [
+  {
+    step: 1,
+    title: "Introduction",
+    script: "Hi, is this [Customer Name]?",
+    responses: ["Yes, speaking", "No, wrong number", "Who is this?"],
+    nextStep: { "Yes, speaking": 2, "No, wrong number": -1, "Who is this?": 2 }
+  },
+  {
+    step: 2,
+    title: "Introduction",
+    script: "Great! This is Evan from Home Setup Solutions. I work with realtors in Calgary to help get listings show-ready fast. Do you have a quick minute?",
+    responses: ["Sure, go ahead", "Not right now", "Tell me more"],
+    nextStep: { "Sure, go ahead": 3, "Not right now": -5, "Tell me more": 3 }
+  },
+  {
+    step: 3,
+    title: "Value Pitch",
+    script: "I help realtors with pre-listing prep – deep cleans, move-out cleans, minor repairs, staging prep, and decluttering. I get properties photo-ready fast so you can list quicker and impress your sellers.",
+    responses: ["That sounds useful", "Not interested", "Already have a team"],
+    nextStep: { "That sounds useful": 4, "Not interested": -2, "Already have a team": -4 }
+  },
+  {
+    step: 4,
+    title: "Qualify",
+    script: "Do you currently have a go-to person for pre-listing cleanups and touch-ups, or is that something your sellers usually handle?",
+    responses: ["I have someone", "Sellers handle it", "Looking for someone reliable"],
+    nextStep: { "I have someone": 5, "Sellers handle it": 5, "Looking for someone reliable": 5 }
+  },
+  {
+    step: 5,
+    title: "Service Selection",
+    script: "Here's what I offer: pre-listing deep cleans, move-out cleans, minor drywall patches, decluttering, and furniture moving. I send you before/after photos for every job. What do you usually need help with?",
+    responses: ["Cleaning", "Repairs/touch-ups", "Full pre-listing prep", "Multiple services"],
+    nextStep: { "Cleaning": 6, "Repairs/touch-ups": 6, "Full pre-listing prep": 6, "Multiple services": 6 },
+    collectInfo: ["address", "bedrooms", "bathrooms"]
+  },
+  {
+    step: 6,
+    title: "Scheduling",
+    script: "I can usually turn properties around in 24-48 hours. Do you have a listing coming up that needs prep, or should I just send you my info for next time?",
+    responses: ["Have a listing now", "Send me your info", "Specific date", "Need to think about it"],
+    nextStep: { "Have a listing now": 7, "Send me your info": -6, "Specific date": 7, "Need to think about it": -5 },
+    showCalendar: true
+  },
+  {
+    step: 7,
+    title: "Confirm Booking",
+    script: "Let me confirm: [Service] at [Address] on [Date] at [Time]. I'll send you photos when it's done. Sound good?",
+    responses: ["Yes, book it!", "Change date", "Change service", "Cancel"],
+    nextStep: { "Yes, book it!": 8, "Change date": 6, "Change service": 5, "Cancel": -2 }
+  },
+  {
+    step: 8,
+    title: "Complete",
+    script: "Perfect! I'll text you the confirmation and my contact. Feel free to share my info with other agents – I give priority to referrals. Anything else I can help with?",
+    responses: ["No, thank you", "Yes, one more thing"],
+    nextStep: { "No, thank you": -3, "Yes, one more thing": 4 },
+    isComplete: true
+  }
+];
+
+const SCRIPTS = {
+  customer: CUSTOMER_SCRIPT,
+  realtor: REALTOR_SCRIPT
+};
 
 interface ServiceItem {
   id: string;
@@ -136,10 +207,14 @@ export function CallingSystemTab() {
   const [loadingServices, setLoadingServices] = useState(false);
   
   // Call state
+  const [scriptType, setScriptType] = useState<ScriptType>('customer');
   const [callStarted, setCallStarted] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [callNotes, setCallNotes] = useState('');
   const [callOutcome, setCallOutcome] = useState<'booked' | 'callback' | 'not-interested' | null>(null);
+  
+  // Get current script based on type
+  const activeScript = SCRIPTS[scriptType];
   
   // Booking info
   const [booking, setBooking] = useState<BookingInfo>({
@@ -254,7 +329,7 @@ export function CallingSystemTab() {
   };
 
   const handleResponse = (response: string) => {
-    const currentScriptStep = CALL_SCRIPT.find(s => s.step === currentStep);
+    const currentScriptStep = activeScript.find(s => s.step === currentStep);
     if (!currentScriptStep) return;
     
     const nextStep = currentScriptStep.nextStep[response];
@@ -364,22 +439,47 @@ export function CallingSystemTab() {
     setManualPhone('');
   };
 
-  const currentScriptStep = CALL_SCRIPT.find(s => s.step === currentStep);
+  const currentScriptStep = activeScript.find(s => s.step === currentStep);
 
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h2 className="text-2xl font-bold">Calling System</h2>
           <p className="text-muted-foreground">Click-through call script with easy booking</p>
         </div>
-        {callStarted && (
-          <Button variant="destructive" onClick={resetCall}>
-            <PhoneOff className="h-4 w-4 mr-2" />
-            End & Reset
-          </Button>
-        )}
+        <div className="flex items-center gap-3">
+          {/* Script Type Selector */}
+          <div className="flex items-center gap-2">
+            <Label className="text-sm font-medium">Script:</Label>
+            <Select value={scriptType} onValueChange={(v) => setScriptType(v as ScriptType)}>
+              <SelectTrigger className="w-[160px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="customer">
+                  <div className="flex items-center gap-2">
+                    <Home className="h-4 w-4" />
+                    Homeowner
+                  </div>
+                </SelectItem>
+                <SelectItem value="realtor">
+                  <div className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    Realtor
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          {callStarted && (
+            <Button variant="destructive" onClick={resetCall}>
+              <PhoneOff className="h-4 w-4 mr-2" />
+              End & Reset
+            </Button>
+          )}
+        </div>
       </div>
 
       {!callStarted ? (
@@ -731,7 +831,7 @@ export function CallingSystemTab() {
               <div className="pt-4 border-t">
                 <Label className="text-xs mb-2 block">Progress</Label>
                 <div className="flex gap-1">
-                  {CALL_SCRIPT.map(step => (
+                  {activeScript.map(step => (
                     <div
                       key={step.step}
                       className={cn(
