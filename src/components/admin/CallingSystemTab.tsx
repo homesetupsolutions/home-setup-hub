@@ -1,0 +1,711 @@
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
+import { Calendar } from '@/components/ui/calendar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { 
+  Phone, 
+  PhoneCall, 
+  PhoneOff, 
+  ArrowRight, 
+  ArrowLeft, 
+  User, 
+  Calendar as CalendarIcon, 
+  Clock, 
+  MapPin,
+  CheckCircle2,
+  XCircle,
+  MessageSquare,
+  Home,
+  RefreshCw
+} from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { use3CX } from '@/hooks/use3CX';
+import { listCustomers, searchCustomers, SquareCustomer } from '@/lib/squareCRM';
+import { format, addDays, setHours, setMinutes } from 'date-fns';
+import { cn } from '@/lib/utils';
+
+// Call script steps
+const CALL_SCRIPT = [
+  {
+    step: 1,
+    title: "Introduction",
+    script: "Hi, this is [Your Name] from Realtor Group Cleaners. Am I speaking with [Customer Name]?",
+    responses: ["Yes, speaking", "No, wrong number", "Who is this?"],
+    nextStep: { "Yes, speaking": 2, "No, wrong number": -1, "Who is this?": 2 }
+  },
+  {
+    step: 2,
+    title: "Purpose",
+    script: "Great! I'm calling because we provide professional cleaning services for realtors and property managers. Do you have any properties that need cleaning soon?",
+    responses: ["Yes, I need cleaning", "Maybe, tell me more", "Not interested"],
+    nextStep: { "Yes, I need cleaning": 3, "Maybe, tell me more": 3, "Not interested": -2 }
+  },
+  {
+    step: 3,
+    title: "Service Details",
+    script: "Perfect! We offer move-out cleans, deep cleans, and regular maintenance. What type of property is it? (House, Apartment, Condo)",
+    responses: ["House", "Apartment", "Condo", "Other"],
+    nextStep: { "House": 4, "Apartment": 4, "Condo": 4, "Other": 4 }
+  },
+  {
+    step: 4,
+    title: "Size & Location",
+    script: "Got it! How many bedrooms and bathrooms? And what's the address?",
+    responses: ["Info provided", "Need to check", "Rather not say"],
+    nextStep: { "Info provided": 5, "Need to check": 5, "Rather not say": 5 },
+    collectInfo: ["address", "bedrooms", "bathrooms"]
+  },
+  {
+    step: 5,
+    title: "Scheduling",
+    script: "When would you like us to come? We have availability this week and next.",
+    responses: ["This week", "Next week", "Specific date"],
+    nextStep: { "This week": 6, "Next week": 6, "Specific date": 6 },
+    showCalendar: true
+  },
+  {
+    step: 6,
+    title: "Confirm Booking",
+    script: "Let me confirm: [Service] at [Address] on [Date] at [Time]. Does that work for you?",
+    responses: ["Yes, book it!", "Change date", "Change service", "Cancel"],
+    nextStep: { "Yes, book it!": 7, "Change date": 5, "Change service": 3, "Cancel": -2 }
+  },
+  {
+    step: 7,
+    title: "Complete",
+    script: "Excellent! You're all booked. We'll send you a confirmation text. Is there anything else I can help with?",
+    responses: ["No, thank you", "Yes, one more thing"],
+    nextStep: { "No, thank you": -3, "Yes, one more thing": 2 },
+    isComplete: true
+  }
+];
+
+const SERVICES = [
+  { id: 'move-out', name: 'Move-Out Clean', duration: 180, price: 250 },
+  { id: 'deep-clean', name: 'Deep Clean', duration: 120, price: 175 },
+  { id: 'regular', name: 'Regular Maintenance', duration: 90, price: 125 },
+  { id: 'post-construction', name: 'Post-Construction', duration: 240, price: 350 },
+];
+
+const TIME_SLOTS = [
+  '08:00', '09:00', '10:00', '11:00', '12:00', 
+  '13:00', '14:00', '15:00', '16:00', '17:00'
+];
+
+interface BookingInfo {
+  customerName: string;
+  customerPhone: string;
+  customerEmail: string;
+  service: string;
+  serviceDuration: number;
+  servicePrice: number;
+  address: string;
+  bedrooms: string;
+  bathrooms: string;
+  date: Date | null;
+  time: string;
+  notes: string;
+}
+
+export function CallingSystemTab() {
+  const { toast } = useToast();
+  const { initiateCall, endCall, isCallActive, formatPhoneFor3CX } = use3CX();
+  
+  // Customer search
+  const [searchQuery, setSearchQuery] = useState('');
+  const [customers, setCustomers] = useState<SquareCustomer[]>([]);
+  const [selectedCustomer, setSelectedCustomer] = useState<SquareCustomer | null>(null);
+  const [loadingCustomers, setLoadingCustomers] = useState(false);
+  
+  // Call state
+  const [callStarted, setCallStarted] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [callNotes, setCallNotes] = useState('');
+  const [callOutcome, setCallOutcome] = useState<'booked' | 'callback' | 'not-interested' | null>(null);
+  
+  // Booking info
+  const [booking, setBooking] = useState<BookingInfo>({
+    customerName: '',
+    customerPhone: '',
+    customerEmail: '',
+    service: '',
+    serviceDuration: 60,
+    servicePrice: 0,
+    address: '',
+    bedrooms: '',
+    bathrooms: '',
+    date: null,
+    time: '',
+    notes: ''
+  });
+  
+  const [savingBooking, setSavingBooking] = useState(false);
+  const [manualPhone, setManualPhone] = useState('');
+
+  // Load customers
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
+  const fetchCustomers = async () => {
+    setLoadingCustomers(true);
+    try {
+      const result = await listCustomers(50);
+      setCustomers(result.customers || []);
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+    } finally {
+      setLoadingCustomers(false);
+    }
+  };
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      fetchCustomers();
+      return;
+    }
+    setLoadingCustomers(true);
+    try {
+      const result = await searchCustomers(searchQuery);
+      setCustomers(result.customers || []);
+    } catch (error) {
+      toast({
+        title: 'Search Error',
+        description: 'Could not search customers',
+        variant: 'destructive'
+      });
+    } finally {
+      setLoadingCustomers(false);
+    }
+  };
+
+  const selectCustomer = (customer: SquareCustomer) => {
+    setSelectedCustomer(customer);
+    setBooking(prev => ({
+      ...prev,
+      customerName: `${customer.given_name || ''} ${customer.family_name || ''}`.trim(),
+      customerPhone: customer.phone_number || '',
+      customerEmail: customer.email_address || ''
+    }));
+  };
+
+  const startCall = async (phone: string, name?: string) => {
+    const cleanPhone = formatPhoneFor3CX(phone);
+    setCallStarted(true);
+    setCurrentStep(1);
+    setCallOutcome(null);
+    
+    // Open phone dialer
+    window.open(`tel:${cleanPhone}`, '_self');
+    
+    toast({
+      title: 'Call Started',
+      description: `Calling ${name || phone}...`
+    });
+  };
+
+  const handleResponse = (response: string) => {
+    const currentScriptStep = CALL_SCRIPT.find(s => s.step === currentStep);
+    if (!currentScriptStep) return;
+    
+    const nextStep = currentScriptStep.nextStep[response];
+    
+    if (nextStep === -1) {
+      // Wrong number
+      setCallOutcome('not-interested');
+      toast({ title: 'Wrong Number', description: 'Ending call flow' });
+      resetCall();
+    } else if (nextStep === -2) {
+      // Not interested
+      setCallOutcome('not-interested');
+      toast({ title: 'Not Interested', description: 'Customer declined' });
+      resetCall();
+    } else if (nextStep === -3) {
+      // Call complete - proceed to book if we have info
+      setCallOutcome('booked');
+    } else {
+      setCurrentStep(nextStep);
+    }
+    
+    // Add to notes
+    setCallNotes(prev => prev + `\nStep ${currentStep}: ${response}`);
+  };
+
+  const handleServiceSelect = (serviceId: string) => {
+    const service = SERVICES.find(s => s.id === serviceId);
+    if (service) {
+      setBooking(prev => ({
+        ...prev,
+        service: service.name,
+        serviceDuration: service.duration,
+        servicePrice: service.price
+      }));
+    }
+  };
+
+  const saveAppointment = async () => {
+    if (!booking.date || !booking.time || !booking.service) {
+      toast({
+        title: 'Missing Info',
+        description: 'Please select date, time, and service',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setSavingBooking(true);
+    try {
+      const [hours, minutes] = booking.time.split(':').map(Number);
+      const scheduledDate = setMinutes(setHours(booking.date, hours), minutes);
+
+      const { error } = await supabase.from('appointments').insert({
+        customer_name: booking.customerName,
+        customer_phone: booking.customerPhone,
+        customer_email: booking.customerEmail,
+        service_name: booking.service,
+        service_price: booking.servicePrice,
+        duration_minutes: booking.serviceDuration,
+        address: booking.address,
+        scheduled_at: scheduledDate.toISOString(),
+        notes: `Bedrooms: ${booking.bedrooms}, Bathrooms: ${booking.bathrooms}\n${booking.notes}\n\nCall Notes:\n${callNotes}`,
+        status: 'scheduled'
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: 'Appointment Booked! ✓',
+        description: `${booking.service} on ${format(scheduledDate, 'MMM d')} at ${booking.time}`
+      });
+
+      // Reset for next call
+      resetCall();
+    } catch (error) {
+      console.error('Error saving appointment:', error);
+      toast({
+        title: 'Booking Error',
+        description: error instanceof Error ? error.message : 'Could not save appointment',
+        variant: 'destructive'
+      });
+    } finally {
+      setSavingBooking(false);
+    }
+  };
+
+  const resetCall = () => {
+    setCallStarted(false);
+    setCurrentStep(1);
+    setCallNotes('');
+    setCallOutcome(null);
+    setSelectedCustomer(null);
+    setBooking({
+      customerName: '',
+      customerPhone: '',
+      customerEmail: '',
+      service: '',
+      serviceDuration: 60,
+      servicePrice: 0,
+      address: '',
+      bedrooms: '',
+      bathrooms: '',
+      date: null,
+      time: '',
+      notes: ''
+    });
+    setManualPhone('');
+  };
+
+  const currentScriptStep = CALL_SCRIPT.find(s => s.step === currentStep);
+
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold">Calling System</h2>
+          <p className="text-muted-foreground">Click-through call script with easy booking</p>
+        </div>
+        {callStarted && (
+          <Button variant="destructive" onClick={resetCall}>
+            <PhoneOff className="h-4 w-4 mr-2" />
+            End & Reset
+          </Button>
+        )}
+      </div>
+
+      {!callStarted ? (
+        /* Customer Selection / Manual Dial */
+        <div className="grid md:grid-cols-2 gap-4">
+          {/* Customer List */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <User className="h-5 w-5" />
+                Select Customer to Call
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Search customers..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                />
+                <Button onClick={handleSearch} disabled={loadingCustomers}>
+                  {loadingCustomers ? <RefreshCw className="h-4 w-4 animate-spin" /> : 'Search'}
+                </Button>
+              </div>
+              
+              <div className="max-h-[300px] overflow-y-auto space-y-2">
+                {customers.map(customer => (
+                  <div
+                    key={customer.id}
+                    className={cn(
+                      "p-3 border rounded-lg cursor-pointer hover:bg-accent transition-colors",
+                      selectedCustomer?.id === customer.id && "border-primary bg-accent"
+                    )}
+                    onClick={() => selectCustomer(customer)}
+                  >
+                    <div className="font-medium">
+                      {customer.given_name} {customer.family_name}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {customer.phone_number || 'No phone'}
+                    </div>
+                  </div>
+                ))}
+                {customers.length === 0 && !loadingCustomers && (
+                  <p className="text-center text-muted-foreground py-4">No customers found</p>
+                )}
+              </div>
+
+              {selectedCustomer && selectedCustomer.phone_number && (
+                <Button 
+                  className="w-full" 
+                  size="lg"
+                  onClick={() => startCall(selectedCustomer.phone_number!, `${selectedCustomer.given_name} ${selectedCustomer.family_name}`)}
+                >
+                  <Phone className="h-5 w-5 mr-2" />
+                  Call {selectedCustomer.given_name}
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Manual Dial */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <PhoneCall className="h-5 w-5" />
+                Manual Dial
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Phone Number</Label>
+                <Input
+                  placeholder="Enter phone number..."
+                  value={manualPhone}
+                  onChange={(e) => setManualPhone(e.target.value)}
+                  type="tel"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Customer Name (optional)</Label>
+                <Input
+                  placeholder="Enter name..."
+                  value={booking.customerName}
+                  onChange={(e) => setBooking(prev => ({ ...prev, customerName: e.target.value }))}
+                />
+              </div>
+              <Button 
+                className="w-full" 
+                size="lg"
+                disabled={!manualPhone}
+                onClick={() => {
+                  setBooking(prev => ({ ...prev, customerPhone: manualPhone }));
+                  startCall(manualPhone, booking.customerName);
+                }}
+              >
+                <Phone className="h-5 w-5 mr-2" />
+                Start Call
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      ) : (
+        /* Call In Progress - Script Flow */
+        <div className="grid md:grid-cols-3 gap-4">
+          {/* Left: Script */}
+          <Card className="md:col-span-2">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5" />
+                  Step {currentStep}: {currentScriptStep?.title}
+                </CardTitle>
+                <Badge variant="outline" className="text-green-600">
+                  <Phone className="h-3 w-3 mr-1 animate-pulse" />
+                  On Call with {booking.customerName || 'Customer'}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Script to read */}
+              <div className="bg-muted p-4 rounded-lg text-lg">
+                "{currentScriptStep?.script}"
+              </div>
+
+              {/* Response buttons */}
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Customer Response:</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  {currentScriptStep?.responses.map(response => (
+                    <Button
+                      key={response}
+                      variant="outline"
+                      size="lg"
+                      className="h-auto py-3 text-left justify-start"
+                      onClick={() => handleResponse(response)}
+                    >
+                      <ArrowRight className="h-4 w-4 mr-2 flex-shrink-0" />
+                      {response}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Collect info sections */}
+              {currentScriptStep?.collectInfo && (
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="col-span-3 space-y-2">
+                    <Label>Address</Label>
+                    <Input
+                      placeholder="123 Main St, City, State"
+                      value={booking.address}
+                      onChange={(e) => setBooking(prev => ({ ...prev, address: e.target.value }))}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Bedrooms</Label>
+                    <Select value={booking.bedrooms} onValueChange={(v) => setBooking(prev => ({ ...prev, bedrooms: v }))}>
+                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                      <SelectContent>
+                        {['1', '2', '3', '4', '5', '6+'].map(n => (
+                          <SelectItem key={n} value={n}>{n}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Bathrooms</Label>
+                    <Select value={booking.bathrooms} onValueChange={(v) => setBooking(prev => ({ ...prev, bathrooms: v }))}>
+                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                      <SelectContent>
+                        {['1', '1.5', '2', '2.5', '3', '3.5', '4+'].map(n => (
+                          <SelectItem key={n} value={n}>{n}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              )}
+
+              {/* Service selection */}
+              {currentStep === 3 && (
+                <div className="space-y-2">
+                  <Label>Select Service</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {SERVICES.map(service => (
+                      <Button
+                        key={service.id}
+                        variant={booking.service === service.name ? "default" : "outline"}
+                        className="h-auto py-3 flex-col items-start"
+                        onClick={() => handleServiceSelect(service.id)}
+                      >
+                        <span className="font-medium">{service.name}</span>
+                        <span className="text-xs opacity-70">${service.price} • {service.duration}min</span>
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Calendar for scheduling */}
+              {currentScriptStep?.showCalendar && (
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Select Date</Label>
+                    <Calendar
+                      mode="single"
+                      selected={booking.date || undefined}
+                      onSelect={(date) => setBooking(prev => ({ ...prev, date: date || null }))}
+                      disabled={(date) => date < new Date()}
+                      className="rounded-md border"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Select Time</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {TIME_SLOTS.map(time => (
+                        <Button
+                          key={time}
+                          variant={booking.time === time ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setBooking(prev => ({ ...prev, time }))}
+                        >
+                          <Clock className="h-3 w-3 mr-1" />
+                          {time}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Complete step - Book button */}
+              {currentScriptStep?.isComplete && (
+                <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-4 rounded-lg space-y-4">
+                  <div className="flex items-center gap-2 text-green-700 dark:text-green-300">
+                    <CheckCircle2 className="h-5 w-5" />
+                    <span className="font-medium">Ready to Book!</span>
+                  </div>
+                  <div className="text-sm space-y-1">
+                    <p><strong>Customer:</strong> {booking.customerName}</p>
+                    <p><strong>Service:</strong> {booking.service}</p>
+                    <p><strong>Address:</strong> {booking.address}</p>
+                    <p><strong>Date:</strong> {booking.date ? format(booking.date, 'MMM d, yyyy') : 'Not set'}</p>
+                    <p><strong>Time:</strong> {booking.time || 'Not set'}</p>
+                  </div>
+                  <Button 
+                    className="w-full" 
+                    size="lg"
+                    disabled={savingBooking}
+                    onClick={saveAppointment}
+                  >
+                    {savingBooking ? (
+                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4 mr-2" />
+                    )}
+                    Book Appointment Now
+                  </Button>
+                </div>
+              )}
+
+              {/* Navigation */}
+              <div className="flex gap-2 pt-4 border-t">
+                <Button
+                  variant="ghost"
+                  onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+                  disabled={currentStep === 1}
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => setCurrentStep(Math.min(7, currentStep + 1))}
+                >
+                  Skip
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Right: Quick Info Panel */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Booking Summary</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Customer name"
+                    value={booking.customerName}
+                    onChange={(e) => setBooking(prev => ({ ...prev, customerName: e.target.value }))}
+                    className="h-8"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Phone"
+                    value={booking.customerPhone}
+                    onChange={(e) => setBooking(prev => ({ ...prev, customerPhone: e.target.value }))}
+                    className="h-8"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Home className="h-4 w-4 text-muted-foreground" />
+                  <span className="truncate">{booking.service || 'No service selected'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                  <span className="truncate">{booking.address || 'No address'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                  <span>{booking.date ? format(booking.date, 'MMM d') : 'No date'} {booking.time || ''}</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-xs">Quick Notes</Label>
+                <Textarea
+                  placeholder="Add notes during call..."
+                  value={booking.notes}
+                  onChange={(e) => setBooking(prev => ({ ...prev, notes: e.target.value }))}
+                  className="h-24 text-sm"
+                />
+              </div>
+
+              {/* Quick Book Button */}
+              <Button 
+                className="w-full"
+                disabled={!booking.date || !booking.time || !booking.service || savingBooking}
+                onClick={saveAppointment}
+              >
+                {savingBooking ? (
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <CheckCircle2 className="h-4 w-4 mr-2" />
+                )}
+                Quick Book
+              </Button>
+
+              {/* Step Progress */}
+              <div className="pt-4 border-t">
+                <Label className="text-xs mb-2 block">Progress</Label>
+                <div className="flex gap-1">
+                  {CALL_SCRIPT.map(step => (
+                    <div
+                      key={step.step}
+                      className={cn(
+                        "h-2 flex-1 rounded-full transition-colors",
+                        step.step < currentStep ? "bg-green-500" :
+                        step.step === currentStep ? "bg-primary" :
+                        "bg-muted"
+                      )}
+                    />
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+    </div>
+  );
+}
