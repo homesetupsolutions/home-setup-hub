@@ -42,10 +42,10 @@ const CALL_SCRIPT = [
   },
   {
     step: 2,
-    title: "Permission",
-    script: "Hey [Customer Name], this is Evan with Home Setup Solutions here in Calgary. Did I catch you with a quick minute?",
-    responses: ["Sure, go ahead", "Not really", "What's this about?"],
-    nextStep: { "Sure, go ahead": 3, "Not really": 3, "What's this about?": 3 }
+    title: "Introduction",
+    script: "Great! This is Evan calling from Home Setup Solutions in Calgary. I help homeowners and realtors with deep cleaning, handyman work, and heavy lifting. Do you have a quick minute to chat?",
+    responses: ["Sure, go ahead", "Not right now", "What services do you offer?"],
+    nextStep: { "Sure, go ahead": 3, "Not right now": -5, "What services do you offer?": 3 }
   },
   {
     step: 3,
