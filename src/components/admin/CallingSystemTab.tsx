@@ -27,7 +27,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { use3CX } from '@/hooks/use3CX';
-import { listCustomers, searchCustomers, SquareCustomer } from '@/lib/squareCRM';
+import { listCustomers, searchCustomers, listCatalogItems, SquareCustomer, SquareCatalogItem } from '@/lib/squareCRM';
 import { format, addDays, setHours, setMinutes } from 'date-fns';
 import { cn } from '@/lib/utils';
 
@@ -94,14 +94,12 @@ const CALL_SCRIPT = [
   }
 ];
 
-const SERVICES = [
-  { id: 'move-out', name: 'Move-Out Clean', duration: 180, price: 250 },
-  { id: 'deep-clean', name: 'Deep Clean', duration: 120, price: 175 },
-  { id: 'post-reno', name: 'Post-Reno Cleanup', duration: 180, price: 275 },
-  { id: 'heavy-lifting', name: 'Heavy Lifting / Furniture Moving', duration: 90, price: 125 },
-  { id: 'handyman', name: 'Handyman Touch-ups', duration: 60, price: 95 },
-  { id: 'pre-listing', name: 'Pre-Listing Prep (Realtors)', duration: 150, price: 225 },
-];
+interface ServiceItem {
+  id: string;
+  name: string;
+  duration: number;
+  price: number;
+}
 
 const TIME_SLOTS = [
   '08:00', '09:00', '10:00', '11:00', '12:00', 
@@ -133,6 +131,10 @@ export function CallingSystemTab() {
   const [selectedCustomer, setSelectedCustomer] = useState<SquareCustomer | null>(null);
   const [loadingCustomers, setLoadingCustomers] = useState(false);
   
+  // Services from Square
+  const [services, setServices] = useState<ServiceItem[]>([]);
+  const [loadingServices, setLoadingServices] = useState(false);
+  
   // Call state
   const [callStarted, setCallStarted] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
@@ -158,10 +160,45 @@ export function CallingSystemTab() {
   const [savingBooking, setSavingBooking] = useState(false);
   const [manualPhone, setManualPhone] = useState('');
 
-  // Load customers
+  // Load customers and services
   useEffect(() => {
     fetchCustomers();
+    fetchServices();
   }, []);
+
+  const fetchServices = async () => {
+    setLoadingServices(true);
+    try {
+      const result = await listCatalogItems();
+      const serviceItems: ServiceItem[] = (result.items || []).map(item => {
+        // Get the first variation's price, default to 0 if not set
+        const firstVariation = item.variations?.[0];
+        const priceInCents = firstVariation?.price || 0;
+        const priceInDollars = priceInCents / 100;
+        
+        return {
+          id: item.id,
+          name: item.name,
+          duration: 60, // Default duration, can be customized
+          price: priceInDollars
+        };
+      });
+      setServices(serviceItems);
+    } catch (error) {
+      console.error('Error fetching services:', error);
+      // Fallback to default services if Square fails
+      setServices([
+        { id: 'move-out', name: 'Move-Out Clean', duration: 180, price: 250 },
+        { id: 'deep-clean', name: 'Deep Clean', duration: 120, price: 175 },
+        { id: 'post-reno', name: 'Post-Reno Cleanup', duration: 180, price: 275 },
+        { id: 'heavy-lifting', name: 'Heavy Lifting / Furniture Moving', duration: 90, price: 125 },
+        { id: 'handyman', name: 'Handyman Touch-ups', duration: 60, price: 95 },
+        { id: 'pre-listing', name: 'Pre-Listing Prep (Realtors)', duration: 150, price: 225 },
+      ]);
+    } finally {
+      setLoadingServices(false);
+    }
+  };
 
   const fetchCustomers = async () => {
     setLoadingCustomers(true);
@@ -244,7 +281,7 @@ export function CallingSystemTab() {
   };
 
   const handleServiceSelect = (serviceId: string) => {
-    const service = SERVICES.find(s => s.id === serviceId);
+    const service = services.find(s => s.id === serviceId);
     if (service) {
       setBooking(prev => ({
         ...prev,
@@ -527,9 +564,9 @@ export function CallingSystemTab() {
               {/* Service selection */}
               {currentStep === 3 && (
                 <div className="space-y-2">
-                  <Label>Select Service</Label>
+                  <Label>Select Service {loadingServices && <span className="text-xs text-muted-foreground">(Loading from Square...)</span>}</Label>
                   <div className="grid grid-cols-2 gap-2">
-                    {SERVICES.map(service => (
+                    {services.map(service => (
                       <Button
                         key={service.id}
                         variant={booking.service === service.name ? "default" : "outline"}

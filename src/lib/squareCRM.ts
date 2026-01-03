@@ -84,3 +84,21 @@ export async function getBooking(bookingId: string) {
 export async function listPayments(limit = 50, cursor?: string) {
   return callSquareCRM<{ payments: SquarePayment[]; cursor?: string }>('list_payments', { limit, cursor });
 }
+
+export interface SquareCatalogItem {
+  id: string;
+  name: string;
+  description?: string;
+  category_id?: string;
+  variations: Array<{
+    id: string;
+    name?: string;
+    price?: number;
+    currency?: string;
+  }>;
+  updated_at?: string;
+}
+
+export async function listCatalogItems(cursor?: string) {
+  return callSquareCRM<{ items: SquareCatalogItem[]; cursor?: string }>('list_catalog_items', { cursor });
+}

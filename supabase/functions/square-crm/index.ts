@@ -117,6 +117,7 @@ Deno.serve(async (req) => {
       'list_bookings',
       'get_booking',
       'list_payments',
+      'list_catalog_items',
     ]);
 
     const action = typeof raw.action === 'string' ? raw.action : '';
@@ -274,6 +275,48 @@ Deno.serve(async (req) => {
           cursor: data.cursor,
         };
         console.log('Search returned', result.customers.length, 'customers');
+        break;
+      }
+
+      case 'list_catalog_items': {
+        // List catalog items (services) with their variations and prices
+        const params = new URLSearchParams();
+        params.append('types', 'ITEM');
+        if (cursor) params.append('cursor', cursor);
+        
+        const response = await fetch(`${squareBaseUrl}/catalog/list?${params}`, { headers });
+        const data = await response.json();
+        
+        if (!response.ok) {
+          console.error('Square API error:', data);
+          throw new Error(data.errors?.[0]?.detail || 'Failed to fetch catalog items');
+        }
+        
+        // Filter to only include service-type items and extract pricing
+        const items = (data.objects || []).map((item: any) => {
+          const itemData = item.item_data || {};
+          const variations = (itemData.variations || []).map((v: any) => ({
+            id: v.id,
+            name: v.item_variation_data?.name,
+            price: v.item_variation_data?.price_money?.amount,
+            currency: v.item_variation_data?.price_money?.currency,
+          }));
+          
+          return {
+            id: item.id,
+            name: itemData.name,
+            description: itemData.description,
+            category_id: itemData.category_id,
+            variations,
+            updated_at: item.updated_at,
+          };
+        });
+        
+        result = {
+          items,
+          cursor: data.cursor,
+        };
+        console.log('Fetched', items.length, 'catalog items');
         break;
       }
 
