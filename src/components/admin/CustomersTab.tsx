@@ -10,6 +10,8 @@ import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { use3CX } from '@/hooks/use3CX';
 
+const MAX_CUSTOMERS = 2000;
+
 export function CustomersTab() {
   const [customers, setCustomers] = useState<SquareCustomer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,7 @@ export function CustomersTab() {
     initiateCall(customer.phone_number, customer.id, customerName);
   };
 
-  // Fetch ALL customers by paginating through the entire list
+  // Fetch customers up to MAX_CUSTOMERS limit
   const fetchAllCustomers = useCallback(async () => {
     setLoading(true);
     setCustomers([]);
@@ -39,12 +41,18 @@ export function CustomersTab() {
       let allCustomers: SquareCustomer[] = [];
       let nextCursor: string | undefined = undefined;
       
-      // Keep fetching until no more pages
+      // Keep fetching until no more pages or max reached
       do {
         const result = await listCustomers(100, nextCursor);
         allCustomers = [...allCustomers, ...result.customers];
         nextCursor = result.cursor;
         setTotalLoaded(allCustomers.length);
+        
+        // Stop if we've reached the max
+        if (allCustomers.length >= MAX_CUSTOMERS) {
+          allCustomers = allCustomers.slice(0, MAX_CUSTOMERS);
+          break;
+        }
       } while (nextCursor);
       
       setCustomers(allCustomers);
@@ -53,7 +61,7 @@ export function CustomersTab() {
       
       toast({
         title: 'Customers Loaded',
-        description: `Successfully loaded ${allCustomers.length} customers from Square`,
+        description: `Loaded ${allCustomers.length} customers (max ${MAX_CUSTOMERS})`,
       });
     } catch (error) {
       toast({
