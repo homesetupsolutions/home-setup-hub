@@ -88,20 +88,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Check if user is admin
-    const { data: hasAdminRole } = await supabase.rpc('has_role', {
-      _user_id: user.id,
-      _role: 'admin'
-    });
-
-    if (!hasAdminRole) {
-      console.error('User is not admin:', user.id);
-      return new Response(
-        JSON.stringify({ error: 'Forbidden: Admin access required' }),
-        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
     const raw = await req.json().catch(() => null);
     if (!raw || typeof raw !== 'object') {
       return new Response(
@@ -110,7 +96,13 @@ Deno.serve(async (req) => {
       );
     }
 
-    const allowedActions = new Set([
+    const action = typeof raw.action === 'string' ? raw.action : '';
+    
+    // Customer-only action that doesn't require admin
+    const customerActions = new Set(['get_my_transactions']);
+    
+    // Admin-only actions
+    const adminActions = new Set([
       'list_customers',
       'get_customer',
       'search_customers',
@@ -121,12 +113,29 @@ Deno.serve(async (req) => {
       'list_catalog_items',
     ]);
 
-    const action = typeof raw.action === 'string' ? raw.action : '';
-    if (!allowedActions.has(action)) {
+    const allActions = new Set([...customerActions, ...adminActions]);
+    
+    if (!allActions.has(action)) {
       return new Response(
         JSON.stringify({ error: 'Invalid action' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
+    }
+
+    // Check admin role for admin actions
+    if (adminActions.has(action)) {
+      const { data: hasAdminRole } = await supabase.rpc('has_role', {
+        _user_id: user.id,
+        _role: 'admin'
+      });
+
+      if (!hasAdminRole) {
+        console.error('User is not admin:', user.id);
+        return new Response(
+          JSON.stringify({ error: 'Forbidden: Admin access required' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
     }
 
     const limitRaw = raw.limit ?? 100;
@@ -423,6 +432,138 @@ Deno.serve(async (req) => {
           cursor: data.cursor,
         };
         console.log('Fetched', items.length, 'catalog items');
+        break;
+      }
+
+      case 'get_my_transactions': {
+        // Get the user's profile to find their email/phone
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('email, phone')
+          .eq('user_id', user.id)
+          .single();
+
+        if (profileError || !profile) {
+          console.error('Failed to get user profile:', profileError);
+          result = { payments: [], bookings: [], squareCustomer: null };
+          break;
+        }
+
+        console.log('Looking up Square customer for:', profile.email, profile.phone);
+
+        // Search Square for matching customer by email first, then phone
+        let squareCustomerId: string | null = null;
+        let squareCustomer: SquareCustomer | null = null;
+
+        // Try email search
+        if (profile.email) {
+          const emailSearchBody = {
+            limit: 1,
+            query: {
+              filter: {
+                email_address: { exact: profile.email },
+              },
+            },
+          };
+
+          const emailResponse = await fetch(`${squareBaseUrl}/customers/search`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(emailSearchBody),
+          });
+
+          if (emailResponse.ok) {
+            const emailData = await emailResponse.json();
+            if (emailData.customers && emailData.customers.length > 0) {
+              squareCustomer = emailData.customers[0];
+              squareCustomerId = squareCustomer!.id;
+              console.log('Found Square customer by email:', squareCustomerId);
+            }
+          }
+        }
+
+        // Try phone search if email didn't match
+        if (!squareCustomerId && profile.phone) {
+          const phoneNormalized = profile.phone.replace(/\D/g, '');
+          const phoneVariants = [
+            phoneNormalized,
+            `+1${phoneNormalized}`,
+            phoneNormalized.slice(-10),
+          ];
+
+          for (const phoneVariant of phoneVariants) {
+            if (phoneVariant.length < 10) continue;
+
+            const phoneSearchBody = {
+              limit: 1,
+              query: {
+                filter: {
+                  phone_number: { exact: `+1${phoneVariant.slice(-10)}` },
+                },
+              },
+            };
+
+            const phoneResponse = await fetch(`${squareBaseUrl}/customers/search`, {
+              method: 'POST',
+              headers,
+              body: JSON.stringify(phoneSearchBody),
+            });
+
+            if (phoneResponse.ok) {
+              const phoneData = await phoneResponse.json();
+              if (phoneData.customers && phoneData.customers.length > 0) {
+                squareCustomer = phoneData.customers[0];
+                squareCustomerId = squareCustomer!.id;
+                console.log('Found Square customer by phone:', squareCustomerId);
+                break;
+              }
+            }
+          }
+        }
+
+        if (!squareCustomerId) {
+          console.log('No Square customer found for user');
+          result = { payments: [], bookings: [], squareCustomer: null };
+          break;
+        }
+
+        // Fetch payments for this customer
+        const paymentsResponse = await fetch(
+          `${squareBaseUrl}/payments?limit=50`,
+          { headers }
+        );
+        
+        let payments: SquarePayment[] = [];
+        if (paymentsResponse.ok) {
+          const paymentsData = await paymentsResponse.json();
+          payments = (paymentsData.payments || []).filter(
+            (p: any) => p.customer_id === squareCustomerId
+          );
+        }
+
+        // Fetch bookings for this customer
+        const bookingsResponse = await fetch(
+          `${squareBaseUrl}/bookings?customer_id=${squareCustomerId}&limit=50`,
+          { headers }
+        );
+        
+        let bookings: SquareBooking[] = [];
+        if (bookingsResponse.ok) {
+          const bookingsData = await bookingsResponse.json();
+          bookings = bookingsData.bookings || [];
+        }
+
+        console.log(`Found ${payments.length} payments and ${bookings.length} bookings for customer`);
+        
+        result = { 
+          payments, 
+          bookings, 
+          squareCustomer: {
+            id: squareCustomer?.id,
+            given_name: squareCustomer?.given_name,
+            family_name: squareCustomer?.family_name,
+          }
+        };
         break;
       }
 

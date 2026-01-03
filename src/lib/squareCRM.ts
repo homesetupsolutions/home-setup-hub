@@ -106,3 +106,13 @@ export interface SquareCatalogItem {
 export async function listCatalogItems(cursor?: string) {
   return callSquareCRM<{ items: SquareCatalogItem[]; cursor?: string }>('list_catalog_items', { cursor });
 }
+
+export interface MyTransactionsResult {
+  payments: SquarePayment[];
+  bookings: SquareBooking[];
+  squareCustomer: { id: string; given_name?: string; family_name?: string } | null;
+}
+
+export async function getMyTransactions() {
+  return callSquareCRM<MyTransactionsResult>('get_my_transactions', {});
+}

@@ -9,8 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Calendar, History, User, LogOut, Phone, Mail, Clock, MapPin } from 'lucide-react';
+import { Loader2, Calendar, History, User, LogOut, Phone, Mail, Clock, MapPin, CreditCard, ExternalLink } from 'lucide-react';
 import { format } from 'date-fns';
+import { getMyTransactions, SquarePayment, SquareBooking } from '@/lib/squareCRM';
 
 interface Appointment {
   id: string;
@@ -33,6 +34,8 @@ export default function CustomerPortal() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [squarePayments, setSquarePayments] = useState<SquarePayment[]>([]);
+  const [squareBookings, setSquareBookings] = useState<SquareBooking[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loadingData, setLoadingData] = useState(true);
 
@@ -64,7 +67,7 @@ export default function CustomerPortal() {
         setProfile(profileData);
       }
 
-      // Fetch appointments
+      // Fetch local appointments
       const { data: appointmentsData, error: appointmentsError } = await supabase
         .from('appointments')
         .select('id, service_name, scheduled_at, status, address, notes, duration_minutes')
@@ -75,6 +78,17 @@ export default function CustomerPortal() {
         console.error('Error fetching appointments:', appointmentsError);
       } else {
         setAppointments(appointmentsData || []);
+      }
+
+      // Fetch Square transaction history
+      try {
+        const squareData = await getMyTransactions();
+        setSquarePayments(squareData.payments || []);
+        setSquareBookings(squareData.bookings || []);
+        console.log('Fetched Square data:', squareData.payments?.length, 'payments,', squareData.bookings?.length, 'bookings');
+      } catch (squareError) {
+        console.error('Error fetching Square transactions:', squareError);
+        // Don't fail the whole fetch if Square fails
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -275,62 +289,125 @@ export default function CustomerPortal() {
                 </motion.div>
               </TabsContent>
 
-              {/* Past Appointments */}
+              {/* Past Appointments & Transactions */}
               <TabsContent value="history">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
+                  className="space-y-6"
                 >
                   {loadingData ? (
                     <div className="flex justify-center py-12">
                       <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     </div>
-                  ) : pastAppointments.length === 0 ? (
-                    <Card>
-                      <CardContent className="py-12 text-center">
-                        <History className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                        <h3 className="text-lg font-semibold mb-2">No Past Appointments</h3>
-                        <p className="text-muted-foreground">
-                          Your completed appointments will appear here.
-                        </p>
-                      </CardContent>
-                    </Card>
                   ) : (
-                    <div className="space-y-4">
-                      {pastAppointments.map((apt) => (
-                        <Card key={apt.id} className="opacity-80">
-                          <CardContent className="py-4">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                              <div className="space-y-2">
-                                <div className="flex items-center gap-3">
-                                  <h3 className="font-semibold text-lg">{apt.service_name}</h3>
-                                  <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(apt.status)}`}>
-                                    {apt.status.charAt(0).toUpperCase() + apt.status.slice(1)}
-                                  </span>
-                                </div>
-                                <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                                  <div className="flex items-center gap-1">
-                                    <Calendar className="w-4 h-4" />
-                                    <span>{format(new Date(apt.scheduled_at), 'EEEE, MMMM d, yyyy')}</span>
-                                  </div>
-                                  <div className="flex items-center gap-1">
-                                    <Clock className="w-4 h-4" />
-                                    <span>{format(new Date(apt.scheduled_at), 'h:mm a')}</span>
-                                  </div>
-                                  {apt.address && (
-                                    <div className="flex items-center gap-1">
-                                      <MapPin className="w-4 h-4" />
-                                      <span>{apt.address}</span>
+                    <>
+                      {/* Square Payments Section */}
+                      {squarePayments.length > 0 && (
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <CreditCard className="w-5 h-5 text-primary" />
+                            Payment History
+                          </h3>
+                          {squarePayments.map((payment) => (
+                            <Card key={payment.id}>
+                              <CardContent className="py-4">
+                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                  <div className="space-y-2">
+                                    <div className="flex items-center gap-3">
+                                      <span className="font-semibold text-lg">
+                                        ${payment.amount_money ? (payment.amount_money.amount / 100).toFixed(2) : '0.00'} {payment.amount_money?.currency || 'CAD'}
+                                      </span>
+                                      <span className={`px-2 py-1 rounded-full text-xs font-medium border ${
+                                        payment.status === 'COMPLETED' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-muted text-muted-foreground border-border'
+                                      }`}>
+                                        {payment.status}
+                                      </span>
                                     </div>
+                                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                                      <div className="flex items-center gap-1">
+                                        <Calendar className="w-4 h-4" />
+                                        <span>{payment.created_at ? format(new Date(payment.created_at), 'MMMM d, yyyy') : 'Unknown date'}</span>
+                                      </div>
+                                      {payment.source_type && (
+                                        <div className="flex items-center gap-1">
+                                          <CreditCard className="w-4 h-4" />
+                                          <span>{payment.source_type.replace(/_/g, ' ')}</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  {payment.receipt_url && (
+                                    <Button variant="outline" size="sm" asChild>
+                                      <a href={payment.receipt_url} target="_blank" rel="noopener noreferrer" className="gap-2">
+                                        <ExternalLink className="w-4 h-4" />
+                                        Receipt
+                                      </a>
+                                    </Button>
                                   )}
                                 </div>
-                              </div>
-                            </div>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Local Past Appointments */}
+                      {pastAppointments.length > 0 && (
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <History className="w-5 h-5 text-primary" />
+                            Past Appointments
+                          </h3>
+                          {pastAppointments.map((apt) => (
+                            <Card key={apt.id} className="opacity-80">
+                              <CardContent className="py-4">
+                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                  <div className="space-y-2">
+                                    <div className="flex items-center gap-3">
+                                      <h3 className="font-semibold text-lg">{apt.service_name}</h3>
+                                      <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(apt.status)}`}>
+                                        {apt.status.charAt(0).toUpperCase() + apt.status.slice(1)}
+                                      </span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                                      <div className="flex items-center gap-1">
+                                        <Calendar className="w-4 h-4" />
+                                        <span>{format(new Date(apt.scheduled_at), 'EEEE, MMMM d, yyyy')}</span>
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <Clock className="w-4 h-4" />
+                                        <span>{format(new Date(apt.scheduled_at), 'h:mm a')}</span>
+                                      </div>
+                                      {apt.address && (
+                                        <div className="flex items-center gap-1">
+                                          <MapPin className="w-4 h-4" />
+                                          <span>{apt.address}</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* No history at all */}
+                      {pastAppointments.length === 0 && squarePayments.length === 0 && (
+                        <Card>
+                          <CardContent className="py-12 text-center">
+                            <History className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                            <h3 className="text-lg font-semibold mb-2">No History Yet</h3>
+                            <p className="text-muted-foreground">
+                              Your past appointments and payments will appear here.
+                            </p>
                           </CardContent>
                         </Card>
-                      ))}
-                    </div>
+                      )}
+                    </>
                   )}
                 </motion.div>
               </TabsContent>
