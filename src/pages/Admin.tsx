@@ -14,6 +14,7 @@ import { CallingSystemTab } from '@/components/admin/CallingSystemTab';
 import SMSServices from '@/components/staff/SMSServices';
 import StaffManagement from '@/components/staff/StaffManagement';
 import SiteSettings from '@/components/staff/SiteSettings';
+import logo from '@/assets/logo.png';
 
 export default function Admin() {
   const { user, loading, isAdmin, signOut } = useAuth();
@@ -66,9 +67,7 @@ export default function Admin() {
         <header className="border-b border-border bg-card">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <span className="text-primary font-bold text-lg">HS</span>
-              </div>
+              <img src={logo} alt="Home Setup Solutions" className="w-10 h-10 rounded-lg" />
               <div>
                 <h1 className="text-lg font-semibold text-foreground">CRM Dashboard</h1>
                 <p className="text-sm text-muted-foreground">Square Integration</p>

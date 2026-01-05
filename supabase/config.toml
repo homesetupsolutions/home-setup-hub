@@ -2,3 +2,6 @@ project_id = "adkpgzxnlxzfojemgsof"
 
 [functions.square-crm]
 verify_jwt = false
+
+[functions.send-email]
+verify_jwt = false
