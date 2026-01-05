@@ -22,12 +22,14 @@ import {
   XCircle,
   MessageSquare,
   Home,
-  RefreshCw
+  RefreshCw,
+  Mail
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { use3CX } from '@/hooks/use3CX';
 import { listCustomers, searchCustomers, listCatalogItems, SquareCustomer, SquareCatalogItem } from '@/lib/squareCRM';
+import { sendBookingConfirmation } from '@/lib/emailService';
 import { format, addDays, setHours, setMinutes } from 'date-fns';
 import { cn } from '@/lib/utils';
 
@@ -397,10 +399,35 @@ export function CallingSystemTab() {
 
       if (error) throw error;
 
-      toast({
-        title: 'Appointment Booked! ✓',
-        description: `${booking.service} on ${format(scheduledDate, 'MMM d')} at ${booking.time}`
-      });
+      // Send email confirmation if customer has email
+      if (booking.customerEmail) {
+        const emailResult = await sendBookingConfirmation(
+          booking.customerEmail,
+          booking.customerName,
+          booking.service,
+          format(scheduledDate, 'MMMM d, yyyy'),
+          booking.time,
+          booking.address,
+          booking.servicePrice
+        );
+        
+        if (emailResult.success) {
+          toast({
+            title: 'Appointment Booked! ✓',
+            description: `${booking.service} on ${format(scheduledDate, 'MMM d')} at ${booking.time}. Confirmation email sent!`
+          });
+        } else {
+          toast({
+            title: 'Appointment Booked! ✓',
+            description: `${booking.service} on ${format(scheduledDate, 'MMM d')} at ${booking.time}. (Email not sent)`
+          });
+        }
+      } else {
+        toast({
+          title: 'Appointment Booked! ✓',
+          description: `${booking.service} on ${format(scheduledDate, 'MMM d')} at ${booking.time}`
+        });
+      }
 
       // Reset for next call
       resetCall();

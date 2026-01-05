@@ -11,20 +11,16 @@ import {
   Calendar, 
   Clock, 
   Users, 
-  Phone, 
   Settings, 
   LogOut,
   Loader2,
   BookOpen,
   Camera,
-  MapPin,
-  CreditCard,
-  Shield,
   ChevronRight,
   Home,
   MessageSquare,
   UserCog,
-  Palette
+  CreditCard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,6 +34,7 @@ import { CustomersTab } from "@/components/admin/CustomersTab";
 import { BookingsTab } from "@/components/admin/BookingsTab";
 import { PaymentsTab } from "@/components/admin/PaymentsTab";
 import { TodaysAppointments } from "@/components/staff/TodaysAppointments";
+import logo from "@/assets/logo.png";
 
 const staffResources = [
   {
@@ -51,43 +48,42 @@ const staffResources = [
     title: "My Schedule",
     description: "View your appointments",
     icon: Calendar,
-    path: "/admin?tab=bookings",
+    path: "/staff?tab=today",
     color: "bg-green-500/10 text-green-500",
   },
   {
     title: "Time Clock",
     description: "Clock in/out and timecards",
     icon: Clock,
-    path: "/admin?tab=timecards",
+    path: "/staff?tab=timeclock",
     color: "bg-orange-500/10 text-orange-500",
   },
   {
     title: "Customer Lookup",
     description: "Search customer records",
     icon: Users,
-    path: "/admin?tab=customers",
+    path: "/staff?tab=customers",
     color: "bg-purple-500/10 text-purple-500",
   },
   {
-    title: "Phone Logs",
-    description: "Call history and notes",
-    icon: Phone,
-    path: "/admin?tab=phone",
+    title: "SMS Services",
+    description: "Send text messages",
+    icon: MessageSquare,
+    path: "/staff?tab=sms",
     color: "bg-cyan-500/10 text-cyan-500",
   },
   {
     title: "Work Photos",
     description: "Upload job photos",
     icon: Camera,
-    path: "/admin?tab=photos",
+    path: "/staff?tab=photos",
     color: "bg-pink-500/10 text-pink-500",
   },
 ];
 
 const quickLinks = [
-  { title: "Admin Dashboard", path: "/admin", icon: Shield },
-  { title: "Payments", path: "/admin?tab=payments", icon: CreditCard },
-  { title: "Location Tracking", path: "/admin?tab=location", icon: MapPin },
+  { title: "Main Site", path: "/", icon: Home },
+  { title: "Book Appointment", path: "/book", icon: Calendar },
 ];
 
 const StaffPortal = () => {
@@ -196,9 +192,7 @@ const StaffPortal = () => {
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center gap-4">
                 <Link to="/" className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                    <span className="text-primary-foreground font-bold text-lg">HS</span>
-                  </div>
+                  <img src={logo} alt="Home Setup Solutions" className="w-10 h-10 rounded-lg" />
                 </Link>
                 <Separator orientation="vertical" className="h-6" />
                 <h1 className="font-semibold text-lg">Staff Portal</h1>
