@@ -11,7 +11,6 @@ import {
   Calendar, 
   Clock, 
   Users, 
-  Settings, 
   LogOut,
   Loader2,
   BookOpen,
@@ -28,10 +27,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StaffManagement from "@/components/staff/StaffManagement";
-import SiteSettings from "@/components/staff/SiteSettings";
 import SMSServices from "@/components/staff/SMSServices";
 import { CustomersTab } from "@/components/admin/CustomersTab";
-import { BookingsTab } from "@/components/admin/BookingsTab";
 import { PaymentsTab } from "@/components/admin/PaymentsTab";
 import { TodaysAppointments } from "@/components/staff/TodaysAppointments";
 import logo from "@/assets/logo.png";
@@ -48,35 +45,28 @@ const staffResources = [
     title: "My Schedule",
     description: "View your appointments",
     icon: Calendar,
-    path: "/staff?tab=today",
+    tabKey: "today",
     color: "bg-green-500/10 text-green-500",
   },
   {
     title: "Time Clock",
     description: "Clock in/out and timecards",
     icon: Clock,
-    path: "/staff?tab=timeclock",
+    tabKey: "timeclock",
     color: "bg-orange-500/10 text-orange-500",
   },
   {
     title: "Customer Lookup",
     description: "Search customer records",
     icon: Users,
-    path: "/staff?tab=customers",
+    tabKey: "customers",
     color: "bg-purple-500/10 text-purple-500",
-  },
-  {
-    title: "SMS Services",
-    description: "Send text messages",
-    icon: MessageSquare,
-    path: "/staff?tab=sms",
-    color: "bg-cyan-500/10 text-cyan-500",
   },
   {
     title: "Work Photos",
     description: "Upload job photos",
     icon: Camera,
-    path: "/staff?tab=photos",
+    tabKey: "photos",
     color: "bg-pink-500/10 text-pink-500",
   },
 ];
@@ -243,7 +233,7 @@ const StaffPortal = () => {
 
             {/* Main Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className={`grid w-full mb-8 ${isAdmin ? 'grid-cols-7' : 'grid-cols-3'}`}>
+              <TabsList className={`grid w-full mb-8 ${isAdmin ? 'grid-cols-8' : 'grid-cols-5'}`}>
                 <TabsTrigger value="resources" className="gap-2">
                   <BookOpen className="h-4 w-4" />
                   <span className="hidden sm:inline">Resources</span>
@@ -252,15 +242,23 @@ const StaffPortal = () => {
                   <Calendar className="h-4 w-4" />
                   <span className="hidden sm:inline">Today</span>
                 </TabsTrigger>
-                <TabsTrigger value="sms" className="gap-2">
-                  <MessageSquare className="h-4 w-4" />
-                  <span className="hidden sm:inline">SMS</span>
+                <TabsTrigger value="timeclock" className="gap-2">
+                  <Clock className="h-4 w-4" />
+                  <span className="hidden sm:inline">Time Clock</span>
+                </TabsTrigger>
+                <TabsTrigger value="customers" className="gap-2">
+                  <Users className="h-4 w-4" />
+                  <span className="hidden sm:inline">Customers</span>
+                </TabsTrigger>
+                <TabsTrigger value="photos" className="gap-2">
+                  <Camera className="h-4 w-4" />
+                  <span className="hidden sm:inline">Photos</span>
                 </TabsTrigger>
                 {isAdmin && (
                   <>
-                    <TabsTrigger value="customers" className="gap-2">
-                      <Users className="h-4 w-4" />
-                      <span className="hidden sm:inline">Customers</span>
+                    <TabsTrigger value="sms" className="gap-2">
+                      <MessageSquare className="h-4 w-4" />
+                      <span className="hidden sm:inline">SMS</span>
                     </TabsTrigger>
                     <TabsTrigger value="payments" className="gap-2">
                       <CreditCard className="h-4 w-4" />
@@ -269,10 +267,6 @@ const StaffPortal = () => {
                     <TabsTrigger value="staff" className="gap-2">
                       <UserCog className="h-4 w-4" />
                       <span className="hidden sm:inline">Staff</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="settings" className="gap-2">
-                      <Settings className="h-4 w-4" />
-                      <span className="hidden sm:inline">Settings</span>
                     </TabsTrigger>
                   </>
                 )}
@@ -288,8 +282,28 @@ const StaffPortal = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
                     >
-                      <Link to={resource.path}>
-                        <Card className="h-full hover:shadow-lg transition-all duration-300 hover:border-primary/50 group cursor-pointer">
+                      {resource.path ? (
+                        <Link to={resource.path}>
+                          <Card className="h-full hover:shadow-lg transition-all duration-300 hover:border-primary/50 group cursor-pointer">
+                            <CardHeader className="pb-3">
+                              <div className="flex items-center justify-between">
+                                <div className={`p-3 rounded-lg ${resource.color}`}>
+                                  <resource.icon className="h-6 w-6" />
+                                </div>
+                                <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                              </div>
+                            </CardHeader>
+                            <CardContent>
+                              <CardTitle className="text-lg mb-1">{resource.title}</CardTitle>
+                              <CardDescription>{resource.description}</CardDescription>
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      ) : (
+                        <Card 
+                          className="h-full hover:shadow-lg transition-all duration-300 hover:border-primary/50 group cursor-pointer"
+                          onClick={() => resource.tabKey && setActiveTab(resource.tabKey)}
+                        >
                           <CardHeader className="pb-3">
                             <div className="flex items-center justify-between">
                               <div className={`p-3 rounded-lg ${resource.color}`}>
@@ -303,7 +317,7 @@ const StaffPortal = () => {
                             <CardDescription>{resource.description}</CardDescription>
                           </CardContent>
                         </Card>
-                      </Link>
+                      )}
                     </motion.div>
                   ))}
                 </div>
@@ -336,22 +350,28 @@ const StaffPortal = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-3">
-                      <a href="/docs/customer-guide.md" download>
+                      <a href="/docs/customer-guide.md" download="Customer-Guide.md">
                         <Button variant="secondary" size="sm" className="gap-2">
                           <FileText className="h-4 w-4" />
-                          Customer Guide
+                          Customer Guide (MD)
                         </Button>
                       </a>
-                      <a href="/docs/admin-guide.md" download>
+                      <a href="/docs/admin-guide.md" download="Admin-Guide.md">
                         <Button variant="secondary" size="sm" className="gap-2">
                           <FileText className="h-4 w-4" />
-                          Admin Guide
+                          Admin Guide (MD)
                         </Button>
                       </a>
-                      <a href="/docs/technical-docs.md" download>
+                      <a href="/docs/technical-docs.md" download="Technical-Docs.md">
                         <Button variant="secondary" size="sm" className="gap-2">
                           <FileText className="h-4 w-4" />
-                          Technical Docs
+                          Technical Docs (MD)
+                        </Button>
+                      </a>
+                      <a href="/docs/call_script.zip" download>
+                        <Button variant="secondary" size="sm" className="gap-2">
+                          <FileText className="h-4 w-4" />
+                          Call Scripts (ZIP)
                         </Button>
                       </a>
                     </div>
@@ -363,28 +383,56 @@ const StaffPortal = () => {
                 <TodaysAppointments />
               </TabsContent>
 
-              <TabsContent value="sms">
-                <SMSServices />
+              <TabsContent value="timeclock">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Clock className="h-5 w-5" />
+                      Time Clock
+                    </CardTitle>
+                    <CardDescription>
+                      Clock in/out and view your timecards
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">Time clock feature coming soon...</p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="customers">
+                <CustomersTab />
+              </TabsContent>
+
+              <TabsContent value="photos">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Camera className="h-5 w-5" />
+                      Work Photos
+                    </CardTitle>
+                    <CardDescription>
+                      Upload photos of completed work
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">Work photos feature coming soon...</p>
+                  </CardContent>
+                </Card>
               </TabsContent>
 
               {isAdmin && (
-                <TabsContent value="customers">
-                  <CustomersTab />
-                </TabsContent>
-              )}
-
-              {isAdmin && (
                 <>
+                  <TabsContent value="sms">
+                    <SMSServices />
+                  </TabsContent>
+
                   <TabsContent value="payments">
                     <PaymentsTab />
                   </TabsContent>
 
                   <TabsContent value="staff">
                     <StaffManagement />
-                  </TabsContent>
-
-                  <TabsContent value="settings">
-                    <SiteSettings />
                   </TabsContent>
                 </>
               )}

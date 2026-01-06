@@ -74,28 +74,20 @@ const Book = () => {
               ))}
             </motion.div>
 
-            {/* Square Booking Embed */}
+            {/* Square Booking Embed - Full Width */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="max-w-4xl mx-auto"
+              className="w-full"
             >
-              <div className="bg-card rounded-2xl border border-border overflow-hidden">
-                <div className="p-6 border-b border-border">
-                  <h2 className="text-xl font-semibold">Select a Service</h2>
-                  <p className="text-sm text-muted-foreground">
-                    Choose your service and pick an available time slot
-                  </p>
-                </div>
-                <div className="aspect-[4/3] md:aspect-[16/10] w-full">
-                  <iframe
-                    src="https://book.squareup.com/appointments/ygqnrdv6a907zu/location/LBJ4C01HMM5JH/services"
-                    title="Book an Appointment with Home Setup Solutions"
-                    className="w-full h-full border-0"
-                    allow="payment"
-                  />
-                </div>
+              <div className="w-full min-h-[800px] md:min-h-[900px]">
+                <iframe
+                  src="https://book.squareup.com/appointments/ygqnrdv6a907zu/location/LBJ4C01HMM5JH/services"
+                  title="Book an Appointment with Home Setup Solutions"
+                  className="w-full h-[800px] md:h-[900px] border-0 rounded-xl"
+                  allow="payment"
+                />
               </div>
             </motion.div>
 

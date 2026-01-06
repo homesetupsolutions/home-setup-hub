@@ -155,13 +155,21 @@ const Policy = () => {
               <section className="mb-12" id="cancellation">
                 <h2 className="text-2xl font-semibold mb-4 text-primary">Cancellation & Rescheduling Policy</h2>
                 <div className="prose prose-invert max-w-none space-y-4 text-muted-foreground">
+                  <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 mb-6">
+                    <p className="text-foreground font-medium mb-2">
+                      We ask that you please reschedule or cancel at least 1 day before the beginning of your appointment or you may be charged a cancellation fee of CA$40.00.
+                    </p>
+                    <p className="text-foreground">
+                      Cancellation must be done within 24 hours before the appointment, if not a fee will be charged.
+                    </p>
+                  </div>
                   <h3 className="text-lg font-semibold text-foreground mt-6">Cancellation</h3>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>
-                      <strong className="text-foreground">24+ hours before appointment:</strong> Full refund available
+                      <strong className="text-foreground">24+ hours before appointment:</strong> Free cancellation or reschedule
                     </li>
                     <li>
-                      <strong className="text-foreground">Less than 24 hours:</strong> 50% cancellation fee may apply
+                      <strong className="text-foreground">Less than 24 hours:</strong> CA$40.00 cancellation fee applies
                     </li>
                     <li>
                       <strong className="text-foreground">No-show:</strong> Full service charge may apply
@@ -169,7 +177,7 @@ const Policy = () => {
                   </ul>
                   <h3 className="text-lg font-semibold text-foreground mt-6">Rescheduling</h3>
                   <p>
-                    You can reschedule your appointment at no charge up to 2 hours before your scheduled time. 
+                    You can reschedule your appointment at no charge up to 24 hours before your scheduled time. 
                     Use the rescheduling link in your appointment reminder text or call us directly.
                   </p>
                   <h3 className="text-lg font-semibold text-foreground mt-6">Emergency Cancellations</h3>
