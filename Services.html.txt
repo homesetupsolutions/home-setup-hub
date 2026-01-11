@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Services | Home Setup Solutions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .embed-wrapper {
+      margin-top: 2rem;
+      border: 2px solid #111;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .embed-frame {
+      width: 100%;
+      min-height: 900px; /* adjust if you want it taller/shorter */
+      border: 0;
+    }
+    .embed-note {
+      font-size: 0.85rem;
+      color: #ccc;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-container">
+      <div class="logo">
+        <span class="logo-mark">HSS</span>
+        <span class="logo-text">Home Setup Solutions</span>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="services.html" class="active">Services</a>
+        <a href="staff-dashboard.html">Staff</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="container center">
+      <h1>Services & Booking</h1>
+      <p>
+        Browse services, choose your time, and see current pricing without leaving this page.
+        The list below loads directly from Square Appointments.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>What We Offer</h2>
+      <div class="grid two-col service-detail-grid">
+        <div>
+          <h3>Home Setup & Moving Help</h3>
+          <ul>
+            <li>Packing and unpacking</li>
+            <li>Home organization and decluttering</li>
+            <li>Move‑in / move‑out setup</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Smart Home & Tech</h3>
+          <ul>
+            <li>Smart device installation</li>
+            <li>Wi‑Fi and mesh network setup</li>
+            <li>TV mounting and cable management</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Cleaning & Refresh</h3>
+          <ul>
+            <li>General home cleaning</li>
+            <li>Deep cleaning</li>
+            <li>Carpet and floor refresh</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Handyman & Extras</h3>
+          <ul>
+            <li>Furniture assembly</li>
+            <li>Mounting shelves, art, and fixtures</li>
+            <li>Small repairs and punch‑list items</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="center mt-lg">
+        <p><strong>Live prices, durations, and add‑ons come straight from Square:</strong></p>
+      </div>
+
+      <!-- Embedded Square booking page -->
+      <div class="embed-wrapper">
+        <iframe
+          class="embed-frame"
+          src="https://book.squareup.com/appointments/ygqnrdv6a907zu/location/LBJ4C01HMM5JH/services"
+          title="Home Setup Solutions – Square Services & Booking"
+          loading="lazy"
+        ></iframe>
+      </div>
+      <p class="embed-note">
+        The embedded list and booking flow above are provided directly by Square Appointments.
+        Any changes you make in Square (services, prices, durations) show here automatically.
+      </p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Home Setup Solutions · Calgary, Alberta</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
