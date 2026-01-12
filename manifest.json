@@ -1,0 +1,23 @@
+{
+  "name": "Home Setup Solutions",
+  "short_name": "HSS",
+  "description": "Professional home setup and technology services in Calgary and surrounding areas.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#ff6600",
+  "icons": [
+    {
+      "src": "images/Icon-Colour.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/Icon-Colour.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
