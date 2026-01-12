@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="theme-color" content="#ff6600" />
+    <meta name="description" content="Home Setup Solutions provides professional home setup, deep cleaning, minor repairs, and heavy lifting/moving services in Calgary and surrounding areas." />
+    <meta name="author" content="Home Setup Solutions" />
+    <meta property="og:title" content="Home Setup Solutions | Calgary Home Setup & Moving Help" />
+    <meta property="og:description" content="Professional home setup, deep cleaning, minor repairs, and heavy lifting/moving services for homes and businesses in Calgary." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@HomeSetupSolutions" />
+    <link rel="manifest" href="manifest.json" />
+    <title>Home Setup Solutions</title>
+    <style>
+      :root {
+        --primary-orange: #ff6600;
+        --dark-bg: #1a1a1a;
+        --text-light: #ffffff;
+        --accent-blue: #1e3a8a;
+        --accent-purple: #581c87;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--dark-bg);
+        color: var(--text-light);
+        line-height: 1.6;
+        overflow-x: hidden;
+        background: linear-gradient(45deg, #000000, #ff6600);
+        background-size: 400% 400%;
+        animation: marbleEffect 15s ease infinite;
+      }
+      @keyframes marbleEffect {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      header {
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 0.8rem 1rem;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+        border-bottom: 1px solid var(--primary-orange);
+      }
+      .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .logo-img {
+        height: 50px;
+        width: auto;
+      }
+      nav ul {
+        list-style: none;
+        display: flex;
+        gap: 1.5rem;
+      }
+      nav ul li a {
+        color: var(--text-light);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+      }
+      nav ul li a:hover {
+        color: var(--primary-orange);
+      }
+      .header-buttons {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .header-btn {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        transition: transform 0.2s ease;
+      }
+      .header-btn:hover {
+        transform: scale(1.05);
+      }
+      .call-btn {
+        background-color: var(--primary-orange);
+        color: var(--text-light);
+      }
+      .email-btn {
+        background-color: var(--accent-blue);
+        color: var(--text-light);
+      }
+      .text-btn {
+        background-color: var(--accent-purple);
+        color: var(--text-light);
+      }
+      .book-btn {
+        background-color: #fff;
+        color: #000;
+      }
+      .admin-btn {
+        background-color: #555;
+        color: #fff;
+      }
+      .hero {
+        padding: 3rem 1rem;
+        text-align: center;
+        background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+        margin-bottom: 2rem;
+      }
+      .hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--text-light);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+      }
+      .cta-btn {
+        display: inline-block;
+        padding: 0.8rem 2rem;
+        background-color: var(--primary-orange);
+        color: var(--text-light);
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: bold;
+        transition: transform 0.3s ease, background 0.3s ease;
+      }
+      .cta-btn:hover {
+        transform: scale(1.1);
+        background-color: #e55a00;
+      }
+      .section {
+        padding: 3rem 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .section h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--primary-orange);
+        font-size: 2rem;
+      }
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+      }
+      .service-card {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 10px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(255, 102, 0, 0.3);
+      }
+      .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(255, 102, 0, 0.3);
+      }
+      .service-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 1rem;
+        background: linear-gradient(135deg, var(--primary-orange), #ff8800);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-light);
+      }
+      .about-stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+      .stat-box {
+        text-align: center;
+        background-color: rgba(255, 102, 0, 0.2);
+        padding: 1rem;
+        border-radius: 10px;
+        min-width: 150px;
+      }
+      .stat-box h3 {
+        color: var(--primary-orange);
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .partners-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      .partner-card {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 10px;
+        text-align: center;
+        transition: filter 0.3s ease, transform 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .partner-card:hover {
+        filter: grayscale(0);
+        transform: scale(1.05);
+      }
+      .partner-placeholder {
+        width: 100px;
+        height: 60px;
+        background-color: rgba(255, 255, 255, 0.3);
+        margin: 0 auto 1rem;
+        border-radius: 5px;
+      }
+      .onedrive-section {
+        text-align: center;
+        margin: 2rem 0;
+      }
+      .onedrive-btn {
+        background-color: var(--accent-blue);
+        color: var(--text-light);
+        padding: 0.8rem 2rem;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.3s ease;
+      }
+      .onedrive-btn:hover {
+        background-color: #152c70;
+      }
+      footer {
+        background-color: rgba(0, 0, 0, 0.9);
+        padding: 2.5rem 1rem;
+        border-top: 1px solid var(--primary-orange);
+      }
+      .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+      .footer-col h3 {
+        color: var(--primary-orange);
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+      }
+      .footer-col ul {
+        list-style: none;
+      }
+      .footer-col ul li {
+        margin-bottom: 0.5rem;
+      }
+      .footer-col ul li a {
+        color: var(--text-light);
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+      .footer-col ul li a:hover {
+        color: var(--primary-orange);
+      }
+      .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        margin-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .chat-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #25D366;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        z-index: 100;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        text-decoration: none;
+      }
+      .chat-button:hover {
+        transform: scale(1.1);
+        background-color: #1ebe57;
+      }
+      @media (max-width: 768px) {
+        nav ul {
+          display: none;
+        }
+        .header-buttons {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .hero h1 {
+          font-size: 1.8rem;
+        }
+        .hero p {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <img src="images/Icon-Colour.png" alt="Home Setup Solutions Logo" class="logo-img">
+        <nav>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header-buttons">
+          <a href="tel:18332302933" class="header-btn call-btn">Call Now</a>
+          <a href="mailto:customerservice@homesetupsolutions.ca" class="header-btn email-btn">Email</a>
+          <a href="sms:15876045127" class="header-btn text-btn">Text</a>
+          <a href="https://outlook.office.com/book/HomeSetupSolutions@homesetupsolutions.ca/?ismsaljsauthenabled" class="header-btn book-btn">Book Now</a>
+          <a href="/portal/admin" class="header-btn admin-btn">Admin Panel</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero" id="home">
+      <h1>Professional Home Setup Services</h1>
+      <p>Simplify Your Space, Amplify Your Comfort!<br>Expert installation and setup services for all your home technology needs. From smart devices to entertainment systems, we make technology work for you.</p>
+      <a href="https://outlook.office.com/book/HomeSetupSolutions@homesetupsolutions.ca/?ismsaljsauthenabled" class="cta-btn">Book Your Setup</a>
+      <p style="margin-top: 1rem;"><a href="#services" style="color: white; text-decoration: none; font-size: 1rem;">View Services</a></p>
+    </section>
+
+    <section class="section" id="services">
+      <h2>Our Services</h2>
+      <p style="text-align: center; margin-bottom: 2rem;">Comprehensive home technology services tailored to your needs. From simple setups to complex installations, we've got you covered.</p>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- SVG Icon for Furniture Assembly -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M22 7l-8.5 5.5-2-1-2 1L2 7"></path><line x1="12" y1="16" x2="12" y2="21"></line></svg>
+          </div>
+          <h3>Furniture Assembly</h3>
+          <p>CA$55/hr</p>
+          <p>Sit back and relax while our expert team handles all your furniture assembly needs with precision and care.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- SVG Icon for Smart Home Install -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 8.35l-5.81 3.45c-.34.2-.72.2-1.06 0L5 8.35l1.12-1.67c.24-.36.58-.65.99-.85l5.38-2.91c.36-.2.76-.2 1.12 0l5.38 2.91c.41.2.75.49.99.85L19 8.35z"></path><path d="M22 10v6c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-6"></path><path d="M7.5 12.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0 -3 0z"></path></svg>
+          </div>
+          <h3>Smart Home Install</h3>
+          <p>CA$55/hr</p>
+          <p>Transform your living space into a futuristic oasis with seamless integration of smart devices and systems.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- SVG Icon for General Mounting -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          </div>
+          <h3>General Mounting</h3>
+          <p>Price Varies</p>
+          <p>Professional and secure installation of TVs, shelves, artwork, and more for residential and commercial spaces.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- SVG Icon for Yard Maintenance -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><circle cx="12" cy="12" r="4"></circle></svg>
+          </div>
+          <h3>Yard Maintenance</h3>
+          <p>CA$55/hr</p>
+          <p>Efficient and thorough care to keep your outdoor spaces looking their best with professional results.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- SVG Icon for Minor Home Repair -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5l2.7 2.7-2.2 2.2 2.8 2.9c.2.2.3.4.3.7l-.5 3.4c0 .3-.2.5-.5.5h-3.1c-.3 0-.5-.2-.7-.4L8 12.9l-1.2 1.2c-.2.2-.3.4-.3.7v2.7c0 .3.2.5.5.5h2c.3 0 .5.2.5.5v2c0 .3.2.5.5.5h2c.3 0 .5-.2.5-.5v-2c0-.3.2-.5.5-.5h2c.3 0 .5-.2.5-.5v-3.2c0-.1 0-.3-.1-.4l-1.7-1.7"></path></svg>
+          </div>
+          <h3>Minor Home Repair</h3>
+          <p>CA$55/hr</p>
+          <p>Reliable repairs for small jobs to improve your home's comfort and value, handled with care.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- SVG Icon for Snow Removal -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <h3>Snow Removal</h3>
+          <p>CA$46.67/hr</p>
+          <p>Customized snow clearing for sidewalks, driveways, and vehicles using efficient power tools for quick results.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <!-- SVG Icon for Deep Cleaning -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <h3>Deep Cleaning</h3>
+          <p>CA$42.50/hr</p>
+          <p>Ultimate cleaning with all-natural products, transforming your space into a pristine oasis. Minimum 2 hours.</p>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 2rem;">
+        <a href="https://outlook.office.com/book/HomeSetupSolutions@homesetupsolutions.ca/?ismsaljsauthenabled" class="cta-btn">View All Services & Book</a>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <h2>About Us</h2>
+      <p style="text-align: center; margin-bottom: 1rem;">We're a team of passionate technology experts dedicated to making your home smarter and more connected. With years of experience and a commitment to excellence, we deliver professional installation services that exceed expectations.</p>
+      <ul style="text-align: center; list-style: none; margin-bottom: 1rem;">
+        <li>✓ Certified and experienced technicians</li>
+        <li>✓ Same-day service available</li>
+        <li>✓ Satisfaction guaranteed</li>
+        <li>✓ Transparent pricing with no hidden fees</li>
+        <li>✓ Post-installation support included</li>
+        <li>✓ Eco-friendly practices</li>
+      </ul>
+      <div class="about-stats">
+        <div class="stat-box">
+          <h3>1,000+</h3>
+          <p>Happy Customers</p>
+        </div>
+        <div class="stat-box">
+          <h3>95%</h3>
+          <p>Customer Satisfaction</p>
+        </div>
+        <div class="stat-box">
+          <h3>24/7</h3>
+          <p>Available Support</p>
+        </div>
+        <div class="stat-box">
+          <h3>3+</h3>
+          <p>Years Experience</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <h2>Get In Touch</h2>
+      <p style="text-align: center; margin-bottom: 2rem;">Contact us today to schedule your home setup appointment. We're here to help make your technology work for you.</p>
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-bottom: 2rem;">
+        <div style="background-color: rgba(255, 102, 0, 0.2); padding: 1.5rem; border-radius: 10px; text-align: center; min-width: 200px;">
+          <h3 style="color: var(--primary-orange); margin-bottom: 0.5rem;">Call Us</h3>
+          <p>Toll Free: 1-833-230-2933</p>
+        </div>
+        <div style="background-color: rgba(255, 102, 0, 0.2); padding: 1.5rem; border-radius: 10px; text-align: center; min-width: 200px;">
+          <h3 style="color: var(--primary-orange); margin-bottom: 0.5rem;">Text Us</h3>
+          <p>Quick Response: 1-587-604-5127</p>
+        </div>
+        <div style="background-color: rgba(255, 102, 0, 0.2); padding: 1.5rem; border-radius: 10px; text-align: center; min-width: 200px;">
+          <h3 style="color: var(--primary-orange); margin-bottom: 0.5rem;">Email Us</h3>
+          <p>We'll reply within 24h</p>
+          <a href="mailto:customerservice@homesetupsolutions.ca" style="color: var(--primary-orange); text-decoration: none;">Send Email</a>
+        </div>
+        <div style="background-color: rgba(255, 102, 0, 0.2); padding: 1.5rem; border-radius: 10px; text-align: center; min-width: 200px;">
+          <h3 style="color: var(--primary-orange); margin-bottom: 0.5rem;">Business Hours</h3>
+          <p>Mon-Sat: 9AM - 9PM</p>
+        </div>
+      </div>
+      <div style="text-align: center;">
+        <a href="https://outlook.office.com/book/HomeSetupSolutions@homesetupsolutions.ca/?ismsaljsauthenabled" class="cta-btn">Book Your Appointment Now</a>
+      </div>
+    </section>
+
+    <section class="section" id="partners">
+      <h2>Partners & Supporters</h2>
+      <p style="text-align: center; margin-bottom: 1rem;">We are proud to collaborate with amazing organizations and businesses that support our mission to simplify and amplify home comfort.</p>
+      <div class="partners-grid">
+        <div class="partner-card">
+          <div class="partner-placeholder"></div>
+          <p>Business Partner</p>
+        </div>
+        <div class="partner-card">
+          <div class="partner-placeholder"></div>
+          <p>Sponsor</p>
+        </div>
+        <div class="partner-card">
+          <div class="partner-placeholder"></div>
+          <p>Donor</p>
+        </div>
+        <div class="partner-card">
+          <div class="partner-placeholder"></div>
+          <p>Community Supporter</p>
+        </div>
+        <div class="partner-card">
+          <div class="partner-placeholder"></div>
+          <p>Partner Organization</p>
+        </div>
+        <div class="partner-card">
+          <div class="partner-placeholder"></div>
+          <p>Technology Partner</p>
+        </div>
+      </div>
+      <div class="onedrive-section">
+        <p>Are you a partner or donor? Upload your logo to be featured on our site.</p>
+        <a href="https://1drv.ms/f/YOUR_ONEDRIVE_FOLDER_LINK" target="_blank" class="onedrive-btn">Upload Logo</a>
+      </div>
+    </section>
+
+    <section class="section" id="policies">
+      <h2>Our Policies</h2>
+      <div style="background-color: rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+        <h3 style="color: var(--primary-orange); margin-bottom: 1rem;">Privacy Policy</h3>
+        <p style="margin-bottom: 1rem;"><strong>Last Updated: December 2024</strong></p>
+        <p style="margin-bottom: 1rem;">Home Setup Solutions ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our services.</p>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Information We Collect</h4>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Contact information (name, email, phone number, address)</li>
+          <li>Service appointment details and preferences</li>
+          <li>Payment information (processed securely through Square)</li>
+          <li>Communication records for customer service purposes</li>
+        </ul>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">How We Use Your Information</h4>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>To provide and improve our services</li>
+          <li>To communicate with you about appointments and services</li>
+          <li>To send appointment reminders via SMS (with your consent)</li>
+          <li>To process payments and prevent fraud</li>
+        </ul>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Data Protection</h4>
+        <p style="margin-bottom: 1rem;">We implement appropriate security measures to protect your personal information. We do not sell or rent your personal information to third parties.</p>
+      </div>
+      <div style="background-color: rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+        <h3 style="color: var(--primary-orange); margin-bottom: 1rem;">Terms of Service</h3>
+        <p style="margin-bottom: 1rem;">By using Home Setup Solutions' services, you agree to these terms. Please read them carefully.</p>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Service Agreement</h4>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Services are provided as described at the time of booking</li>
+          <li>Pricing is confirmed before service begins</li>
+          <li>Additional work beyond the original scope may incur extra charges</li>
+          <li>We reserve the right to refuse service at our discretion</li>
+        </ul>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Liability</h4>
+        <p style="margin-bottom: 1rem;">While we take every precaution to ensure quality service, we are not liable for pre-existing damage or issues with customer-provided equipment. Our liability is limited to the cost of the service provided.</p>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Warranty</h4>
+        <p style="margin-bottom: 1rem;">We offer a 30-day workmanship warranty on all installations. This covers any issues directly related to our installation work.</p>
+      </div>
+      <div style="background-color: rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+        <h3 style="color: var(--primary-orange); margin-bottom: 1rem;">SMS/Text Message Policy</h3>
+        <p style="margin-bottom: 1rem;"><strong>Important Information About Text Messages from Home Setup Solutions</strong></p>
+        <p style="margin-bottom: 1rem;">In accordance with the Canadian Anti-Spam Legislation (CASL) and the Canadian Radio-television and Telecommunications Commission (CRTC) requirements, we provide the following information about our SMS messaging practices.</p>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Consent</h4>
+        <p style="margin-bottom: 1rem;">By providing your phone number and booking an appointment, you consent to receive text messages from Home Setup Solutions regarding your appointment, including:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Appointment confirmation</li>
+          <li>Day-of appointment reminder (morning)</li>
+          <li>One-hour reminder before your appointment</li>
+          <li>Technician arrival notifications</li>
+          <li>Rescheduling links if needed</li>
+        </ul>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Message Frequency</h4>
+        <p style="margin-bottom: 1rem;">You will typically receive 2-4 messages per appointment. Message frequency varies based on your service appointments.</p>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Message and Data Rates</h4>
+        <p style="margin-bottom: 1rem;">Standard message and data rates may apply. Message rates depend on your mobile carrier and plan. Contact your carrier for details about your text messaging plan.</p>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Opt-Out Instructions</h4>
+        <p style="margin-bottom: 1rem;">You may opt out of receiving text messages at any time by:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Replying STOP to any of our text messages</li>
+          <li>Calling us at 1-833-230-2933</li>
+          <li>Emailing info@homesetupsolutions.ca</li>
+        </ul>
+        <p style="margin-bottom: 1rem;">After opting out, you will receive a confirmation message. You may still receive one-time messages if you contact us or book a new appointment.</p>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Contact Information</h4>
+        <p style="margin-bottom: 1rem;">For questions about our SMS policy or to update your preferences, contact:</p>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>Phone: 1-833-230-2933 (Toll Free)</li>
+          <li>Text: 1-587-604-5127</li>
+          <li>Email: info@homesetupsolutions.ca</li>
+        </ul>
+        <p style="margin-bottom: 1rem;">Home Setup Solutions is identified in all messages. We comply with CASL requirements for commercial electronic messages and CRTC regulations for telecommunications in Canada.</p>
+      </div>
+      <div style="background-color: rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: 10px;">
+        <h3 style="color: var(--primary-orange); margin-bottom: 1rem;">Cancellation & Rescheduling Policy</h3>
+        <p style="margin-bottom: 1rem;">We ask that you please reschedule or cancel at least 1 day before the beginning of your appointment or you may be charged a cancellation fee of CA$40.00.</p>
+        <p style="margin-bottom: 1rem;">Cancellation must be done within 24 hours before the appointment, if not a fee will be charged.</p>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Cancellation</h4>
+        <ul style="margin-bottom: 1rem; padding-left: 1.5rem;">
+          <li>24+ hours before appointment: Free cancellation or reschedule</li>
+          <li>Less than 24 hours: CA$40.00 cancellation fee applies</li>
+          <li>No-show: Full service charge may apply</li>
+        </ul>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Rescheduling</h4>
+        <p style="margin-bottom: 1rem;">You can reschedule your appointment at no charge up to 24 hours before your scheduled time. Use the rescheduling link in your appointment reminder text or call us directly.</p>
+        <h4 style="margin-bottom: 0.5rem; color: var(--text-light);">Emergency Cancellations</h4>
+        <p style="margin-bottom: 1rem;">We understand emergencies happen. Please contact us as soon as possible, and we'll do our best to accommodate your situation.</p>
+        <p style="margin-bottom: 1rem;"><strong>Questions About Our Policies?</strong> Contact us at 1-833-230-2933 or customerservice@homesetupsolutions.ca.</p>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-container">
+        <div class="footer-col">
+          <h3>Home Setup Solutions</h3>
+          <p>Professional home installation and setup services. We make your technology work seamlessly.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="https://outlook.office.com/book/HomeSetupSolutions@homesetupsolutions.ca/?ismsaljsauthenabled">Book Appointment</a></li>
+            <li><a href="#about">About Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="#policies">Privacy Policy</a></li>
+            <li><a href="#policies">Terms of Service</a></li>
+            <li><a href="#policies">SMS Policy</a></li>
+            <li><a href="#policies">Cancellation Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Contact Us</h3>
+          <ul>
+            <li>Phone: 1-833-230-2933 (Toll Free)</li>
+            <li>Text: 1-587-604-5127</li>
+            <li>Email: <a href="mailto:customerservice@homesetupsolutions.ca">customerservice@homesetupsolutions.ca</a></li>
+            <li>Serving all of Canada</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Home Setup Solutions. All rights reserved.</p>
+        <p>Standard message and data rates may apply. See our SMS Policy for details.</p>
+      </div>
+    </footer>
+
+    <a href="https://wa.me/15876045127?text=Hi!%20I%27d%20like%20to%20book%20a%20home%20setup%20service." class="chat-button">
+      <!-- WhatsApp Icon SVG -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-2.514.742-4.901 2.067-6.893 1.33-1.996 3.178-3.598 5.392-4.594 2.213-.995 4.637-1.494 7.197-1.493 2.241.001 4.372.499 6.246 1.496 1.876.997 3.386 2.6 4.386 4.6s1.5 4.386 1.5 6.63c-.001 2.515-.742 4.905-2.067 6.9-1.33 1.996-3.178 3.598-5.392 4.594-2.213.995-4.635 1.494-7.195 1.493-2.875 0-5.579-.813-7.875-2.226L.057 24zm3.91-3.237c2.094 1.296 4.46 1.962 6.873 1.962 2.003-.001 3.888-.575 5.494-1.596 1.603-1.019 2.895-2.465 3.816-4.178.92-1.711 1.381-3.615 1.38-5.591 0-1.977-.576-3.879-1.596-5.483-.997-1.569-2.442-2.835-4.179-3.689-1.735-.854-3.639-1.281-5.612-1.28-1.975.001-3.877.576-5.48 1.596-1.57 1.022-2.837 2.467-3.69 4.178-.854 1.712-1.281 3.616-1.28 5.592.001 2.411.668 4.678 1.964 6.872l-1.378 5.03 5.188-1.413zM8.242 7.813c-.988-2.243-3.298-3.513-5.54-2.525L3.55 9.108c.237.069.455.189.63.34 1.258 1.087 2.086 2.748 2.086 4.532 0 .345.031.68.084 1.002.703 4.326 4.878 7.523 9.204 6.82 1.992-.32 3.788-1.355 5.04-2.819.175-.205.119-.498-.13-.622l-3.136-1.567c-.247-.124-.542-.068-.698.13-.988 1.258-2.398 2.196-4.009 2.52-2.757.555-5.696-.714-6.25-3.471-.035-.175.03-.36.16-.49l2.458-2.457c.13-.13.195-.316.16-.49-.277-1.388-2.581-2.114-3.969-1.836z"></path></svg>
+    </a>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+            console.log('Service Worker registered with scope: ', registration.scope);
+          }, function(err) {
+            console.log('Service Worker registration failed: ', err);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
