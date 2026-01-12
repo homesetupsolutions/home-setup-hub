@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Loader2, LogOut, Users, Calendar, CreditCard, MessageSquare, UserCog, Settings, Phone } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2, LogOut, Users, Calendar, CreditCard, MessageSquare, UserCog, Settings, Headphones, BarChart3, ExternalLink } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { CustomersTab } from '@/components/admin/CustomersTab';
 import { BookingsTab } from '@/components/admin/BookingsTab';
 import { PaymentsTab } from '@/components/admin/PaymentsTab';
-import { CallingSystemTab } from '@/components/admin/CallingSystemTab';
 import SMSServices from '@/components/staff/SMSServices';
 import StaffManagement from '@/components/staff/StaffManagement';
 import SiteSettings from '@/components/staff/SiteSettings';
@@ -20,7 +20,7 @@ export default function Admin() {
   const { user, loading, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState('calling');
+  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
     if (!loading && !user) {
@@ -56,21 +56,47 @@ export default function Admin() {
     return null;
   }
 
+  const quickLinks = [
+    {
+      title: 'Reception Portal',
+      description: 'Handle calls, book appointments, manage customers',
+      icon: Headphones,
+      path: '/reception',
+      color: 'bg-blue-500/10 text-blue-500'
+    },
+    {
+      title: 'Supervisor Portal',
+      description: 'Weekly overview, staff schedules, call logs',
+      icon: BarChart3,
+      path: '/supervisor',
+      color: 'bg-purple-500/10 text-purple-500'
+    },
+    {
+      title: 'Azure Phone Monitor',
+      description: 'Monitor phone system status',
+      icon: ExternalLink,
+      href: 'https://portal.azure.com',
+      color: 'bg-green-500/10 text-green-500'
+    }
+  ];
+
   return (
     <>
       <Helmet>
-        <title>CRM Dashboard | Home Setup Solutions</title>
-        <meta name="description" content="Admin CRM dashboard for Home Setup Solutions." />
+        <title>Admin Dashboard | Home Setup Solutions</title>
+        <meta name="description" content="Admin dashboard for Home Setup Solutions." />
       </Helmet>
 
       <div className="min-h-screen bg-background">
         <header className="border-b border-border bg-card">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img src={logo} alt="Home Setup Solutions" className="w-10 h-10 rounded-lg" />
+              <Link to="/">
+                <img src={logo} alt="Home Setup Solutions" className="w-10 h-10 rounded-lg" />
+              </Link>
               <div>
-                <h1 className="text-lg font-semibold text-foreground">CRM Dashboard</h1>
-                <p className="text-sm text-muted-foreground">Square Integration</p>
+                <h1 className="text-lg font-semibold text-foreground">Admin Dashboard</h1>
+                <p className="text-sm text-muted-foreground">Home Setup Solutions</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -90,10 +116,10 @@ export default function Admin() {
             transition={{ duration: 0.3 }}
           >
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-7 max-w-3xl">
-                <TabsTrigger value="calling" className="flex items-center gap-2">
-                  <Phone className="h-4 w-4" />
-                  <span className="hidden sm:inline">Calling</span>
+              <TabsList className="grid w-full grid-cols-6 max-w-3xl">
+                <TabsTrigger value="overview" className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  <span className="hidden sm:inline">Overview</span>
                 </TabsTrigger>
                 <TabsTrigger value="customers" className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
@@ -107,10 +133,6 @@ export default function Admin() {
                   <CreditCard className="h-4 w-4" />
                   <span className="hidden sm:inline">Payments</span>
                 </TabsTrigger>
-                <TabsTrigger value="sms" className="flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4" />
-                  <span className="hidden sm:inline">SMS</span>
-                </TabsTrigger>
                 <TabsTrigger value="staff" className="flex items-center gap-2">
                   <UserCog className="h-4 w-4" />
                   <span className="hidden sm:inline">Staff</span>
@@ -121,8 +143,61 @@ export default function Admin() {
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="calling">
-                <CallingSystemTab />
+              <TabsContent value="overview">
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="text-2xl font-bold mb-2">Admin Overview</h2>
+                    <p className="text-muted-foreground">Quick access to all admin features and portals.</p>
+                  </div>
+
+                  {/* Quick Links */}
+                  <div className="grid gap-4 md:grid-cols-3">
+                    {quickLinks.map((link) => (
+                      link.path ? (
+                        <Link key={link.title} to={link.path}>
+                          <Card className="h-full hover:shadow-lg transition-all duration-300 hover:border-primary/50 cursor-pointer">
+                            <CardHeader>
+                              <div className={`w-12 h-12 rounded-lg ${link.color} flex items-center justify-center mb-2`}>
+                                <link.icon className="h-6 w-6" />
+                              </div>
+                              <CardTitle className="text-lg">{link.title}</CardTitle>
+                              <CardDescription>{link.description}</CardDescription>
+                            </CardHeader>
+                          </Card>
+                        </Link>
+                      ) : (
+                        <a key={link.title} href={link.href} target="_blank" rel="noopener noreferrer">
+                          <Card className="h-full hover:shadow-lg transition-all duration-300 hover:border-primary/50 cursor-pointer">
+                            <CardHeader>
+                              <div className={`w-12 h-12 rounded-lg ${link.color} flex items-center justify-center mb-2`}>
+                                <link.icon className="h-6 w-6" />
+                              </div>
+                              <CardTitle className="text-lg flex items-center gap-2">
+                                {link.title}
+                                <ExternalLink className="h-4 w-4" />
+                              </CardTitle>
+                              <CardDescription>{link.description}</CardDescription>
+                            </CardHeader>
+                          </Card>
+                        </a>
+                      )
+                    ))}
+                  </div>
+
+                  {/* SMS Services Quick Access */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <MessageSquare className="h-5 w-5" />
+                        SMS Services
+                      </CardTitle>
+                      <CardDescription>Send SMS messages and manage text communications</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <SMSServices />
+                    </CardContent>
+                  </Card>
+                </div>
               </TabsContent>
 
               <TabsContent value="customers">
@@ -135,10 +210,6 @@ export default function Admin() {
 
               <TabsContent value="payments">
                 <PaymentsTab />
-              </TabsContent>
-
-              <TabsContent value="sms">
-                <SMSServices />
               </TabsContent>
 
               <TabsContent value="staff">
