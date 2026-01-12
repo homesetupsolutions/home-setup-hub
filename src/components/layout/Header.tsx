@@ -66,11 +66,11 @@ export function Header() {
           {/* Contact Actions */}
           <div className="hidden md:flex items-center gap-3">
             <a
-              href="tel:8332302933"
+              href="tel:18332302933"
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               <Phone className="w-4 h-4" />
-              <span>833-230-2933</span>
+              <span>1-833-230-2933</span>
             </a>
             
             {/* Login Buttons */}
@@ -143,18 +143,18 @@ export function Header() {
                 ))}
               <div className="pt-4 space-y-3">
                 <a
-                  href="tel:8332302933"
+                  href="tel:18332302933"
                   className="flex items-center gap-2 px-4 py-3 text-muted-foreground hover:text-primary"
                 >
                   <Phone className="w-5 h-5" />
-                  <span>833-230-2933</span>
+                  <span>1-833-230-2933</span>
                 </a>
                 <a
-                  href="sms:15873164353"
+                  href="sms:15876045127"
                   className="flex items-center gap-2 px-4 py-3 text-muted-foreground hover:text-primary"
                 >
                   <MessageSquare className="w-5 h-5" />
-                  <span>Text Us</span>
+                  <span>Text: 1-587-604-5127</span>
                 </a>
                 
                 {/* Mobile Login Buttons */}

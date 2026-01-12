@@ -4,6 +4,7 @@ import { ServicesSection } from "@/components/sections/ServicesSection";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { CTASection } from "@/components/sections/CTASection";
+import { LiveChat } from "@/components/chat/LiveChat";
 import { Helmet } from "react-helmet-async";
 
 const Index = () => {
@@ -24,6 +25,7 @@ const Index = () => {
         <AboutSection />
         <CTASection />
         <ContactSection />
+        <LiveChat />
       </Layout>
     </>
   );

@@ -31,6 +31,7 @@ import SMSServices from "@/components/staff/SMSServices";
 import { CustomersTab } from "@/components/admin/CustomersTab";
 import { PaymentsTab } from "@/components/admin/PaymentsTab";
 import { TodaysAppointments } from "@/components/staff/TodaysAppointments";
+import { EmergencyButton } from "@/components/staff/EmergencyButton";
 import logo from "@/assets/logo.png";
 
 const staffResources = [
@@ -440,11 +441,14 @@ const StaffPortal = () => {
           </motion.div>
         </main>
 
+        {/* Emergency Button */}
+        <EmergencyButton />
+
         {/* Footer */}
         <footer className="border-t py-6 mt-auto">
           <div className="container mx-auto px-4">
             <p className="text-center text-sm text-muted-foreground">
-              Home Setup Solutions Staff Portal • Need help? Contact your administrator
+              Home Setup Solutions Staff Portal • Emergency: 1-833-230-2933 ext. 9
             </p>
           </div>
         </footer>
