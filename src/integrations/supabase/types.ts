@@ -157,6 +157,48 @@ export type Database = {
           },
         ]
       }
+      notification_preferences: {
+        Row: {
+          created_at: string
+          email_enabled: boolean | null
+          email_promotions: boolean | null
+          email_reminders: boolean | null
+          id: string
+          preferred_phone: string | null
+          sms_enabled: boolean | null
+          sms_promotions: boolean | null
+          sms_reminders: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_enabled?: boolean | null
+          email_promotions?: boolean | null
+          email_reminders?: boolean | null
+          id?: string
+          preferred_phone?: string | null
+          sms_enabled?: boolean | null
+          sms_promotions?: boolean | null
+          sms_reminders?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email_enabled?: boolean | null
+          email_promotions?: boolean | null
+          email_reminders?: boolean | null
+          id?: string
+          preferred_phone?: string | null
+          sms_enabled?: boolean | null
+          sms_promotions?: boolean | null
+          sms_reminders?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

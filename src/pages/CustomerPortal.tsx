@@ -9,9 +9,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Calendar, History, User, LogOut, Phone, Mail, Clock, MapPin, CreditCard, ExternalLink } from 'lucide-react';
+import { Loader2, Calendar, History, User, LogOut, Phone, Mail, Clock, MapPin, CreditCard, ExternalLink, Settings } from 'lucide-react';
 import { format } from 'date-fns';
 import { getMyTransactions, SquarePayment, SquareBooking } from '@/lib/squareCRM';
+import { AccountSettings } from '@/components/customer/AccountSettings';
 
 interface Appointment {
   id: string;
@@ -206,18 +207,22 @@ export default function CustomerPortal() {
             )}
 
             <Tabs defaultValue="upcoming" className="space-y-6">
-              <TabsList className="grid w-full max-w-md grid-cols-3">
+              <TabsList className="grid w-full max-w-lg grid-cols-4">
                 <TabsTrigger value="upcoming" className="gap-2">
                   <Calendar className="w-4 h-4" />
-                  Upcoming
+                  <span className="hidden sm:inline">Upcoming</span>
                 </TabsTrigger>
                 <TabsTrigger value="history" className="gap-2">
                   <History className="w-4 h-4" />
-                  History
+                  <span className="hidden sm:inline">History</span>
                 </TabsTrigger>
                 <TabsTrigger value="book" className="gap-2">
                   <Calendar className="w-4 h-4" />
-                  Book
+                  <span className="hidden sm:inline">Book</span>
+                </TabsTrigger>
+                <TabsTrigger value="settings" className="gap-2">
+                  <Settings className="w-4 h-4" />
+                  <span className="hidden sm:inline">Settings</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -437,6 +442,17 @@ export default function CustomerPortal() {
                       </div>
                     </CardContent>
                   </Card>
+                </motion.div>
+              </TabsContent>
+
+              {/* Account Settings */}
+              <TabsContent value="settings">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <AccountSettings />
                 </motion.div>
               </TabsContent>
             </Tabs>
