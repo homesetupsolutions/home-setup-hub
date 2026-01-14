@@ -32,12 +32,15 @@ export function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-2xl border-b border-border/30">
+    <header className="fixed top-0 left-0 right-0 z-50 glass-strong">
       <div className="container mx-auto px-6 md:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Home Setup Solutions" className="w-11 h-11 rounded-xl" />
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="relative">
+              <img src={logo} alt="Home Setup Solutions" className="w-11 h-11 rounded-xl relative z-10" />
+              <div className="absolute inset-0 bg-primary/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
             <span className="font-bold text-lg hidden sm:block">
               Home Setup <span className="text-primary">Solutions</span>
             </span>
