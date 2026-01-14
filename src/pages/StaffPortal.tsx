@@ -32,6 +32,7 @@ import { CustomersTab } from "@/components/admin/CustomersTab";
 import { PaymentsTab } from "@/components/admin/PaymentsTab";
 import { TodaysAppointments } from "@/components/staff/TodaysAppointments";
 import { EmergencyButton } from "@/components/staff/EmergencyButton";
+import { WorkPhotoUpload } from "@/components/staff/WorkPhotoUpload";
 import logo from "@/assets/logo.png";
 
 const staffResources = [
@@ -406,20 +407,7 @@ const StaffPortal = () => {
               </TabsContent>
 
               <TabsContent value="photos">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Camera className="h-5 w-5" />
-                      Work Photos
-                    </CardTitle>
-                    <CardDescription>
-                      Upload photos of completed work
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">Work photos feature coming soon...</p>
-                  </CardContent>
-                </Card>
+                <WorkPhotoUpload />
               </TabsContent>
 
               {isAdmin && (
