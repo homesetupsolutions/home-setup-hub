@@ -18,7 +18,7 @@ const benefits = [
 
 export function AboutSection() {
   return (
-    <section id="about" className="py-32 md:py-44 relative">
+    <section id="about" className="py-24 md:py-32 relative">
       {/* Subtle tech grid */}
       <div className="absolute inset-0 tech-grid opacity-20" />
       {/* Ambient glow */}

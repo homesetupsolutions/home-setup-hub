@@ -36,7 +36,7 @@ const contactMethods = [
 
 export function ContactSection() {
   return (
-    <section id="contact" className="py-32 md:py-44 relative overflow-hidden">
+    <section id="contact" className="py-24 md:py-32 relative overflow-hidden">
       {/* Tech grid overlay */}
       <div className="absolute inset-0 tech-grid opacity-20" />
       

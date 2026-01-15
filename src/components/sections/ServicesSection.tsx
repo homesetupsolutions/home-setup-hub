@@ -73,7 +73,7 @@ const itemVariants = {
 
 export function ServicesSection() {
   return (
-    <section id="services" className="py-32 md:py-44 relative">
+    <section id="services" className="py-24 md:py-32 relative">
       {/* Subtle tech grid */}
       <div className="absolute inset-0 tech-grid opacity-20" />
       
