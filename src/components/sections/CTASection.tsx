@@ -42,12 +42,12 @@ export function CTASection() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-            <Link to="/book">
+            <a href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/" target="_blank" rel="noopener noreferrer">
               <Button variant="hero" size="xl" className="group">
                 Book Now
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
-            </Link>
+            </a>
             <a href="tel:18332302933">
               <Button variant="heroOutline" size="xl">
                 Call: 1-833-230-2933

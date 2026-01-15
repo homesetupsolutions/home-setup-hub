@@ -119,7 +119,7 @@ export function PromoBanner() {
                 </span>
               )}
               
-              <Link to="/book">
+              <a href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/" target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="secondary"
                   size="sm"
@@ -128,7 +128,7 @@ export function PromoBanner() {
                   Book Now
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
           
