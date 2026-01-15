@@ -12,6 +12,7 @@ Deno.serve(async (req) => {
 
   try {
     const squareAccessToken = Deno.env.get('SQUARE_ACCESS_TOKEN');
+    const squareApplicationId = Deno.env.get('SQUARE_APPLICATION_ID');
     const locationId = Deno.env.get('SQUARE_LOCATION_ID') || 'LBJ4C01HMM5JH';
 
     if (!squareAccessToken) {
@@ -40,6 +41,15 @@ Deno.serve(async (req) => {
     let result;
 
     switch (action) {
+      case 'get_config': {
+        // Return public Square config for Web Payments SDK
+        result = {
+          applicationId: squareApplicationId,
+          locationId: locationId,
+        };
+        console.log('Returning Square config');
+        break;
+      }
       case 'get_services': {
         // Get catalog items that are bookable services
         const response = await fetch(`${squareBaseUrl}/catalog/list?types=ITEM`, { headers });
@@ -284,6 +294,195 @@ Deno.serve(async (req) => {
         }
 
         result = { booking: bookingData.booking };
+        break;
+      }
+
+      case 'create_booking_with_payment': {
+        const { 
+          startAt, 
+          serviceVariationId, 
+          durationMinutes,
+          customerNote,
+          customerFirstName,
+          customerLastName,
+          customerEmail,
+          customerPhone,
+          paymentToken,
+          verificationToken,
+          amount,
+        } = raw;
+
+        if (!startAt || !serviceVariationId || !paymentToken) {
+          throw new Error('startAt, serviceVariationId, and paymentToken required');
+        }
+
+        console.log('Creating booking with payment hold for amount:', amount);
+
+        // First, create or find customer
+        let customerId: string | undefined;
+
+        if (customerEmail || customerPhone) {
+          const searchBody: any = {
+            limit: 1,
+            query: { filter: {} },
+          };
+
+          if (customerEmail) {
+            searchBody.query.filter.email_address = { exact: customerEmail };
+          } else if (customerPhone) {
+            searchBody.query.filter.phone_number = { exact: customerPhone };
+          }
+
+          const searchResponse = await fetch(`${squareBaseUrl}/customers/search`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(searchBody),
+          });
+
+          const searchData = await searchResponse.json();
+
+          if (searchData.customers && searchData.customers.length > 0) {
+            customerId = searchData.customers[0].id;
+            console.log('Found existing customer:', customerId);
+          } else {
+            // Create new customer
+            const createCustomerBody: any = {
+              given_name: customerFirstName || '',
+              family_name: customerLastName || '',
+              email_address: customerEmail,
+              phone_number: customerPhone,
+              idempotency_key: crypto.randomUUID(),
+            };
+
+            const createResponse = await fetch(`${squareBaseUrl}/customers`, {
+              method: 'POST',
+              headers,
+              body: JSON.stringify(createCustomerBody),
+            });
+
+            const createData = await createResponse.json();
+            if (createData.customer) {
+              customerId = createData.customer.id;
+              console.log('Created new customer:', customerId);
+            }
+          }
+        }
+
+        // Create a card on file from the payment token
+        let cardId: string | undefined;
+        
+        if (customerId) {
+          const cardBody: any = {
+            idempotency_key: crypto.randomUUID(),
+            source_id: paymentToken,
+            verification_token: verificationToken,
+            card: {
+              customer_id: customerId,
+            },
+          };
+
+          const cardResponse = await fetch(`${squareBaseUrl}/cards`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(cardBody),
+          });
+
+          const cardData = await cardResponse.json();
+          
+          if (cardData.card) {
+            cardId = cardData.card.id;
+            console.log('Stored card on file:', cardId);
+          } else {
+            console.log('Card storage response:', cardData);
+          }
+        }
+
+        // Create an authorization (hold) on the card
+        let paymentId: string | undefined;
+        
+        if (amount && amount > 0) {
+          const paymentBody: any = {
+            idempotency_key: crypto.randomUUID(),
+            amount_money: {
+              amount: amount,
+              currency: 'CAD',
+            },
+            source_id: cardId || paymentToken,
+            autocomplete: false, // This creates a hold, not a capture
+            customer_id: customerId,
+            location_id: locationId,
+            note: `Hold for appointment: ${serviceVariationId}`,
+            verification_token: cardId ? undefined : verificationToken,
+          };
+
+          const paymentResponse = await fetch(`${squareBaseUrl}/payments`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(paymentBody),
+          });
+
+          const paymentData = await paymentResponse.json();
+          
+          if (paymentData.payment) {
+            paymentId = paymentData.payment.id;
+            console.log('Created payment hold:', paymentId, 'Status:', paymentData.payment.status);
+          } else {
+            console.error('Payment hold failed:', paymentData);
+            throw new Error(paymentData.errors?.[0]?.detail || 'Failed to authorize payment');
+          }
+        }
+
+        // Create the booking
+        const bookingBody: any = {
+          booking: {
+            start_at: startAt,
+            location_id: locationId,
+            customer_id: customerId,
+            customer_note: customerNote ? 
+              `${customerNote}\n\nPayment ID: ${paymentId || 'N/A'}` : 
+              `Payment ID: ${paymentId || 'N/A'}`,
+            appointment_segments: [{
+              duration_minutes: durationMinutes || 60,
+              service_variation_id: serviceVariationId,
+              team_member_id: 'anyone',
+            }],
+          },
+          idempotency_key: crypto.randomUUID(),
+        };
+
+        const bookingResponse = await fetch(`${squareBaseUrl}/bookings`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(bookingBody),
+        });
+
+        const bookingData = await bookingResponse.json();
+
+        if (!bookingResponse.ok) {
+          console.error('Booking error:', bookingData);
+          
+          // If booking fails, try to cancel the payment hold
+          if (paymentId) {
+            try {
+              await fetch(`${squareBaseUrl}/payments/${paymentId}/cancel`, {
+                method: 'POST',
+                headers,
+              });
+              console.log('Cancelled payment hold due to booking failure');
+            } catch (cancelError) {
+              console.error('Failed to cancel payment hold:', cancelError);
+            }
+          }
+          
+          throw new Error(bookingData.errors?.[0]?.detail || 'Failed to create booking');
+        }
+
+        console.log('Booking created successfully:', bookingData.booking?.id);
+        result = { 
+          booking: bookingData.booking,
+          paymentId: paymentId,
+          cardId: cardId,
+        };
         break;
       }
 

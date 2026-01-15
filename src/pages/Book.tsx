@@ -1,8 +1,9 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
-import { Calendar, Clock, Shield, Star, Phone, Mail, MapPin } from "lucide-react";
+import { Calendar, Clock, Shield, Star, Phone, Mail, CreditCard } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Card, CardContent } from "@/components/ui/card";
+import { BookingWizard } from "@/components/booking/BookingWizard";
 
 const features = [
   {
@@ -19,6 +20,11 @@ const features = [
     icon: Shield,
     title: "Guaranteed Quality",
     description: "100% satisfaction guaranteed on all services",
+  },
+  {
+    icon: CreditCard,
+    title: "Secure Payment",
+    description: "Card is held for your appointment, only charged after service",
   },
 ];
 
@@ -40,7 +46,7 @@ const Book = () => {
       </Helmet>
       <Layout>
         {/* Hero Section */}
-        <section className="relative py-16 md:py-24 bg-gradient-to-br from-primary/10 via-background to-accent/10">
+        <section className="relative py-12 md:py-20 bg-gradient-to-br from-primary/10 via-background to-accent/10">
           <div className="container mx-auto px-4 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -59,9 +65,9 @@ const Book = () => {
         </section>
 
         {/* Features */}
-        <section className="py-12 bg-muted/30">
+        <section className="py-8 bg-muted/30">
           <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {features.map((feature, index) => (
                 <motion.div
                   key={index}
@@ -69,11 +75,11 @@ const Book = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className="h-full">
-                    <CardContent className="p-6 text-center">
-                      <feature.icon className="w-10 h-10 mx-auto mb-4 text-primary" />
-                      <h3 className="font-semibold mb-2">{feature.title}</h3>
-                      <p className="text-sm text-muted-foreground">{feature.description}</p>
+                  <Card className="h-full border-0 bg-transparent shadow-none">
+                    <CardContent className="p-4 text-center">
+                      <feature.icon className="w-8 h-8 mx-auto mb-2 text-primary" />
+                      <h3 className="font-semibold text-sm mb-1">{feature.title}</h3>
+                      <p className="text-xs text-muted-foreground">{feature.description}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -82,31 +88,16 @@ const Book = () => {
           </div>
         </section>
 
-        {/* M365 Bookings Embed */}
+        {/* Booking Wizard */}
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="max-w-5xl mx-auto"
             >
-              <div className="bg-card rounded-xl shadow-lg overflow-hidden border">
-                <div className="p-4 md:p-6 bg-muted/50 border-b">
-                  <h2 className="text-xl font-semibold text-center">Select Your Service & Time</h2>
-                  <p className="text-sm text-muted-foreground text-center mt-1">
-                    Choose from our available services and book your preferred time slot
-                  </p>
-                </div>
-                <div className="relative w-full" style={{ paddingBottom: "150%", minHeight: "600px" }}>
-                  <iframe
-                    src="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/"
-                    title="Book an Appointment - Home Setup Solutions"
-                    className="absolute inset-0 w-full h-full border-0"
-                    allow="payment"
-                    loading="lazy"
-                  />
-                </div>
+              <div className="bg-card rounded-xl shadow-lg border p-6 md:p-8">
+                <BookingWizard />
               </div>
             </motion.div>
           </div>
