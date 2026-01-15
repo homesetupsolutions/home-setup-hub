@@ -12,11 +12,18 @@ interface Star {
 }
 
 const colors = [
+  // Orange variants
   "hsl(24, 100%, 50%)",    // Bright Orange
   "hsl(30, 100%, 55%)",    // Light Orange
   "hsl(20, 100%, 45%)",    // Deep Orange
-  "hsl(35, 100%, 60%)",    // Golden Orange
-  "hsl(15, 100%, 50%)",    // Red-Orange
+  // Blue variants
+  "hsl(220, 90%, 55%)",    // Vivid Blue
+  "hsl(210, 100%, 50%)",   // Electric Blue
+  "hsl(230, 80%, 60%)",    // Soft Blue
+  // Purple variants
+  "hsl(270, 80%, 55%)",    // Vivid Purple
+  "hsl(280, 90%, 50%)",    // Electric Purple
+  "hsl(260, 70%, 60%)",    // Soft Purple
 ];
 
 export function ShootingStars() {
