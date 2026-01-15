@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -27,11 +28,48 @@ interface EmailRequest {
   };
 }
 
+// HTML escape function to prevent XSS/injection attacks
+function escapeHtml(unsafe: string | undefined | null): string {
+  if (!unsafe) return '';
+  return String(unsafe)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// Validate URL to prevent javascript: and other malicious protocols
+function isValidHttpUrl(url: string | undefined | null): boolean {
+  if (!url) return false;
+  try {
+    const parsed = new URL(url);
+    return ['http:', 'https:'].includes(parsed.protocol);
+  } catch {
+    return false;
+  }
+}
+
+// Safely format price
+function formatPrice(price: number | undefined | null): string {
+  if (typeof price !== 'number' || isNaN(price) || price < 0) return '0.00';
+  return price.toFixed(2);
+}
+
 function getEmailTemplate(type: string, data: EmailRequest['data']): { subject: string; html: string } {
+  // Escape all user-supplied data
+  const safeCustomerName = escapeHtml(data?.customerName) || 'Valued Customer';
+  const safeServiceName = escapeHtml(data?.serviceName) || 'N/A';
+  const safeAppointmentDate = escapeHtml(data?.appointmentDate) || 'N/A';
+  const safeAppointmentTime = escapeHtml(data?.appointmentTime) || 'N/A';
+  const safeAddress = escapeHtml(data?.address);
+  const safePrice = formatPrice(data?.price);
+  const safeReceiptUrl = isValidHttpUrl(data?.receiptUrl) ? escapeHtml(data?.receiptUrl) : '';
+
   switch (type) {
     case 'booking_confirmation':
       return {
-        subject: `Booking Confirmed - ${data?.serviceName || 'Your Appointment'}`,
+        subject: `Booking Confirmed - ${safeServiceName}`,
         html: `
           <!DOCTYPE html>
           <html>
@@ -46,17 +84,17 @@ function getEmailTemplate(type: string, data: EmailRequest['data']): { subject: 
               </div>
               <div style="padding: 30px;">
                 <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
-                  Hi ${data?.customerName || 'Valued Customer'},
+                  Hi ${safeCustomerName},
                 </p>
                 <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
                   Your appointment has been confirmed. Here are the details:
                 </p>
                 <div style="background: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                  <p style="margin: 0 0 10px 0;"><strong>Service:</strong> ${data?.serviceName || 'N/A'}</p>
-                  <p style="margin: 0 0 10px 0;"><strong>Date:</strong> ${data?.appointmentDate || 'N/A'}</p>
-                  <p style="margin: 0 0 10px 0;"><strong>Time:</strong> ${data?.appointmentTime || 'N/A'}</p>
-                  ${data?.address ? `<p style="margin: 0 0 10px 0;"><strong>Address:</strong> ${data.address}</p>` : ''}
-                  ${data?.price ? `<p style="margin: 0;"><strong>Price:</strong> $${data.price.toFixed(2)}</p>` : ''}
+                  <p style="margin: 0 0 10px 0;"><strong>Service:</strong> ${safeServiceName}</p>
+                  <p style="margin: 0 0 10px 0;"><strong>Date:</strong> ${safeAppointmentDate}</p>
+                  <p style="margin: 0 0 10px 0;"><strong>Time:</strong> ${safeAppointmentTime}</p>
+                  ${safeAddress ? `<p style="margin: 0 0 10px 0;"><strong>Address:</strong> ${safeAddress}</p>` : ''}
+                  ${data?.price ? `<p style="margin: 0;"><strong>Price:</strong> $${safePrice}</p>` : ''}
                 </div>
                 <p style="font-size: 14px; color: #666;">
                   If you need to reschedule or cancel, please call us at <a href="tel:8332302933" style="color: #f97316;">833-230-2933</a>.
@@ -74,7 +112,7 @@ function getEmailTemplate(type: string, data: EmailRequest['data']): { subject: 
     
     case 'booking_reminder':
       return {
-        subject: `Reminder: Your Appointment Tomorrow - ${data?.serviceName || ''}`,
+        subject: `Reminder: Your Appointment Tomorrow - ${safeServiceName}`,
         html: `
           <!DOCTYPE html>
           <html>
@@ -89,16 +127,16 @@ function getEmailTemplate(type: string, data: EmailRequest['data']): { subject: 
               </div>
               <div style="padding: 30px;">
                 <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
-                  Hi ${data?.customerName || 'Valued Customer'},
+                  Hi ${safeCustomerName},
                 </p>
                 <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
                   This is a friendly reminder about your upcoming appointment:
                 </p>
                 <div style="background: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                  <p style="margin: 0 0 10px 0;"><strong>Service:</strong> ${data?.serviceName || 'N/A'}</p>
-                  <p style="margin: 0 0 10px 0;"><strong>Date:</strong> ${data?.appointmentDate || 'N/A'}</p>
-                  <p style="margin: 0 0 10px 0;"><strong>Time:</strong> ${data?.appointmentTime || 'N/A'}</p>
-                  ${data?.address ? `<p style="margin: 0;"><strong>Address:</strong> ${data.address}</p>` : ''}
+                  <p style="margin: 0 0 10px 0;"><strong>Service:</strong> ${safeServiceName}</p>
+                  <p style="margin: 0 0 10px 0;"><strong>Date:</strong> ${safeAppointmentDate}</p>
+                  <p style="margin: 0 0 10px 0;"><strong>Time:</strong> ${safeAppointmentTime}</p>
+                  ${safeAddress ? `<p style="margin: 0;"><strong>Address:</strong> ${safeAddress}</p>` : ''}
                 </div>
                 <p style="font-size: 14px; color: #666;">
                   Need to reschedule? Call us at <a href="tel:8332302933" style="color: #3b82f6;">833-230-2933</a>.
@@ -130,17 +168,17 @@ function getEmailTemplate(type: string, data: EmailRequest['data']): { subject: 
               </div>
               <div style="padding: 30px;">
                 <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
-                  Hi ${data?.customerName || 'Valued Customer'},
+                  Hi ${safeCustomerName},
                 </p>
                 <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
                   Thank you for your payment. Here's your receipt:
                 </p>
                 <div style="background: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                  <p style="margin: 0 0 10px 0;"><strong>Service:</strong> ${data?.serviceName || 'N/A'}</p>
-                  <p style="margin: 0 0 10px 0;"><strong>Date:</strong> ${data?.appointmentDate || 'N/A'}</p>
-                  ${data?.price ? `<p style="margin: 0;"><strong>Amount Paid:</strong> $${data.price.toFixed(2)}</p>` : ''}
+                  <p style="margin: 0 0 10px 0;"><strong>Service:</strong> ${safeServiceName}</p>
+                  <p style="margin: 0 0 10px 0;"><strong>Date:</strong> ${safeAppointmentDate}</p>
+                  ${data?.price ? `<p style="margin: 0;"><strong>Amount Paid:</strong> $${safePrice}</p>` : ''}
                 </div>
-                ${data?.receiptUrl ? `<p style="text-align: center;"><a href="${data.receiptUrl}" style="display: inline-block; background: #10b981; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500;">View Full Receipt</a></p>` : ''}
+                ${safeReceiptUrl ? `<p style="text-align: center;"><a href="${safeReceiptUrl}" style="display: inline-block; background: #10b981; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500;">View Full Receipt</a></p>` : ''}
               </div>
               <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #eee;">
                 <p style="margin: 0; color: #666; font-size: 14px;">Home Setup Solutions</p>
@@ -163,9 +201,53 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Authentication check - require admin or staff role
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.error("No authorization header provided");
+      return new Response(
+        JSON.stringify({ error: "Unauthorized: Authentication required" }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      console.error("User authentication failed:", userError?.message);
+      return new Response(
+        JSON.stringify({ error: "Unauthorized: Invalid authentication" }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // Check if user has admin or staff role
+    const { data: isAdmin } = await supabase.rpc('has_role', {
+      _user_id: user.id,
+      _role: 'admin'
+    });
+    
+    const { data: isStaff } = await supabase.rpc('has_role', {
+      _user_id: user.id,
+      _role: 'staff'
+    });
+
+    if (!isAdmin && !isStaff) {
+      console.error("User lacks required role:", user.id);
+      return new Response(
+        JSON.stringify({ error: "Forbidden: Admin or staff access required" }),
+        { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
     const emailRequest: EmailRequest = await req.json();
     
-    console.log("Received email request:", { 
+    console.log("Received email request from user:", user.id, { 
       to: emailRequest.to, 
       type: emailRequest.type,
       subject: emailRequest.subject 
@@ -178,6 +260,13 @@ const handler = async (req: Request): Promise<Response> => {
       const template = getEmailTemplate(emailRequest.type, emailRequest.data);
       subject = subject || template.subject;
       html = html || template.html;
+    }
+
+    // For custom emails, escape the HTML content if it contains user data
+    if (emailRequest.type === 'custom' && emailRequest.html) {
+      // Custom emails should already be sanitized by the caller
+      // Log a warning if custom HTML is used
+      console.warn("Custom HTML email being sent - ensure content is sanitized");
     }
 
     if (!subject || (!html && !emailRequest.text)) {
@@ -213,7 +302,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log("Email sent successfully:", data);
+    console.log("Email sent successfully by user:", user.id, data);
 
     return new Response(JSON.stringify(data), {
       status: 200,
