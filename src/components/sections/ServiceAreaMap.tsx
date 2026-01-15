@@ -5,18 +5,33 @@ import { Button } from "@/components/ui/button";
 
 const serviceAreas = [
   {
-    region: "Calgary",
-    cities: ["Downtown", "NW Calgary", "NE Calgary", "SW Calgary", "SE Calgary"],
+    region: "NW Calgary",
+    cities: ["Brentwood", "Bowness", "Tuscany", "Varsity", "Dalhousie", "Edgemont", "Hamptons", "Scenic Acres"],
     featured: true,
   },
   {
-    region: "Calgary Suburbs",
-    cities: ["Airdrie", "Cochrane", "Chestermere", "Okotoks", "High River"],
+    region: "NE Calgary",
+    cities: ["Bridgeland", "Renfrew", "Marlborough", "Saddle Ridge", "Skyview Ranch", "Cityscape", "Cornerstone"],
     featured: true,
   },
   {
-    region: "Surrounding Areas",
-    cities: ["Strathmore", "Crossfield", "Irricana", "Black Diamond", "Turner Valley"],
+    region: "SW Calgary",
+    cities: ["Marda Loop", "Altadore", "Mount Royal", "Killarney", "Aspen Woods", "Signal Hill", "Springbank Hill"],
+    featured: true,
+  },
+  {
+    region: "SE Calgary",
+    cities: ["Inglewood", "Mahogany", "Auburn Bay", "McKenzie Towne", "Copperfield", "New Brighton", "Cranston"],
+    featured: true,
+  },
+  {
+    region: "Downtown & Inner City",
+    cities: ["Downtown", "Beltline", "Mission", "Kensington", "Sunnyside", "Eau Claire", "Victoria Park"],
+    featured: true,
+  },
+  {
+    region: "Surrounding Communities",
+    cities: ["Airdrie", "Cochrane", "Chestermere", "Okotoks", "High River", "Strathmore", "Crossfield"],
     featured: true,
   },
 ];
