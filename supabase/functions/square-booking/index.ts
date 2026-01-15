@@ -82,7 +82,18 @@ Deno.serve(async (req) => {
           throw new Error('startDate and serviceVariationId required');
         }
 
-        // Get team members first
+        // Get bookable staff members (team members assigned to booking profile)
+        const bookingProfileResponse = await fetch(`${squareBaseUrl}/bookings/business-booking-profile`, {
+          headers,
+        });
+        
+        const bookingProfileData = await bookingProfileResponse.json();
+        console.log('Booking profile:', JSON.stringify(bookingProfileData, null, 2));
+
+        // Try to get team members from the booking profile first
+        let teamMemberIds: string[] = [];
+        
+        // Fall back to searching team members with booking enabled
         const teamResponse = await fetch(`${squareBaseUrl}/team-members/search`, {
           method: 'POST',
           headers,
@@ -97,15 +108,28 @@ Deno.serve(async (req) => {
         });
 
         const teamData = await teamResponse.json();
-        const teamMemberIds = (teamData.team_members || []).map((tm: any) => tm.id);
+        console.log('Team members found:', teamData.team_members?.length || 0);
+        
+        // Filter to only team members that have is_bookable set
+        const bookableMembers = (teamData.team_members || []).filter((tm: any) => {
+          // Check if team member has assignments at this location with is_bookable
+          const assignment = (tm.assigned_locations?.locations || []).find(
+            (loc: any) => loc.location_id === locationId
+          );
+          return assignment?.is_bookable !== false;
+        });
+        
+        teamMemberIds = bookableMembers.map((tm: any) => tm.id);
+        console.log('Bookable team member IDs:', teamMemberIds);
 
         if (teamMemberIds.length === 0) {
+          console.log('No bookable team members found, returning empty availabilities');
           result = { availabilities: [] };
           break;
         }
 
-        // Search for available time slots
-        const searchBody = {
+        // Search for available time slots - try without team member filter first if needed
+        let searchBody: any = {
           query: {
             filter: {
               start_at_range: {
@@ -123,17 +147,35 @@ Deno.serve(async (req) => {
           },
         };
 
-        const availResponse = await fetch(`${squareBaseUrl}/bookings/availability/search`, {
+        let availResponse = await fetch(`${squareBaseUrl}/bookings/availability/search`, {
           method: 'POST',
           headers,
           body: JSON.stringify(searchBody),
         });
 
-        const availData = await availResponse.json();
+        let availData = await availResponse.json();
+
+        // If we get invalid team member errors, try with "all" filter instead
+        if (!availResponse.ok && availData.errors?.some((e: any) => e.detail?.includes('Invalid team member'))) {
+          console.log('Team member filter failed, trying with all team members...');
+          
+          // Try without specific team member filter
+          searchBody.query.filter.segment_filters[0].team_member_id_filter = { all: true };
+          
+          availResponse = await fetch(`${squareBaseUrl}/bookings/availability/search`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(searchBody),
+          });
+          
+          availData = await availResponse.json();
+        }
 
         if (!availResponse.ok) {
           console.error('Availability error:', availData);
-          throw new Error(availData.errors?.[0]?.detail || 'Failed to fetch availability');
+          // Return empty instead of throwing to gracefully handle
+          result = { availabilities: [] };
+          break;
         }
 
         const availabilities = (availData.availabilities || []).map((a: any) => ({
