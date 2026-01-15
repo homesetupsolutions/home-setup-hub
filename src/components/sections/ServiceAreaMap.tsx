@@ -57,7 +57,7 @@ export function ServiceAreaMap() {
             Service <span className="text-gradient-orange">Areas</span>
           </h2>
           <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            We proudly serve Calgary and surrounding areas. Check if we're in your area!
+            We proudly serve Calgary and all communities within a 150 km radius. Check if we're in your area!
           </p>
         </motion.div>
 
