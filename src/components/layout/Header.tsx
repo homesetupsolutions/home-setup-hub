@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import logo from "@/assets/logo.png";
 
+const M365_BOOKING_URL = 'https://outlook.office.com/book/allbookings@homesetupsolutions.ca/';
+
 const navLinks = [
   { label: "Home", path: "/", staffOnly: false },
   { label: "Services", path: "/#services", staffOnly: false },
   { label: "About", path: "/#about", staffOnly: false },
-  { label: "Book Now", path: "/book", staffOnly: false },
   { label: "Staff Portal", path: "/staff", staffOnly: true },
   { label: "Contact", path: "/#contact", staffOnly: false },
 ];
@@ -101,11 +102,11 @@ export function Header() {
               </div>
             )}
             
-            <Link to="/book">
+            <a href={M365_BOOKING_URL} target="_blank" rel="noopener noreferrer">
               <Button variant="hero" size="lg">
                 Book Now
               </Button>
-            </Link>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -185,11 +186,11 @@ export function Header() {
                   </>
                 )}
                 
-                <Link to="/book" className="block">
+                <a href={M365_BOOKING_URL} target="_blank" rel="noopener noreferrer" className="block">
                   <Button variant="hero" size="lg" className="w-full">
                     Book Now
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
           </motion.div>

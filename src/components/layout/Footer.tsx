@@ -35,7 +35,6 @@ export function Footer() {
               {[
                 { label: "Home", path: "/" },
                 { label: "Services", path: "/#services" },
-                { label: "Book Appointment", path: "/book" },
                 { label: "About Us", path: "/#about" },
               ].map((link) => (
                 <li key={link.path}>
@@ -48,6 +47,17 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <a
+                  href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center gap-2 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-primary/50 group-hover:bg-primary group-hover:w-2 transition-all duration-300" />
+                  Book Appointment
+                </a>
+              </li>
             </ul>
           </div>
 
