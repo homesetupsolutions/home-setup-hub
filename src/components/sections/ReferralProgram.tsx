@@ -166,7 +166,7 @@ export function ReferralProgram() {
               )}
 
               <div className="pt-4 border-t border-border">
-                <div className="grid grid-cols-2 gap-4 text-center">
+                <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <p className="text-3xl font-bold text-primary">$10</p>
                     <p className="text-sm text-muted-foreground">Off Per Referral</p>
@@ -174,6 +174,10 @@ export function ReferralProgram() {
                   <div>
                     <p className="text-3xl font-bold text-primary">10%</p>
                     <p className="text-sm text-muted-foreground">Friend's Discount</p>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-bold text-primary">20%</p>
+                    <p className="text-sm text-muted-foreground">Off 5th Visit</p>
                   </div>
                 </div>
               </div>
