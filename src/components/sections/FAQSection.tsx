@@ -10,7 +10,7 @@ import {
 const faqs = [
   {
     question: "What areas do you service?",
-    answer: "We provide services throughout Calgary and surrounding areas including Airdrie, Cochrane, Chestermere, Okotoks, High River, and nearby communities. For locations outside our primary service area, additional travel fees may apply. Contact us to confirm availability in your location.",
+    answer: "We provide services throughout Calgary and all communities within a 150 km radius, including Airdrie, Cochrane, Chestermere, Okotoks, High River, Canmore, Banff, and nearby areas. For locations outside our service area, please contact us to discuss options.",
   },
   {
     question: "How do I book an appointment?",
