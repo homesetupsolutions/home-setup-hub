@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
-import { Calendar, Clock, Shield, Phone, Star, CheckCircle2, ExternalLink, MessageSquare, MapPin } from "lucide-react";
+import { Calendar, Clock, Shield, Phone, Star, ExternalLink, MessageSquare, MapPin } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -25,15 +25,6 @@ const features = [
   },
 ];
 
-const services = [
-  { name: "Deep Clean", price: "from $150", duration: "2-3 hours" },
-  { name: "Move-Out Clean", price: "from $200", duration: "3-4 hours" },
-  { name: "Post-Reno Cleanup", price: "from $275", duration: "3-5 hours" },
-  { name: "Handyman Services", price: "$75/hour", duration: "Varies" },
-  { name: "Furniture Moving", price: "from $125", duration: "1-2 hours" },
-  { name: "Smart Home Setup", price: "from $85", duration: "1-2 hours" },
-];
-
 const testimonials = [
   { name: "Sarah M.", text: "Amazing service! Evan was professional and thorough. Highly recommend!", rating: 5 },
   { name: "Mike T.", text: "Best cleaning service in Calgary. My house has never looked better.", rating: 5 },
@@ -41,10 +32,6 @@ const testimonials = [
 ];
 
 const Book = () => {
-  const handleBookNow = () => {
-    window.open(M365_BOOKING_URL, '_blank');
-  };
-
   return (
     <>
       <Helmet>
@@ -56,13 +43,13 @@ const Book = () => {
       </Helmet>
       <Layout>
         {/* Hero Section */}
-        <section className="py-12 md:py-20">
+        <section className="py-12 md:py-16">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-center mb-12"
+              className="text-center mb-8"
             >
               <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
                 Book Online 24/7
@@ -70,19 +57,9 @@ const Book = () => {
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
                 Schedule Your <span className="text-gradient-orange">Appointment</span>
               </h1>
-              <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
+              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
                 Choose your service and book online instantly. We'll confirm your appointment via text message.
               </p>
-              
-              <Button 
-                size="lg" 
-                className="text-lg px-8 py-6 gap-2"
-                onClick={handleBookNow}
-              >
-                <Calendar className="h-5 w-5" />
-                Book Now
-                <ExternalLink className="h-4 w-4 ml-1" />
-              </Button>
             </motion.div>
 
             {/* Features */}
@@ -90,7 +67,7 @@ const Book = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
+              className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
             >
               {features.map((feature) => (
                 <div
@@ -108,36 +85,37 @@ const Book = () => {
               ))}
             </motion.div>
 
-            {/* Services Grid */}
+            {/* Embedded M365 Booking */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mb-16"
+              className="mb-12"
             >
-              <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">Our Services</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {services.map((service) => (
-                  <Card key={service.name} className="hover:border-primary/50 transition-colors cursor-pointer" onClick={handleBookNow}>
-                    <CardContent className="p-6">
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-semibold text-lg">{service.name}</h3>
-                        <span className="text-primary font-bold">{service.price}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Clock className="h-4 w-4" />
-                        <span>{service.duration}</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-              <div className="text-center mt-6">
-                <Button size="lg" onClick={handleBookNow} className="gap-2">
-                  <Calendar className="h-5 w-5" />
-                  View All Services & Book
-                </Button>
-              </div>
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="bg-muted/50 p-4 flex items-center justify-between border-b">
+                    <div>
+                      <h2 className="font-semibold text-lg">Select a Service & Book</h2>
+                      <p className="text-sm text-muted-foreground">Choose from our available services below</p>
+                    </div>
+                    <Button variant="outline" size="sm" asChild>
+                      <a href={M365_BOOKING_URL} target="_blank" rel="noopener noreferrer" className="gap-2">
+                        <ExternalLink className="h-4 w-4" />
+                        Open Full Screen
+                      </a>
+                    </Button>
+                  </div>
+                  <div className="w-full" style={{ height: '800px' }}>
+                    <iframe
+                      src={M365_BOOKING_URL}
+                      title="Book an Appointment with Home Setup Solutions"
+                      className="w-full h-full border-0"
+                      allow="payment"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
 
             {/* Testimonials */}
@@ -145,7 +123,7 @@ const Book = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="mb-16"
+              className="mb-12"
             >
               <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">What Our Customers Say</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -172,19 +150,21 @@ const Book = () => {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-2xl p-8 md:p-12 text-center"
             >
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Get Started?</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">Need Help Booking?</h2>
               <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-                Book your appointment online or give us a call. We're here to help with all your home setup needs in Calgary!
+                Give us a call or send a text if you have any questions about our services!
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" onClick={handleBookNow} className="gap-2">
-                  <Calendar className="h-5 w-5" />
-                  Book Online Now
-                </Button>
-                <Button size="lg" variant="outline" asChild>
+                <Button size="lg" asChild>
                   <a href="tel:18332302933" className="gap-2">
                     <Phone className="h-5 w-5" />
                     Call 1-833-230-2933
+                  </a>
+                </Button>
+                <Button size="lg" variant="outline" asChild>
+                  <a href="sms:15876045127" className="gap-2">
+                    <MessageSquare className="h-5 w-5" />
+                    Text 587-604-5127
                   </a>
                 </Button>
               </div>
