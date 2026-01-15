@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Calendar, Clock, Shield, Phone, Star, ChevronRight, 
-  MessageSquare, MapPin, User, Mail, CheckCircle2, Home, ArrowLeft
+  MessageSquare, MapPin, User, Mail, CheckCircle2, Home, ArrowLeft, Loader2
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
@@ -17,73 +17,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-// Services synced with M365 Bookings page
-const services = [
-  {
-    id: "tv-mounting",
-    name: "TV Mounting",
-    description: "Professional wall mount installation for any TV size. Includes cable management.",
-    duration: 60,
-    price: 9900,
-    icon: "📺",
-  },
-  {
-    id: "network-setup",
-    name: "Network & WiFi Setup",
-    description: "Complete WiFi optimization, router setup, and coverage extension.",
-    duration: 90,
-    price: 14900,
-    icon: "📡",
-  },
-  {
-    id: "smart-home",
-    name: "Smart Home Setup",
-    description: "Voice assistant, smart lighting, and home automation configuration.",
-    duration: 120,
-    price: 14900,
-    icon: "🏠",
-  },
-  {
-    id: "security-camera",
-    name: "Security Camera Install",
-    description: "Indoor/outdoor camera installation with app setup and monitoring.",
-    duration: 90,
-    price: 24900,
-    icon: "📹",
-  },
-  {
-    id: "computer-setup",
-    name: "Computer Setup & Repair",
-    description: "Desktop/laptop setup, data transfer, software installation, and troubleshooting.",
-    duration: 60,
-    price: 9900,
-    icon: "💻",
-  },
-  {
-    id: "home-theater",
-    name: "Home Theater System",
-    description: "Full audio/video system installation with surround sound setup.",
-    duration: 180,
-    price: 39900,
-    icon: "🎬",
-  },
-  {
-    id: "general-handyman",
-    name: "General Handyman",
-    description: "Furniture assembly, small repairs, mounting, and general home tasks.",
-    duration: 60,
-    price: 7900,
-    icon: "🔧",
-  },
-  {
-    id: "cleaning",
-    name: "Home Cleaning",
-    description: "Professional deep cleaning service for homes and apartments.",
-    duration: 120,
-    price: 14900,
-    icon: "🧹",
-  },
-];
+interface Service {
+  id: string;
+  name: string;
+  description: string | null;
+  duration_minutes: number;
+  price_cents: number;
+  icon: string | null;
+}
 
 // Generate available time slots for next 14 days
 const generateTimeSlots = () => {
@@ -151,7 +92,9 @@ interface CustomerInfo {
 
 const Book = () => {
   const [step, setStep] = useState<BookingStep>("service");
-  const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
+  const [services, setServices] = useState<Service[]>([]);
+  const [isLoadingServices, setIsLoadingServices] = useState(true);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<Date | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -164,6 +107,28 @@ const Book = () => {
     address: "",
     notes: "",
   });
+
+  // Fetch services from database
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("services")
+          .select("id, name, description, duration_minutes, price_cents, icon")
+          .order("display_order", { ascending: true });
+
+        if (error) throw error;
+        setServices(data || []);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+        toast.error("Failed to load services");
+      } finally {
+        setIsLoadingServices(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
 
   const timeSlots = generateTimeSlots();
   const availableDates = timeSlots.map(s => s.date);
@@ -179,7 +144,7 @@ const Book = () => {
     }).format(amount / 100);
   };
 
-  const handleServiceSelect = (service: typeof services[0]) => {
+  const handleServiceSelect = (service: Service) => {
     setSelectedService(service);
     setStep("datetime");
   };
@@ -227,9 +192,9 @@ const Book = () => {
           customer_phone: customerInfo.phone,
           address: customerInfo.address,
           service_name: selectedService.name,
-          service_price: selectedService.price,
+          service_price: selectedService.price_cents,
           scheduled_at: selectedTime.toISOString(),
-          duration_minutes: selectedService.duration,
+          duration_minutes: selectedService.duration_minutes,
           notes: customerInfo.notes || null,
           status: "confirmed",
         })
@@ -261,6 +226,11 @@ const Book = () => {
         <p className="text-muted-foreground">Select the service you'd like to book</p>
       </div>
 
+      {isLoadingServices ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      ) : (
       <div className="grid gap-4 md:grid-cols-2">
         {services.map((service) => (
           <motion.div
@@ -287,10 +257,10 @@ const Book = () => {
                     <div className="flex items-center gap-4 mt-3 text-sm">
                       <span className="flex items-center gap-1 text-muted-foreground">
                         <Clock className="h-4 w-4" />
-                        {service.duration} min
+                        {service.duration_minutes} min
                       </span>
                       <span className="font-semibold text-primary">
-                        {formatPrice(service.price)}
+                        {formatPrice(service.price_cents)}
                       </span>
                     </div>
                   </div>
@@ -300,6 +270,7 @@ const Book = () => {
           </motion.div>
         ))}
       </div>
+      )}
     </motion.div>
   );
 
@@ -323,7 +294,7 @@ const Book = () => {
               <div>
                 <h3 className="font-semibold">{selectedService.name}</h3>
                 <p className="text-sm text-muted-foreground">
-                  {selectedService.duration} min • {formatPrice(selectedService.price)}
+                  {selectedService.duration_minutes} min • {formatPrice(selectedService.price_cents)}
                 </p>
               </div>
             </div>
@@ -416,7 +387,7 @@ const Book = () => {
                 <div>
                   <h3 className="font-semibold">{selectedService.name}</h3>
                   <p className="text-sm text-muted-foreground">
-                    {selectedService.duration} min • {formatPrice(selectedService.price)}
+                    {selectedService.duration_minutes} min • {formatPrice(selectedService.price_cents)}
                   </p>
                 </div>
               </div>
@@ -594,7 +565,7 @@ const Book = () => {
                 <div>
                   <p className="font-medium">{selectedService.name}</p>
                   <p className="text-sm text-muted-foreground">
-                    {selectedService.duration} min • {formatPrice(selectedService.price)}
+                    {selectedService.duration_minutes} min • {formatPrice(selectedService.price_cents)}
                   </p>
                 </div>
               </div>
