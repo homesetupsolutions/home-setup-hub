@@ -71,8 +71,8 @@ export function ShootingStars() {
       angle: 20 + Math.random() * 40,
       color: colors[Math.floor(Math.random() * colors.length)],
       size: 2 + Math.random() * 4,
-      duration: 0.6 + Math.random() * 1,
-      length: 120 + Math.random() * 100,
+      duration: 0.3 + Math.random() * 0.5,
+      length: 150 + Math.random() * 120,
     };
 
     setStars((prev) => [...prev.slice(-15), star]);
