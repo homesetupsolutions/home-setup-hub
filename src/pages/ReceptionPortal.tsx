@@ -32,7 +32,7 @@ import { BookingsTab } from '@/components/admin/BookingsTab';
 import SMSServices from '@/components/staff/SMSServices';
 import logo from '@/assets/logo.png';
 
-const M365_BOOKING_URL = 'https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled';
+const M365_BOOKING_URL = 'https://outlook.office.com/book/HomeSetupSolutions1@homesetupsolutions.ca/?ismsaljsauthenabled';
 
 export default function ReceptionPortal() {
   const { user, loading, signOut, isAdmin } = useAuth();

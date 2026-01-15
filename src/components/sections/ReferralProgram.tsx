@@ -48,7 +48,7 @@ export function ReferralProgram() {
     const shareData = {
       title: "Home Setup Solutions Referral",
       text: `Use my referral code ${referralCode} to get 10% off your first service with Home Setup Solutions!`,
-      url: `https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled`,
+      url: `https://outlook.office.com/book/HomeSetupSolutions1@homesetupsolutions.ca/?ismsaljsauthenabled`,
     };
 
     if (navigator.share && navigator.canShare(shareData)) {
