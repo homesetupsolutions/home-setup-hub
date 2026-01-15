@@ -50,8 +50,6 @@ export function Footer() {
               <li>
                 <a
                   href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled"
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center gap-2 group"
                 >
                   <span className="w-1 h-1 rounded-full bg-primary/50 group-hover:bg-primary group-hover:w-2 transition-all duration-300" />

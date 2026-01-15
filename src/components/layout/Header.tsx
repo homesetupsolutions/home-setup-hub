@@ -102,7 +102,7 @@ export function Header() {
               </div>
             )}
             
-            <a href={M365_BOOKING_URL} target="_blank" rel="noopener noreferrer">
+            <a href={M365_BOOKING_URL}>
               <Button variant="hero" size="lg">
                 Book Now
               </Button>
@@ -186,7 +186,7 @@ export function Header() {
                   </>
                 )}
                 
-                <a href={M365_BOOKING_URL} target="_blank" rel="noopener noreferrer" className="block">
+                <a href={M365_BOOKING_URL} className="block">
                   <Button variant="hero" size="lg" className="w-full">
                     Book Now
                   </Button>
