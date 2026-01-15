@@ -177,8 +177,11 @@ export function ServiceAreaMap() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center mt-12"
         >
-          <p className="text-muted-foreground mb-4">
+          <p className="text-lg font-medium text-foreground mb-2">
             Don't see your area? We may still be able to help!
+          </p>
+          <p className="text-muted-foreground mb-4">
+            Special rates may apply for locations outside our primary service area.
           </p>
           <Button variant="outline" asChild>
             <a href="tel:18332302933" className="gap-2">
