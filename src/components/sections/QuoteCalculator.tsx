@@ -205,7 +205,7 @@ export function QuoteCalculator() {
                     })}
                   </div>
 
-                  <a href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/" target="_blank" rel="noopener noreferrer" className="block">
+                  <a href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled" target="_blank" rel="noopener noreferrer" className="block">
                     <Button variant="hero" size="lg" className="w-full group">
                       Book Now
                       <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />

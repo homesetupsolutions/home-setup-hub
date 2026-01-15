@@ -119,7 +119,7 @@ export function PromoBanner() {
                 </span>
               )}
               
-              <a href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/" target="_blank" rel="noopener noreferrer">
+              <a href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled" target="_blank" rel="noopener noreferrer">
                 <Button
                   variant="secondary"
                   size="sm"
