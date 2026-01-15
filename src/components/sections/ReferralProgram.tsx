@@ -22,7 +22,7 @@ const steps = [
   {
     icon: DollarSign,
     title: "You Get Rewarded",
-    description: "Earn $25 credit for each successful referral",
+    description: "Earn $10 off your next service for each successful referral",
   },
 ];
 
@@ -168,8 +168,8 @@ export function ReferralProgram() {
               <div className="pt-4 border-t border-border">
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
-                    <p className="text-3xl font-bold text-primary">$25</p>
-                    <p className="text-sm text-muted-foreground">Per Referral</p>
+                    <p className="text-3xl font-bold text-primary">$10</p>
+                    <p className="text-sm text-muted-foreground">Off Per Referral</p>
                   </div>
                   <div>
                     <p className="text-3xl font-bold text-primary">10%</p>
