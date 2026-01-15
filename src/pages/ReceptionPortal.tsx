@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { 
@@ -18,14 +18,21 @@ import {
   MessageSquare,
   Home,
   FileText,
-  Headphones
+  Headphones,
+  ClipboardList,
+  CheckCircle2,
+  ExternalLink
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { CallingSystemTab } from '@/components/admin/CallingSystemTab';
+import { CallScripts } from '@/components/reception/CallScripts';
+import { AppointmentConfirmation } from '@/components/reception/AppointmentConfirmation';
+import { DailyChecklist } from '@/components/reception/DailyChecklist';
 import { CustomersTab } from '@/components/admin/CustomersTab';
 import { BookingsTab } from '@/components/admin/BookingsTab';
 import SMSServices from '@/components/staff/SMSServices';
 import logo from '@/assets/logo.png';
+
+const M365_BOOKING_URL = 'https://outlook.office.com/book/allbookings@homesetupsolutions.ca/';
 
 export default function ReceptionPortal() {
   const { user, loading, signOut, isAdmin } = useAuth();
@@ -35,7 +42,7 @@ export default function ReceptionPortal() {
   const [checkingRole, setCheckingRole] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [profile, setProfile] = useState<{ full_name: string | null; email: string } | null>(null);
-  const [activeTab, setActiveTab] = useState('calling');
+  const [activeTab, setActiveTab] = useState('scripts');
 
   useEffect(() => {
     if (!loading && !user) {
@@ -58,7 +65,6 @@ export default function ReceptionPortal() {
         console.error('Error checking role:', error);
         setIsAuthorized(false);
       } else {
-        // Only admin and staff with supervisor access can use reception
         setIsAuthorized(data === 'admin' || data === 'staff');
         setUserRole(data);
       }
@@ -144,6 +150,10 @@ export default function ReceptionPortal() {
               </div>
 
               <div className="flex items-center gap-4">
+                <Button variant="outline" size="sm" onClick={() => window.open(M365_BOOKING_URL, '_blank')}>
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  <span className="hidden sm:inline">M365 Bookings</span>
+                </Button>
                 <Link to="/">
                   <Button variant="ghost" size="sm" className="gap-2">
                     <Home className="h-4 w-4" />
@@ -185,7 +195,7 @@ export default function ReceptionPortal() {
             <div className="mb-8">
               <h2 className="text-3xl font-bold mb-2">Reception Desk</h2>
               <p className="text-muted-foreground">
-                Handle incoming calls, manage customers, and book appointments.
+                Handle calls, manage appointments, and complete daily tasks
               </p>
             </div>
 
@@ -195,7 +205,7 @@ export default function ReceptionPortal() {
                 <div className="flex flex-wrap items-center gap-6">
                   <div className="flex items-center gap-2">
                     <Phone className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium">Main Line: 1-833-230-2933</span>
+                    <span className="text-sm font-medium">Main: 1-833-230-2933</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <MessageSquare className="h-4 w-4 text-primary" />
@@ -204,7 +214,7 @@ export default function ReceptionPortal() {
                   <a href="/docs/call_script.zip" download>
                     <Button variant="outline" size="sm" className="gap-2">
                       <FileText className="h-4 w-4" />
-                      Download Call Scripts
+                      Download Scripts PDF
                     </Button>
                   </a>
                 </div>
@@ -213,10 +223,18 @@ export default function ReceptionPortal() {
 
             {/* Main Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 mb-6 max-w-2xl">
-                <TabsTrigger value="calling" className="gap-2">
+              <TabsList className="grid w-full grid-cols-6 mb-6">
+                <TabsTrigger value="scripts" className="gap-2">
                   <Phone className="h-4 w-4" />
-                  <span className="hidden sm:inline">Calling</span>
+                  <span className="hidden sm:inline">Scripts</span>
+                </TabsTrigger>
+                <TabsTrigger value="confirm" className="gap-2">
+                  <CheckCircle2 className="h-4 w-4" />
+                  <span className="hidden sm:inline">Confirm</span>
+                </TabsTrigger>
+                <TabsTrigger value="checklist" className="gap-2">
+                  <ClipboardList className="h-4 w-4" />
+                  <span className="hidden sm:inline">Checklist</span>
                 </TabsTrigger>
                 <TabsTrigger value="customers" className="gap-2">
                   <Users className="h-4 w-4" />
@@ -232,8 +250,16 @@ export default function ReceptionPortal() {
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="calling">
-                <CallingSystemTab />
+              <TabsContent value="scripts">
+                <CallScripts />
+              </TabsContent>
+
+              <TabsContent value="confirm">
+                <AppointmentConfirmation />
+              </TabsContent>
+
+              <TabsContent value="checklist">
+                <DailyChecklist />
               </TabsContent>
 
               <TabsContent value="customers">
