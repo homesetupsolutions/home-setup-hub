@@ -133,7 +133,7 @@ export function ServicesSection() {
           transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mt-20"
         >
-          <a href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/" target="_blank" rel="noopener noreferrer">
+          <a href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled" target="_blank" rel="noopener noreferrer">
             <Button variant="hero" size="lg" className="group">
               View All Services & Book
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />

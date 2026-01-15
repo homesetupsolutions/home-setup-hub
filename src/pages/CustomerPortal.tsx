@@ -434,7 +434,7 @@ export default function CustomerPortal() {
                     <CardContent className="p-0">
                       <div className="aspect-[4/3] md:aspect-[16/10] w-full">
                         <iframe
-                          src="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/"
+                          src="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled"
                           title="Book an Appointment with Home Setup Solutions"
                           className="w-full h-full border-0"
                           allow="payment"

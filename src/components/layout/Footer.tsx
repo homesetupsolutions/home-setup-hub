@@ -49,7 +49,7 @@ export function Footer() {
               ))}
               <li>
                 <a
-                  href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/"
+                  href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center gap-2 group"

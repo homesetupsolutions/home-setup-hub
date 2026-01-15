@@ -40,7 +40,7 @@ interface Appointment {
   reminder_hour_sent: boolean | null;
 }
 
-const M365_BOOKING_URL = 'https://outlook.office.com/book/allbookings@homesetupsolutions.ca/';
+const M365_BOOKING_URL = 'https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled';
 
 export function AppointmentConfirmation() {
   const { toast } = useToast();
