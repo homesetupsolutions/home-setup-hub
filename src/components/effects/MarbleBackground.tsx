@@ -126,40 +126,6 @@ export function MarbleBackground() {
         }}
       />
 
-      {/* Orange marble veins */}
-      <motion.div
-        animate={{
-          opacity: [0.1, 0.2, 0.1],
-        }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(125deg, transparent 35%, hsl(24 100% 50% / 0.5) 35.2%, transparent 35.4%),
-            linear-gradient(235deg, transparent 50%, hsl(30 100% 45% / 0.4) 50.2%, transparent 50.4%),
-            linear-gradient(175deg, transparent 25%, hsl(20 100% 55% / 0.35) 25.2%, transparent 25.4%),
-            linear-gradient(305deg, transparent 65%, hsl(35 100% 50% / 0.3) 65.2%, transparent 65.4%)
-          `,
-          backgroundSize: "100% 100%",
-        }}
-      />
-
-      {/* Secondary veins */}
-      <div 
-        className="absolute inset-0 opacity-[0.08]"
-        style={{
-          backgroundImage: `
-            linear-gradient(145deg, transparent 42%, hsl(24 100% 50%) 42.15%, transparent 42.3%),
-            linear-gradient(215deg, transparent 58%, hsl(30 100% 45%) 58.15%, transparent 58.3%),
-            linear-gradient(335deg, transparent 32%, hsl(28 100% 48%) 32.15%, transparent 32.3%)
-          `,
-          backgroundSize: "600px 600px, 700px 700px, 500px 500px",
-        }}
-      />
 
       {/* Twinkling stars */}
       {stars.map((star) => (
