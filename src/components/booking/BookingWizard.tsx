@@ -48,6 +48,13 @@ export function BookingWizard() {
   });
   const [bookingId, setBookingId] = useState<string | null>(null);
 
+  // Services to exclude from booking
+  const EXCLUDED_SERVICES = [
+    "grandfather pricing",
+    "task rabbit hire mush",
+    "drive time",
+  ];
+
   // Load services and Square config on mount
   useEffect(() => {
     async function loadInitialData() {
@@ -59,7 +66,15 @@ export function BookingWizard() {
           }),
         ]);
 
-        setServices(servicesResult.services || []);
+        // Filter out excluded services
+        const filteredServices = (servicesResult.services || []).filter(
+          (service: SquareService) =>
+            !EXCLUDED_SERVICES.some((excluded) =>
+              service.name.toLowerCase().includes(excluded)
+            )
+        );
+
+        setServices(filteredServices);
         
         if (configResult.data?.applicationId && configResult.data?.locationId) {
           setSquareConfig({
