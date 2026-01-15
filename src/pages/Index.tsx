@@ -19,12 +19,12 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Home Setup Solutions | Professional Home Technology Installation in Canada</title>
+        <title>Home Setup Solutions | Professional Home Technology Installation in Calgary</title>
         <meta
           name="description"
-          content="Expert home technology installation services across Canada. TV mounting, smart home setup, network installation, and more. Book your appointment today!"
+          content="Expert home technology installation services in Calgary and surrounding areas. TV mounting, smart home setup, network installation, and more. Book your appointment today!"
         />
-        <meta name="keywords" content="home setup, TV mounting, smart home installation, network setup, Canada" />
+        <meta name="keywords" content="home setup, TV mounting, smart home installation, network setup, Calgary, Airdrie, Cochrane, Okotoks" />
         <link rel="canonical" href="https://homesetupsolutions.ca" />
       </Helmet>
       <PromoBanner />

@@ -10,7 +10,7 @@ import {
 const faqs = [
   {
     question: "What areas do you service?",
-    answer: "We provide services across all of Canada. Our main service areas include major cities like Toronto, Vancouver, Calgary, Edmonton, Ottawa, and Montreal. For remote areas, we may have additional travel fees. Contact us to confirm availability in your location.",
+    answer: "We provide services throughout Calgary and surrounding areas including Airdrie, Cochrane, Chestermere, Okotoks, High River, and nearby communities. For locations outside our primary service area, additional travel fees may apply. Contact us to confirm availability in your location.",
   },
   {
     question: "How do I book an appointment?",
