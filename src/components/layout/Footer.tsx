@@ -115,7 +115,7 @@ export function Footer() {
                 <div className="w-10 h-10 rounded-xl glass flex items-center justify-center">
                   <MapPin className="w-5 h-5" />
                 </div>
-                <span>Serving all of Canada</span>
+                <span>Serving Calgary & Area</span>
               </li>
             </ul>
           </div>

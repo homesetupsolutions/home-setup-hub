@@ -5,34 +5,19 @@ import { Button } from "@/components/ui/button";
 
 const serviceAreas = [
   {
-    region: "Alberta",
-    cities: ["Calgary", "Edmonton", "Red Deer", "Lethbridge", "Medicine Hat"],
+    region: "Calgary",
+    cities: ["Downtown", "NW Calgary", "NE Calgary", "SW Calgary", "SE Calgary"],
     featured: true,
   },
   {
-    region: "British Columbia",
-    cities: ["Vancouver", "Victoria", "Surrey", "Burnaby", "Kelowna"],
+    region: "Calgary Suburbs",
+    cities: ["Airdrie", "Cochrane", "Chestermere", "Okotoks", "High River"],
     featured: true,
   },
   {
-    region: "Ontario",
-    cities: ["Toronto", "Ottawa", "Mississauga", "Hamilton", "London"],
+    region: "Surrounding Areas",
+    cities: ["Strathmore", "Crossfield", "Irricana", "Black Diamond", "Turner Valley"],
     featured: true,
-  },
-  {
-    region: "Quebec",
-    cities: ["Montreal", "Quebec City", "Laval", "Gatineau"],
-    featured: false,
-  },
-  {
-    region: "Saskatchewan",
-    cities: ["Saskatoon", "Regina"],
-    featured: false,
-  },
-  {
-    region: "Manitoba",
-    cities: ["Winnipeg", "Brandon"],
-    featured: false,
   },
 ];
 
@@ -57,7 +42,7 @@ export function ServiceAreaMap() {
             Service <span className="text-gradient-orange">Areas</span>
           </h2>
           <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            We proudly serve customers across Canada. Check if we're in your area!
+            We proudly serve Calgary and surrounding areas. Check if we're in your area!
           </p>
         </motion.div>
 
