@@ -76,56 +76,6 @@ export function MarbleBackground() {
         }}
       />
 
-      {/* Galaxy spiral arms suggestion */}
-      <motion.div
-        animate={{
-          rotate: [0, 360],
-        }}
-        transition={{
-          duration: 300,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%]"
-        style={{
-          background: `
-            conic-gradient(from 0deg at 50% 50%, 
-              transparent 0deg, 
-              hsl(24 100% 50% / 0.08) 30deg, 
-              transparent 60deg,
-              hsl(270 80% 50% / 0.05) 120deg,
-              transparent 150deg,
-              hsl(220 90% 50% / 0.04) 210deg,
-              transparent 240deg,
-              hsl(30 100% 50% / 0.06) 300deg,
-              transparent 330deg,
-              transparent 360deg
-            )
-          `,
-        }}
-      />
-
-      {/* Cosmic dust clouds */}
-      <motion.div
-        animate={{
-          opacity: [0.3, 0.5, 0.3],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute -inset-[10%]"
-        style={{
-          background: `
-            radial-gradient(ellipse 40% 60% at 75% 25%, hsl(24 100% 55% / 0.18) 0%, transparent 50%),
-            radial-gradient(ellipse 60% 40% at 25% 75%, hsl(280 80% 50% / 0.1) 0%, transparent 45%),
-            radial-gradient(ellipse 50% 50% at 85% 60%, hsl(210 100% 50% / 0.08) 0%, transparent 40%)
-          `,
-        }}
-      />
-
 
       {/* Twinkling stars */}
       {stars.map((star) => (
@@ -153,14 +103,6 @@ export function MarbleBackground() {
           }}
         />
       ))}
-
-      {/* Cosmic noise/dust texture */}
-      <div 
-        className="absolute inset-0 opacity-[0.2]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-        }}
-      />
 
       {/* Large ambient glows */}
       <motion.div
