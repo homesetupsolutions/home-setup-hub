@@ -23,7 +23,7 @@ const QUICK_REPLIES = [
 const BOT_RESPONSES: Record<string, string> = {
   "book": "Great! I can help you book a service. Click the button below to schedule an appointment, or call us at 1-833-230-2933.",
   "services": "We offer TV mounting, smart home setup, network installation, furniture assembly, and more! Would you like to book a service?",
-  "prices": "Our pricing varies by service. Please call us at 1-833-230-2933 or text us at 1-587-604-5127 for pricing details.",
+  "prices": "Our pricing varies by service. Call for a quote at 1-833-230-2933 or text us at 1-587-604-5127.",
   "reschedule": "No problem! Please call us at 1-833-230-2933 or text 1-587-604-5127 to reschedule your appointment.",
   "person": "Of course! You can reach us at:\n📞 Call: 1-833-230-2933\n💬 Text: 1-587-604-5127\n\nWe're available Mon-Sat, 9AM-9PM.",
   "default": "Thanks for reaching out! For the fastest response, please call us at 1-833-230-2933 or text 1-587-604-5127. How can I help you today?"
