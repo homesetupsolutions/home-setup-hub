@@ -75,7 +75,7 @@ const staffResources = [
 
 const quickLinks = [
   { title: "Main Site", path: "/", icon: Home },
-  { title: "Book Appointment", path: "https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled", icon: Calendar, external: true },
+  { title: "Book Appointment", path: "https://outlook.office.com/book/HomeSetupSolutions1@homesetupsolutions.ca/?ismsaljsauthenabled", icon: Calendar, external: true },
 ];
 
 const StaffPortal = () => {

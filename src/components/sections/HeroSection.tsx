@@ -226,7 +226,7 @@ export function HeroSection() {
             transition={{ duration: 1, delay: 1.7, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-24"
           >
-            <a href="https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled">
+            <a href="https://outlook.office.com/book/HomeSetupSolutions1@homesetupsolutions.ca/?ismsaljsauthenabled">
               <Button variant="hero" size="xl" className="group relative overflow-hidden">
                 <span className="relative z-10 flex items-center gap-2">
                   Book Your Setup

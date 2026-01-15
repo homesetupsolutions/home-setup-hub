@@ -43,7 +43,7 @@ import { cn } from '@/lib/utils';
 // Script types
 type ScriptType = 'incoming' | 'outbound-customer' | 'outbound-realtor' | 'follow-up' | 'troubleshooting';
 
-const M365_BOOKING_URL = 'https://outlook.office.com/book/allbookings@homesetupsolutions.ca/?ismsaljsauthenabled';
+const M365_BOOKING_URL = 'https://outlook.office.com/book/HomeSetupSolutions1@homesetupsolutions.ca/?ismsaljsauthenabled';
 
 // ==================== INCOMING CALL SCRIPT ====================
 const INCOMING_SCRIPT = [
