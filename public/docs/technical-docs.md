@@ -86,20 +86,7 @@ src/
 | role | ENUM | admin/staff/customer |
 | created_at | TIMESTAMP | Record creation time |
 
-### call_logs
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| user_id | UUID | Staff member who handled call |
-| customer_id | UUID | Associated customer |
-| customer_name | TEXT | Customer name |
-| phone_number | TEXT | Phone number |
-| direction | TEXT | inbound/outbound |
-| status | TEXT | Call status |
-| duration_seconds | INTEGER | Call duration |
-| notes | TEXT | Call notes |
-| created_at | TIMESTAMP | Call timestamp |
-| ended_at | TIMESTAMP | Call end time |
+---
 
 ### staff_details
 | Column | Type | Description |

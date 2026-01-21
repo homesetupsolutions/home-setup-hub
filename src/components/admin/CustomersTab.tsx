@@ -8,8 +8,6 @@ import { Loader2, RefreshCw, Search, User, Mail, PhoneCall, ChevronDown, Chevron
 import { listCustomers, searchCustomers, SquareCustomer } from '@/lib/squareCRM';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
-import { use3CX } from '@/hooks/use3CX';
-
 const PAGE_SIZE = 100;
 
 export function CustomersTab() {
@@ -21,12 +19,11 @@ export function CustomersTab() {
   const [cursor, setCursor] = useState<string | undefined>(undefined);
   const [hasMore, setHasMore] = useState(false);
   const { toast } = useToast();
-  const { initiateCall } = use3CX();
 
   const handleClickToCall = (customer: SquareCustomer) => {
     if (!customer.phone_number) return;
-    const customerName = `${customer.given_name || ''} ${customer.family_name || ''}`.trim() || 'Unknown';
-    initiateCall(customer.phone_number, customer.id, customerName);
+    const cleaned = customer.phone_number.replace(/[^\d+]/g, '');
+    window.open(`tel:${cleaned}`, '_self');
   };
 
   // Fetch first page of customers

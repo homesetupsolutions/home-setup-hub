@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { use3CX } from '@/hooks/use3CX';
+
 import { listCustomers, searchCustomers, listCatalogItems, SquareCustomer, SquareCatalogItem } from '@/lib/squareCRM';
 import { sendBookingConfirmation } from '@/lib/emailService';
 import { format, addDays, setHours, setMinutes } from 'date-fns';
@@ -194,9 +194,13 @@ interface BookingInfo {
   notes: string;
 }
 
+// Simple phone formatting helper
+const formatPhone = (phone: string): string => {
+  return phone.replace(/[^\d+]/g, '');
+};
+
 export function CallingSystemTab() {
   const { toast } = useToast();
-  const { initiateCall, endCall, isCallActive, formatPhoneFor3CX } = use3CX();
   
   // Customer search
   const [searchQuery, setSearchQuery] = useState('');
