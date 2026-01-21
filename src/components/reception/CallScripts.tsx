@@ -34,7 +34,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { use3CX } from '@/hooks/use3CX';
+
 import { listCustomers, searchCustomers, SquareCustomer } from '@/lib/squareCRM';
 import { sendBookingConfirmation } from '@/lib/emailService';
 import { format, setHours, setMinutes } from 'date-fns';
