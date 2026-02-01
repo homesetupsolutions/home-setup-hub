@@ -28,7 +28,7 @@ const contactMethods = [
   {
     icon: Clock,
     title: "Business Hours",
-    description: "Mon-Sat",
+    description: "Sun-Sat (except Wed)",
     value: "9AM - 9PM",
     href: null,
   },
