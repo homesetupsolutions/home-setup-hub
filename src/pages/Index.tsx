@@ -14,6 +14,7 @@ import { NewsletterSignup } from "@/components/sections/NewsletterSignup";
 import { ServiceAreaMap } from "@/components/sections/ServiceAreaMap";
 import { GoogleReviews } from "@/components/sections/GoogleReviews";
 import { PromoBanner } from "@/components/sections/PromoBanner";
+import { RunningBanner } from "@/components/sections/RunningBanner";
 
 const Index = () => {
   return (
@@ -28,6 +29,7 @@ const Index = () => {
         <link rel="canonical" href="https://homesetupsolutions.ca" />
       </Helmet>
       <PromoBanner />
+      <RunningBanner />
       <Layout>
         <HeroSection />
         <ServicesSection />

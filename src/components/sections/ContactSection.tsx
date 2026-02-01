@@ -15,8 +15,8 @@ const contactMethods = [
     icon: MessageSquare,
     title: "Text Us",
     description: "Quick Response",
-    value: "1-587-604-5127",
-    href: "sms:15876045127",
+    value: "1-587-899-HELP (4357)",
+    href: "sms:15878994357",
   },
   {
     icon: Mail,
