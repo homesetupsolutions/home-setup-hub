@@ -14,7 +14,7 @@ export interface SMSResponse {
 }
 
 // The texting number for Call Centric
-export const CALL_CENTRIC_SMS_NUMBER = '15876045127';
+export const CALL_CENTRIC_SMS_NUMBER = '15878994357';
 
 // Format phone number to E.164 format
 export function formatPhoneNumber(phone: string): string {
