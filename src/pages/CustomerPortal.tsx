@@ -13,6 +13,7 @@ import { Loader2, Calendar, History, User, LogOut, Phone, Mail, Clock, MapPin, C
 import { format } from 'date-fns';
 import { getMyTransactions, SquarePayment, SquareBooking } from '@/lib/squareCRM';
 import { AccountSettings } from '@/components/customer/AccountSettings';
+import { InstallerTracker } from '@/components/customer/InstallerTracker';
 
 interface Appointment {
   id: string;
@@ -232,7 +233,10 @@ export default function CustomerPortal() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
+                  className="space-y-6"
                 >
+                  {/* Installer Location Tracker */}
+                  <InstallerTracker />
                   {loadingData ? (
                     <div className="flex justify-center py-12">
                       <Loader2 className="h-8 w-8 animate-spin text-primary" />
