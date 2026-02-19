@@ -98,8 +98,9 @@ const Documentation = () => {
   return (
     <Layout>
       <Helmet>
-        <title>Documentation | Home Setup Solutions</title>
-        <meta name="description" content="Complete documentation for Home Setup Solutions - Customer Guide, Admin Guide, and Technical Documentation" />
+        <title>Documentation & Guides | Home Setup Solutions Calgary</title>
+        <meta name="description" content="Complete guides for Home Setup Solutions customers, admins, and staff. Learn how to book services, manage appointments, and use the platform." />
+        <meta name="robots" content="noindex, follow" />
       </Helmet>
 
       <section className="py-20 bg-gradient-to-b from-background to-muted/30">

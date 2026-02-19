@@ -41,10 +41,13 @@ const Book = () => {
         <title>Book Online | TV Mounting & Smart Home Calgary | Home Setup Solutions</title>
         <meta
           name="description"
-          content="Book your TV mounting, smart home, WiFi, or handyman appointment online. Serving Calgary, Airdrie, Cochrane & Okotoks. Easy scheduling, secure payment."
+          content="Book your TV mounting, smart home, WiFi, security camera, handyman, or cleaning appointment online. Serving Calgary, Airdrie, Cochrane & Okotoks. Easy scheduling, secure payment, satisfaction guaranteed."
         />
-        <meta name="keywords" content="book TV mounting Calgary, schedule smart home install, online booking handyman Calgary, home setup appointment" />
+        <meta name="keywords" content="book TV mounting Calgary, schedule smart home install, online booking handyman Calgary, home setup appointment, book cleaning Calgary, schedule security camera install, same-day booking Calgary, weekend appointments available" />
         <link rel="canonical" href="https://homesetupsolutions.ca/book" />
+        <meta property="og:title" content="Book Online | Home Setup Solutions Calgary" />
+        <meta property="og:description" content="Schedule TV mounting, smart home, WiFi, or handyman services in Calgary. Book 24/7 online." />
+        <meta property="og:url" content="https://homesetupsolutions.ca/book" />
       </Helmet>
       <Layout>
         {/* Hero Section */}

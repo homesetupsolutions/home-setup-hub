@@ -11,13 +11,18 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://homesetupsolutions.ca/policy</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
     <loc>https://homesetupsolutions.ca/auth</loc>
     <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://homesetupsolutions.ca/policy</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://homesetupsolutions.ca/wishlist</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>

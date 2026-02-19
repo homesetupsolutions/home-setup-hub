@@ -11,11 +11,12 @@ const AmazonWishlist = () => {
   return (
     <>
       <Helmet>
-        <title>Amazon Wishlist | Home Setup Solutions</title>
+        <title>Support Us | Amazon Wishlist | Home Setup Solutions Calgary</title>
         <meta
           name="description"
-          content="Support Home Setup Solutions by shopping our Amazon Wishlist. Help us get the tools and equipment we need to serve you better!"
+          content="Support Home Setup Solutions Calgary by shopping our Amazon Wishlist. Help your local home technology installers get the tools and equipment needed to serve you better!"
         />
+        <meta name="keywords" content="support local business Calgary, Amazon wishlist, Home Setup Solutions donation, help Calgary handyman, support home tech installer" />
       </Helmet>
       <Layout>
         <section className="py-16 md:py-24">
