@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, RefreshCw, Calendar, User, Mail, Phone, Clock, MapPin } from 'lucide-react';
+import { Loader2, RefreshCw, Calendar, User, Clock, MapPin } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { format, startOfDay, endOfDay } from 'date-fns';
@@ -11,8 +11,6 @@ import { format, startOfDay, endOfDay } from 'date-fns';
 interface TodaysAppointment {
   id: string;
   customer_name: string | null;
-  customer_email: string | null;
-  customer_phone: string | null;
   service_name: string;
   scheduled_at: string;
   duration_minutes: number;
@@ -114,20 +112,6 @@ export function TodaysAppointments() {
                         <p className="text-sm text-primary font-medium">
                           {appointment.service_name}
                         </p>
-                        <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
-                          {appointment.customer_email && (
-                            <span className="flex items-center gap-1">
-                              <Mail className="h-3 w-3" />
-                              {appointment.customer_email}
-                            </span>
-                          )}
-                          {appointment.customer_phone && (
-                            <span className="flex items-center gap-1">
-                              <Phone className="h-3 w-3" />
-                              {appointment.customer_phone}
-                            </span>
-                          )}
-                        </div>
                         {appointment.address && (
                           <p className="text-sm text-muted-foreground flex items-center gap-1">
                             <MapPin className="h-3 w-3" />
