@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { CheckCircle2, Users, Star, Clock } from "lucide-react";
 
 const stats = [
-  { icon: Users, value: "500+", label: "Happy Customers" },
+  { icon: Users, value: "1000+", label: "Happy Customers" },
   { icon: Star, value: "4.9", label: "Average Rating" },
   { icon: Clock, value: "24/7", label: "Support Available" },
 ];
