@@ -19,7 +19,8 @@ import {
   Home,
   MessageSquare,
   UserCog,
-  CreditCard
+  CreditCard,
+  Navigation
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,6 +34,8 @@ import { PaymentsTab } from "@/components/admin/PaymentsTab";
 import { TodaysAppointments } from "@/components/staff/TodaysAppointments";
 import { EmergencyButton } from "@/components/staff/EmergencyButton";
 import { WorkPhotoUpload } from "@/components/staff/WorkPhotoUpload";
+import { GPSTracker } from "@/components/staff/GPSTracker";
+import { SquareTimeClock } from "@/components/staff/SquareTimeClock";
 import logo from "@/assets/logo.png";
 
 const staffResources = [
@@ -386,20 +389,10 @@ const StaffPortal = () => {
               </TabsContent>
 
               <TabsContent value="timeclock">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Clock className="h-5 w-5" />
-                      Time Clock
-                    </CardTitle>
-                    <CardDescription>
-                      Clock in/out and view your timecards
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">Time clock feature coming soon...</p>
-                  </CardContent>
-                </Card>
+                <div className="space-y-6">
+                  <SquareTimeClock />
+                  <GPSTracker />
+                </div>
               </TabsContent>
 
               <TabsContent value="customers">
