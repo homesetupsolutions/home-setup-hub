@@ -77,6 +77,16 @@ const AmazonWishlist = () => {
                     </div>
                   </div>
 
+                  {/* Embedded Amazon Wishlist */}
+                  <div className="w-full rounded-xl overflow-hidden border border-border/50 bg-white">
+                    <iframe
+                      src={wishlistUrl}
+                      title="Amazon Wishlist"
+                      className="w-full h-[600px] md:h-[800px]"
+                      sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                    />
+                  </div>
+
                   <a
                     href={wishlistUrl}
                     target="_blank"
@@ -85,12 +95,12 @@ const AmazonWishlist = () => {
                   >
                     <Button size="lg" className="gap-2 text-lg px-8 py-6">
                       <ExternalLink className="w-5 h-5" />
-                      View Our Amazon Wishlist
+                      Open Full Wishlist on Amazon
                     </Button>
                   </a>
                   
                   <p className="text-sm text-muted-foreground">
-                    Opens in a new tab on Amazon.ca
+                    If the list doesn't load above, click the button to view it directly on Amazon.ca
                   </p>
                 </CardContent>
               </Card>
