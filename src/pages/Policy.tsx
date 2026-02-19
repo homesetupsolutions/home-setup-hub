@@ -6,11 +6,13 @@ const Policy = () => {
   return (
     <>
       <Helmet>
-        <title>Policies | Home Setup Solutions</title>
+        <title>Privacy Policy & Terms | Home Setup Solutions Calgary</title>
         <meta
           name="description"
-          content="Read our privacy policy, terms of service, SMS policy, and cancellation policy. Home Setup Solutions is committed to protecting your privacy."
+          content="Read our privacy policy, terms of service, SMS policy, and cancellation policy for Home Setup Solutions Calgary. 30-day workmanship warranty on all installations."
         />
+        <meta name="keywords" content="Home Setup Solutions policy, cancellation policy Calgary, privacy policy home services, terms of service handyman Calgary, SMS policy, warranty home installation" />
+        <link rel="canonical" href="https://homesetupsolutions.ca/policy" />
       </Helmet>
       <Layout>
         <section className="py-12 md:py-20">

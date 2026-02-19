@@ -216,8 +216,9 @@ export function HeroSection() {
             transition={{ duration: 1, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
             className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 md:mb-16 leading-relaxed"
           >
-            Expert installation and setup services for all your home technology needs. 
-            From smart devices to entertainment systems, we make technology work for you.
+            Calgary's trusted experts for TV mounting, smart home installation, WiFi setup, 
+            security cameras, home theater, handyman services, and professional cleaning. 
+            Serving Calgary, Airdrie, Cochrane, Okotoks &amp; surrounding areas.
           </motion.p>
 
           <motion.div
