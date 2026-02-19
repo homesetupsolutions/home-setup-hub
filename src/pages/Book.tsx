@@ -38,11 +38,13 @@ const Book = () => {
   return (
     <>
       <Helmet>
-        <title>Book an Appointment | Home Setup Solutions</title>
+        <title>Book Online | TV Mounting & Smart Home Calgary | Home Setup Solutions</title>
         <meta
           name="description"
-          content="Schedule your home technology installation service today. Easy online booking for TV mounting, smart home setup, and more."
+          content="Book your TV mounting, smart home, WiFi, or handyman appointment online. Serving Calgary, Airdrie, Cochrane & Okotoks. Easy scheduling, secure payment."
         />
+        <meta name="keywords" content="book TV mounting Calgary, schedule smart home install, online booking handyman Calgary, home setup appointment" />
+        <link rel="canonical" href="https://homesetupsolutions.ca/book" />
       </Helmet>
       <Layout>
         {/* Hero Section */}
