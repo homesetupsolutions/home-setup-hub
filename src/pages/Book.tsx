@@ -1,9 +1,12 @@
+import { useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
-import { Calendar, Clock, Shield, Star, Phone, Mail, CreditCard } from "lucide-react";
+import { Calendar, Clock, Shield, Star, Phone, Mail, ExternalLink } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Card, CardContent } from "@/components/ui/card";
-import { BookingWizard } from "@/components/booking/BookingWizard";
+import { Button } from "@/components/ui/button";
+
+const M365_BOOKING_URL = "https://outlook.office.com/book/HomeSetupSolutions1@homesetupsolutions.ca/?ismsaljsauthenabled";
 
 const features = [
   {
@@ -21,11 +24,6 @@ const features = [
     title: "Guaranteed Quality",
     description: "100% satisfaction guaranteed on all services",
   },
-  {
-    icon: CreditCard,
-    title: "Secure Payment",
-    description: "Card is held for your appointment, only charged after service",
-  },
 ];
 
 const testimonials = [
@@ -41,7 +39,7 @@ const Book = () => {
         <title>Book Online | TV Mounting & Smart Home Calgary | Home Setup Solutions</title>
         <meta
           name="description"
-          content="Book your TV mounting, smart home, WiFi, security camera, handyman, or cleaning appointment online. Serving Calgary, Airdrie, Cochrane & Okotoks. Easy scheduling, secure payment, satisfaction guaranteed."
+          content="Book your TV mounting, smart home, WiFi, security camera, handyman, or cleaning appointment online. Serving Calgary, Airdrie, Cochrane & Okotoks. Easy scheduling, satisfaction guaranteed."
         />
         <meta name="keywords" content="book TV mounting Calgary, schedule smart home install, online booking handyman Calgary, home setup appointment, book cleaning Calgary, schedule security camera install, same-day booking Calgary, weekend appointments available" />
         <link rel="canonical" href="https://homesetupsolutions.ca/book" />
@@ -61,10 +59,16 @@ const Book = () => {
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
                 Book Your <span className="text-primary">Appointment</span>
               </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
                 Schedule your home setup service in just a few clicks. Choose your service, 
                 pick a time that works for you, and we'll handle the rest.
               </p>
+              <Button asChild size="lg" className="text-lg px-8 py-6">
+                <a href={M365_BOOKING_URL} target="_self">
+                  <Calendar className="w-5 h-5 mr-2" />
+                  Book Now
+                </a>
+              </Button>
             </motion.div>
           </div>
         </section>
@@ -72,7 +76,7 @@ const Book = () => {
         {/* Features */}
         <section className="py-8 bg-muted/30">
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {features.map((feature, index) => (
                 <motion.div
                   key={index}
@@ -90,21 +94,6 @@ const Book = () => {
                 </motion.div>
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* Booking Wizard */}
-        <section className="py-12 md:py-16">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <div className="bg-card rounded-xl shadow-lg border p-6 md:p-8">
-                <BookingWizard />
-              </div>
-            </motion.div>
           </div>
         </section>
 

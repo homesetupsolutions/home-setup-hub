@@ -101,18 +101,7 @@ export function SquareTimeClock() {
 
       if (error) throw error;
 
-      // Sync with Square via edge function
-      try {
-        await supabase.functions.invoke("square-booking", {
-          body: {
-            action: "clock_in",
-            timecard_id: data.id,
-            staff_id: user.id,
-          },
-        });
-      } catch (squareErr) {
-        console.warn("Square sync failed (non-critical):", squareErr);
-      }
+      // Timecard saved to database
 
       setActiveTimecard(data);
       setNotes("");
@@ -140,18 +129,7 @@ export function SquareTimeClock() {
 
       if (error) throw error;
 
-      // Sync with Square
-      try {
-        await supabase.functions.invoke("square-booking", {
-          body: {
-            action: "clock_out",
-            timecard_id: activeTimecard.id,
-            staff_id: user.id,
-          },
-        });
-      } catch (squareErr) {
-        console.warn("Square sync failed (non-critical):", squareErr);
-      }
+      // Timecard updated in database
 
       toast({ title: "Clocked Out", description: `Ended at ${format(new Date(), "h:mm a")}` });
       setActiveTimecard(null);
