@@ -97,17 +97,17 @@ export function PromoBanner() {
         className="relative overflow-hidden"
       >
         <div className={`bg-gradient-to-r ${currentPromo.bgClass} text-white`}>
-          <div className="container mx-auto px-4 py-3">
-            <div className="flex items-center justify-center gap-4 flex-wrap">
-              <div className="flex items-center gap-2">
-                <currentPromo.icon className="w-5 h-5" />
-                <span className="font-semibold">{currentPromo.title}</span>
+          <div className="container mx-auto px-4 py-2 sm:py-3">
+            <div className="flex items-center justify-center gap-2 sm:gap-4 flex-nowrap">
+              <div className="flex items-center gap-2 shrink-0">
+                <currentPromo.icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                <span className="font-semibold text-xs sm:text-sm whitespace-nowrap">{currentPromo.title}</span>
               </div>
               
-              <span className="hidden sm:inline">{currentPromo.description}</span>
+              <span className="hidden sm:inline text-sm whitespace-nowrap">{currentPromo.description}</span>
               
               {currentPromo.code && (
-                <code className="bg-white/20 px-3 py-1 rounded-full text-sm font-mono font-bold">
+                <code className="bg-white/20 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-mono font-bold whitespace-nowrap">
                   {currentPromo.code}
                 </code>
               )}
@@ -119,14 +119,14 @@ export function PromoBanner() {
                 </span>
               )}
               
-              <a href="https://outlook.office.com/book/HomeSetupSolutions1@homesetupsolutions.ca/?ismsaljsauthenabled">
+              <a href="https://outlook.office.com/book/HomeSetupSolutions1@homesetupsolutions.ca/?ismsaljsauthenabled" className="shrink-0">
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="bg-white text-primary hover:bg-white/90"
+                  className="bg-white text-primary hover:bg-white/90 text-xs sm:text-sm h-7 sm:h-9 px-2 sm:px-3"
                 >
                   Book Now
-                  <ArrowRight className="w-4 h-4 ml-1" />
+                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
                 </Button>
               </a>
             </div>
