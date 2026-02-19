@@ -5,9 +5,8 @@ const wishlistUrl = "https://www.amazon.ca/hz/wishlist/ls/HIJX38KT6U60?ref_=abls
 
 const amazonItems = [
   { text: "Check Out Our Amazon Wishlist" },
-  { text: "Support Our Team – Gift a Tool" },
   { text: "Browse Our Recommended Gear" },
-  { text: "Help Us Serve You Better" },
+  { text: "Shop Notes From Our Installers" },
 ];
 
 export function BottomScrollBar() {
