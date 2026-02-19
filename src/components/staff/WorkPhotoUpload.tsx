@@ -22,6 +22,7 @@ interface Appointment {
 interface UploadedPhoto {
   id: string;
   photo_url: string;
+  signed_url: string;
   description: string | null;
   created_at: string;
   appointment_id: string | null;
@@ -66,7 +67,7 @@ export function WorkPhotoUpload() {
     }
   };
 
-  const fetchRecentPhotos = async () => {
+   const fetchRecentPhotos = async () => {
     const { data, error } = await supabase
       .from('work_photos')
       .select('id, photo_url, description, created_at, appointment_id')
@@ -75,7 +76,16 @@ export function WorkPhotoUpload() {
       .limit(6);
 
     if (!error && data) {
-      setRecentPhotos(data);
+      // Generate signed URLs for private bucket
+      const photosWithUrls = await Promise.all(
+        data.map(async (photo) => {
+          const { data: signedData } = await supabase.storage
+            .from('work-photos')
+            .createSignedUrl(photo.photo_url, 3600);
+          return { ...photo, signed_url: signedData?.signedUrl || '' };
+        })
+      );
+      setRecentPhotos(photosWithUrls);
     }
   };
 
@@ -123,17 +133,15 @@ export function WorkPhotoUpload() {
 
       if (uploadError) throw uploadError;
 
-      // Get public URL
-      const { data: urlData } = supabase.storage
-        .from('work-photos')
-        .getPublicUrl(fileName);
+      // Store the file path (bucket is private, use signed URLs to view)
+      const photoPath = fileName;
 
       // Save to work_photos table
       const { error: insertError } = await supabase
         .from('work_photos')
         .insert({
           staff_id: user.id,
-          photo_url: urlData.publicUrl,
+          photo_url: photoPath,
           description: description || null,
           appointment_id: selectedAppointment || null,
         });
@@ -142,7 +150,7 @@ export function WorkPhotoUpload() {
 
       // If calendar event should be created and appointment is selected
       if (createCalendarEvent && selectedAppointment) {
-        await createCalendarEventForPhoto(selectedAppointment, urlData.publicUrl);
+        await createCalendarEventForPhoto(selectedAppointment, photoPath);
       }
 
       toast({
@@ -335,7 +343,7 @@ export function WorkPhotoUpload() {
               {recentPhotos.map((photo) => (
                 <div key={photo.id} className="relative group">
                   <img
-                    src={photo.photo_url}
+                    src={photo.signed_url}
                     alt={photo.description || 'Work photo'}
                     className="w-full aspect-square object-cover rounded-lg"
                   />
