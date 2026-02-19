@@ -7,7 +7,7 @@ const bannerItems = [
   { icon: Zap, text: "Same Day Availability" },
   { icon: Gift, text: "Referral Rewards Available" },
   { icon: Phone, text: "Call 1-833-230-2933" },
-  { icon: Clock, text: "Open Sun-Sat 9AM-9PM" },
+  { icon: Clock, text: "Open 9AM-9PM (Closed Wednesdays)" },
 ];
 
 export function RunningBanner() {
