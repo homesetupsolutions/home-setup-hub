@@ -24,15 +24,6 @@ const promos: Promo[] = [
     expiresAt: new Date("2026-01-31"),
     bgClass: "from-primary/80 to-orange-600/80",
   },
-  {
-    id: "winter-bundle",
-    title: "Winter Bundle Deal",
-    description: "Book 2+ services, get 20% off",
-    code: "WINTER20",
-    icon: Percent,
-    expiresAt: new Date("2026-03-01"),
-    bgClass: "from-blue-600/80 to-primary/80",
-  },
 ];
 
 export function PromoBanner() {
