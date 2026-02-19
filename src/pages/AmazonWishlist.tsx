@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const AmazonWishlist = () => {
-  const wishlistUrl = "https://www.amazon.ca/hz/wishlist/ls/HIJX38KT6U60?leftNavSection=SharedWithOrg&ref_=abls_lnv_os&source=leftnav";
+  const wishlistUrl = "https://www.amazon.ca/hz/wishlist/ls/HIJX38KT6U60?ref_=abls_nvfly_swo";
 
   return (
     <>
