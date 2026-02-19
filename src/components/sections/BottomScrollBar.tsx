@@ -1,35 +1,41 @@
 import { motion } from "framer-motion";
-import { Sparkles, Star, Zap, Gift, Phone, Clock } from "lucide-react";
+import { ShoppingCart, Gift, ExternalLink } from "lucide-react";
 
-const tickerItems = [
-  { icon: Phone, text: "Call 1-833-230-2933" },
-  { icon: Clock, text: "Open Sun–Sat 9AM–9PM" },
-  { icon: Star, text: "5-Star Rated Service" },
-  { icon: Zap, text: "Same Day Availability" },
-  { icon: Gift, text: "Referral Rewards" },
-  { icon: Sparkles, text: "Professional Installation" },
+const wishlistUrl = "https://www.amazon.ca/hz/wishlist/ls/HIJX38KT6U60?ref_=abls_nvfly_swo";
+
+const amazonItems = [
+  { text: "Check Out Our Amazon Wishlist" },
+  { text: "Support Our Team – Gift a Tool" },
+  { text: "Browse Our Recommended Gear" },
+  { text: "Help Us Serve You Better" },
 ];
 
 export function BottomScrollBar() {
-  const items = [...tickerItems, ...tickerItems];
+  const items = [...amazonItems, ...amazonItems];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-primary/95 backdrop-blur-sm text-primary-foreground overflow-hidden py-2 border-t border-primary/50">
+    <a
+      href={wishlistUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-[#FF9900] hover:bg-[#e88b00] transition-colors overflow-hidden py-2 border-t border-[#cc7a00] block cursor-pointer"
+    >
       <motion.div
-        className="flex items-center gap-8 whitespace-nowrap"
+        className="flex items-center gap-10 whitespace-nowrap"
         animate={{ x: ["0%", "-50%"] }}
         transition={{
-          x: { repeat: Infinity, repeatType: "loop", duration: 20, ease: "linear" },
+          x: { repeat: Infinity, repeatType: "loop", duration: 18, ease: "linear" },
         }}
       >
         {items.map((item, i) => (
-          <div key={i} className="flex items-center gap-2 text-sm font-medium">
-            <item.icon className="w-4 h-4" />
+          <div key={i} className="flex items-center gap-2 text-sm font-semibold text-primary-foreground">
+            {i % 2 === 0 ? <ShoppingCart className="w-4 h-4" /> : <Gift className="w-4 h-4" />}
             <span>{item.text}</span>
-            <span className="mx-4 opacity-50">•</span>
+            <ExternalLink className="w-3 h-3 opacity-70" />
+            <span className="mx-4 opacity-40">★</span>
           </div>
         ))}
       </motion.div>
-    </div>
+    </a>
   );
 }
