@@ -1,10 +1,11 @@
-import { useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
-import { Calendar, Clock, Shield, Star, Phone, Mail, ExternalLink } from "lucide-react";
+import { Calendar, Clock, Shield, Star, Phone, Mail, LogIn, UserPlus } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const M365_BOOKING_URL = "https://outlook.office.com/book/HomeSetupSolutions1@homesetupsolutions.ca/?ismsaljsauthenabled";
 
@@ -33,6 +34,8 @@ const testimonials = [
 ];
 
 const Book = () => {
+  const { user, loading } = useAuth();
+
   return (
     <>
       <Helmet>
@@ -60,15 +63,34 @@ const Book = () => {
                 Book Your <span className="text-primary">Appointment</span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-                Schedule your home setup service in just a few clicks. Choose your service, 
-                pick a time that works for you, and we'll handle the rest.
+                {user
+                  ? "Schedule your home setup service in just a few clicks. Choose your service, pick a time that works for you, and we'll handle the rest."
+                  : "Create a free account or sign in to view our services, pricing, and book your appointment."}
               </p>
-              <Button asChild size="lg" className="text-lg px-8 py-6">
-                <a href={M365_BOOKING_URL} target="_self">
-                  <Calendar className="w-5 h-5 mr-2" />
-                  Book Now
-                </a>
-              </Button>
+
+              {!loading && user ? (
+                <Button asChild size="lg" className="text-lg px-8 py-6">
+                  <a href={M365_BOOKING_URL} target="_self">
+                    <Calendar className="w-5 h-5 mr-2" />
+                    Book Now
+                  </a>
+                </Button>
+              ) : !loading ? (
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <Button asChild size="lg" className="text-lg px-8 py-6">
+                    <Link to="/auth">
+                      <UserPlus className="w-5 h-5 mr-2" />
+                      Create Account
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6">
+                    <Link to="/auth">
+                      <LogIn className="w-5 h-5 mr-2" />
+                      Sign In
+                    </Link>
+                  </Button>
+                </div>
+              ) : null}
             </motion.div>
           </div>
         </section>
