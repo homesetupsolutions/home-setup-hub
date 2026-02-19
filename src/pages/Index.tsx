@@ -28,9 +28,9 @@ const Index = () => {
         <meta name="keywords" content="home setup, TV mounting, smart home installation, network setup, Calgary, Airdrie, Cochrane, Okotoks" />
         <link rel="canonical" href="https://homesetupsolutions.ca" />
       </Helmet>
-      <PromoBanner />
-      <RunningBanner />
       <Layout>
+        <PromoBanner />
+        <RunningBanner />
         <HeroSection />
         <ServicesSection />
         

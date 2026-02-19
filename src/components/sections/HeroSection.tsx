@@ -45,7 +45,7 @@ export function HeroSection() {
   const comfortText = "Comfort";
 
   return (
-    <section className="relative min-h-[100vh] flex items-center overflow-hidden">
+    <section className="relative min-h-[90vh] md:min-h-[100vh] flex items-center overflow-hidden">
       {/* High-tech grid overlay */}
       <div className="absolute inset-0 tech-grid opacity-30" />
       
@@ -54,7 +54,7 @@ export function HeroSection() {
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] animate-pulse-slow" style={{ animationDelay: '1.5s' }} />
 
       <div className="container mx-auto px-6 md:px-8 relative z-10">
-        <div className="max-w-6xl mx-auto text-center py-20 md:py-32">
+        <div className="max-w-6xl mx-auto text-center py-12 md:py-32">
           <motion.div
             initial={{ opacity: 0, y: 40, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -79,7 +79,7 @@ export function HeroSection() {
                     variants={letterVariants}
                     initial="hidden"
                     animate="visible"
-                    className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-foreground inline-block"
+                    className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-foreground inline-block"
                     style={{ 
                       textShadow: "0 0 40px hsl(var(--primary) / 0.3)",
                     }}
@@ -95,7 +95,7 @@ export function HeroSection() {
                 variants={wordVariants}
                 initial="hidden"
                 animate="visible"
-                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-muted-foreground/70"
+                className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-muted-foreground/70"
               >
                 {yourText}
               </motion.span>
@@ -106,7 +106,7 @@ export function HeroSection() {
                 variants={wordVariants}
                 initial="hidden"
                 animate="visible"
-                className="relative text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold"
+                className="relative text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold"
               >
                 <span className="relative z-10 bg-gradient-to-r from-primary via-orange-400 to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-shimmer">
                   {spaceText}
@@ -140,7 +140,7 @@ export function HeroSection() {
                     variants={letterVariants}
                     initial="hidden"
                     animate="visible"
-                    className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold inline-block"
+                    className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold inline-block"
                     style={{
                       background: "linear-gradient(135deg, hsl(var(--primary)), hsl(30 100% 55%), hsl(var(--primary)))",
                       backgroundSize: "200% 200%",
@@ -161,7 +161,7 @@ export function HeroSection() {
                 variants={wordVariants}
                 initial="hidden"
                 animate="visible"
-                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-muted-foreground/70"
+                className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-muted-foreground/70"
               >
                 {yourText}
               </motion.span>
@@ -172,7 +172,7 @@ export function HeroSection() {
                 variants={wordVariants}
                 initial="hidden"
                 animate="visible"
-                className="relative text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold"
+                className="relative text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold"
               >
                 <motion.span
                   animate={{
@@ -214,7 +214,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-16 leading-relaxed"
+            className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 md:mb-16 leading-relaxed"
           >
             Expert installation and setup services for all your home technology needs. 
             From smart devices to entertainment systems, we make technology work for you.
@@ -224,7 +224,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.7, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-24"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 md:mb-24"
           >
             <a href="https://outlook.office.com/book/HomeSetupSolutions1@homesetupsolutions.ca/?ismsaljsauthenabled">
               <Button variant="hero" size="xl" className="group relative overflow-hidden">
@@ -245,7 +245,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.9, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap items-center justify-center gap-8 md:gap-14"
+            className="flex flex-wrap items-center justify-center gap-6 md:gap-14"
           >
             {features.map((feature, index) => (
               <motion.div
@@ -255,7 +255,7 @@ export function HeroSection() {
                 transition={{ duration: 0.6, delay: 2 + index * 0.1 }}
                 className="flex items-center gap-4 group"
               >
-                <div className="w-14 h-14 rounded-2xl glass-card flex items-center justify-center group-hover:border-primary/30 transition-all duration-500">
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl glass-card flex items-center justify-center group-hover:border-primary/30 transition-all duration-500">
                   <feature.icon className="w-6 h-6 text-primary" />
                 </div>
                 <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300">{feature.label}</span>
