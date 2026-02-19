@@ -68,12 +68,12 @@ export function Header() {
           </nav>
 
           {/* Contact Actions */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3">
             <a
               href="tel:18332302933"
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors duration-300"
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors duration-300 whitespace-nowrap"
             >
-              <Phone className="w-4 h-4" />
+              <Phone className="w-4 h-4 shrink-0" />
               <span>1-833-230-2933</span>
             </a>
             
