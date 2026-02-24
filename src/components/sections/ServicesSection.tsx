@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const services = [
+const services: { icon: any; title: string; description: string; link?: string }[] = [
   {
     icon: Tv,
     title: "TV Mounting",
@@ -53,6 +53,12 @@ const services = [
     icon: Lightbulb,
     title: "Smart Lighting",
     description: "Smart bulbs, dimmer switches, and automated scenes.",
+  },
+  {
+    icon: Speaker,
+    title: "FeelBassVIP",
+    description: "Haptic VIP experience — feel every beat with Woojer® vests at your event.",
+    link: "https://feelbass.vip",
   },
 ];
 
@@ -104,26 +110,35 @@ export function ServicesSection() {
           viewport={{ once: true }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
         >
-          {services.map((service) => (
-            <motion.div
-              key={service.title}
-              variants={itemVariants}
-              className="group relative glass-card p-8 hover-lift cursor-pointer"
-            >
-              {/* Hover glow effect */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="relative">
-                <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center mb-6 group-hover:border-primary/40 transition-all duration-500">
-                  <service.icon className="w-8 h-8 text-primary" />
+          {services.map((service) => {
+            const content = (
+              <motion.div
+                key={service.title}
+                variants={itemVariants}
+                className="group relative glass-card p-8 hover-lift cursor-pointer"
+              >
+                {/* Hover glow effect */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center mb-6 group-hover:border-primary/40 transition-all duration-500">
+                    <service.icon className="w-8 h-8 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300">{service.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {service.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300">{service.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {service.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+            return service.link ? (
+              <a key={service.title} href={service.link} target="_blank" rel="noopener noreferrer">
+                {content}
+              </a>
+            ) : (
+              <div key={service.title}>{content}</div>
+            );
+          })}
         </motion.div>
 
         <motion.div

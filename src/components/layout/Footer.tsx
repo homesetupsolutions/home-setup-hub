@@ -37,15 +37,28 @@ export function Footer() {
                 { label: "Services", path: "/#services" },
                 { label: "About Us", path: "/#about" },
                 { label: "Amazon Wishlist", path: "/wishlist" },
+                { label: "FeelBassVIP", path: "https://feelbass.vip", external: true },
               ].map((link) => (
                 <li key={link.path}>
-                  <Link
-                    to={link.path}
-                    className="text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 rounded-full bg-primary/50 group-hover:bg-primary group-hover:w-2 transition-all duration-300" />
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a
+                      href={link.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center gap-2 group"
+                    >
+                      <span className="w-1 h-1 rounded-full bg-primary/50 group-hover:bg-primary group-hover:w-2 transition-all duration-300" />
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      to={link.path}
+                      className="text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center gap-2 group"
+                    >
+                      <span className="w-1 h-1 rounded-full bg-primary/50 group-hover:bg-primary group-hover:w-2 transition-all duration-300" />
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
               <li>
