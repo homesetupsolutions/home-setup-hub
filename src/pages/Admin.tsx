@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, LogOut, Users, Calendar, CreditCard, MessageSquare, UserCog, Settings, Headphones, BarChart3, ExternalLink, Link2 } from 'lucide-react';
+import { Loader2, LogOut, Users, Calendar, CreditCard, MessageSquare, UserCog, Settings, Headphones, BarChart3, ExternalLink, Link2, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { CustomersTab } from '@/components/admin/CustomersTab';
 import { BookingsTab } from '@/components/admin/BookingsTab';
@@ -15,6 +15,7 @@ import SMSServices from '@/components/staff/SMSServices';
 import StaffManagement from '@/components/staff/StaffManagement';
 import SiteSettings from '@/components/staff/SiteSettings';
 import { IntegrationsPanel } from '@/components/integrations/IntegrationsPanel';
+import { AICommandCenter } from '@/components/admin/AICommandCenter';
 import logo from '@/assets/logo.png';
 
 export default function Admin() {
@@ -117,10 +118,14 @@ export default function Admin() {
             transition={{ duration: 0.3 }}
           >
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-7 max-w-4xl">
+              <TabsList className="grid w-full grid-cols-8 max-w-5xl">
                 <TabsTrigger value="overview" className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4" />
                   <span className="hidden sm:inline">Overview</span>
+                </TabsTrigger>
+                <TabsTrigger value="ai" className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4" />
+                  <span className="hidden sm:inline">AI</span>
                 </TabsTrigger>
                 <TabsTrigger value="customers" className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
@@ -203,6 +208,10 @@ export default function Admin() {
                     </CardContent>
                   </Card>
                 </div>
+              </TabsContent>
+
+              <TabsContent value="ai">
+                <AICommandCenter />
               </TabsContent>
 
               <TabsContent value="customers">
