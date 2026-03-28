@@ -210,6 +210,10 @@ export default function Admin() {
                 </div>
               </TabsContent>
 
+              <TabsContent value="ai">
+                <AICommandCenter />
+              </TabsContent>
+
               <TabsContent value="customers">
                 <CustomersTab />
               </TabsContent>
