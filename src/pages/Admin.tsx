@@ -15,6 +15,7 @@ import SMSServices from '@/components/staff/SMSServices';
 import StaffManagement from '@/components/staff/StaffManagement';
 import SiteSettings from '@/components/staff/SiteSettings';
 import { IntegrationsPanel } from '@/components/integrations/IntegrationsPanel';
+import { AICommandCenter } from '@/components/admin/AICommandCenter';
 import logo from '@/assets/logo.png';
 
 export default function Admin() {
