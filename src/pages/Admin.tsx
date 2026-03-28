@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, LogOut, Users, Calendar, CreditCard, MessageSquare, UserCog, Settings, Headphones, BarChart3, ExternalLink, Link2 } from 'lucide-react';
+import { Loader2, LogOut, Users, Calendar, CreditCard, MessageSquare, UserCog, Settings, Headphones, BarChart3, ExternalLink, Link2, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { CustomersTab } from '@/components/admin/CustomersTab';
 import { BookingsTab } from '@/components/admin/BookingsTab';
