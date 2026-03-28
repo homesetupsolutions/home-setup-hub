@@ -131,7 +131,7 @@ const Policy = () => {
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Replying STOP to any of our text messages</li>
                     <li>Calling us at 833-230-2933</li>
-                    <li>Emailing info@homesetupsolutions.ca</li>
+                    <li>Emailing admin@homesetupsolutions.ca</li>
                   </ul>
                   <p>
                     After opting out, you will receive a confirmation message. You may still receive 
@@ -144,7 +144,7 @@ const Policy = () => {
                   <ul className="list-none pl-0 space-y-1">
                     <li><strong className="text-foreground">Phone:</strong> 833-230-2933 (Toll Free)</li>
                     <li><strong className="text-foreground">Text:</strong> 1-587-899-HELP (4357)</li>
-                    <li><strong className="text-foreground">Email:</strong> info@homesetupsolutions.ca</li>
+                    <li><strong className="text-foreground">Email:</strong> admin@homesetupsolutions.ca</li>
                   </ul>
                   <p className="text-sm mt-4 border-t border-border pt-4">
                     Home Setup Solutions is identified in all messages. We comply with CASL requirements 
@@ -205,10 +205,10 @@ const Policy = () => {
                   </a>
                   <span className="text-muted-foreground">|</span>
                   <a
-                    href="mailto:info@homesetupsolutions.ca"
+                    href="mailto:admin@homesetupsolutions.ca"
                     className="text-primary hover:underline font-medium"
                   >
-                    Email: info@homesetupsolutions.ca
+                    Email: admin@homesetupsolutions.ca
                   </a>
                 </div>
               </section>

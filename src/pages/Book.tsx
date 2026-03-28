@@ -168,11 +168,11 @@ const Book = () => {
                 (587) 899-4357
               </a>
               <a
-                href="mailto:info@homesetupsolutions.ca"
+                href="mailto:admin@homesetupsolutions.ca"
                 className="inline-flex items-center gap-2 bg-primary-foreground/10 border border-primary-foreground/20 px-6 py-3 rounded-lg font-medium hover:bg-primary-foreground/20 transition-colors"
               >
                 <Mail className="w-5 h-5" />
-                info@homesetupsolutions.ca
+                admin@homesetupsolutions.ca
               </a>
             </div>
           </div>

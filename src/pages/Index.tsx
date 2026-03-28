@@ -41,7 +41,7 @@ const Index = () => {
           "description": "Professional home technology installation services in Calgary. TV mounting, smart home setup, WiFi, security cameras, handyman and cleaning.",
           "url": "https://homesetupsolutions.ca",
           "telephone": "+15878994357",
-          "email": "info@homesetupsolutions.ca",
+          "email": "admin@homesetupsolutions.ca",
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Calgary",
