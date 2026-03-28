@@ -124,13 +124,13 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:customerservice@homesetupsolutions.ca"
+                  href="mailto:admin@homesetupsolutions.ca"
                   className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-all duration-300 group"
                 >
                   <div className="w-10 h-10 rounded-xl glass flex items-center justify-center group-hover:border-primary/40 transition-all duration-300">
                     <Mail className="w-5 h-5" />
                   </div>
-                  <span className="text-sm">customerservice@homesetupsolutions.ca</span>
+                  <span className="text-sm">admin@homesetupsolutions.ca</span>
                 </a>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground">
