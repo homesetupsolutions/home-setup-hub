@@ -15,7 +15,7 @@ const SiteSettings = () => {
 
   // General settings state
   const [companyName, setCompanyName] = useState("Home Setup Solutions");
-  const [companyEmail, setCompanyEmail] = useState("info@homesetupsolutions.ca");
+  const [companyEmail, setCompanyEmail] = useState("admin@homesetupsolutions.ca");
   const [companyPhone, setCompanyPhone] = useState("(555) 123-4567");
   const [companyAddress, setCompanyAddress] = useState("123 Main Street, City, Province");
 
