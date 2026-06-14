@@ -36,7 +36,7 @@ import { cn } from '@/lib/utils';
 // Script type
 type ScriptType = 'customer' | 'realtor';
 
-// Call script steps - Home Setup Solutions (Evan, Calgary) - CUSTOMER VERSION
+// Call script steps - Home Setup Solutions (Evan, Vancouver) - CUSTOMER VERSION
 const CUSTOMER_SCRIPT = [
   {
     step: 1,
@@ -48,7 +48,7 @@ const CUSTOMER_SCRIPT = [
   {
     step: 2,
     title: "Introduction",
-    script: "Great! This is Evan calling from Home Setup Solutions in Calgary. I help homeowners with deep cleaning, handyman work, and heavy lifting. Do you have a quick minute to chat?",
+    script: "Great! This is Evan calling from Home Setup Solutions in Vancouver. I help homeowners with deep cleaning, handyman work, and heavy lifting. Do you have a quick minute to chat?",
     responses: ["Sure, go ahead", "Not right now", "What services do you offer?"],
     nextStep: { "Sure, go ahead": 3, "Not right now": -5, "What services do you offer?": 3 }
   },
@@ -99,7 +99,7 @@ const CUSTOMER_SCRIPT = [
   }
 ];
 
-// Call script steps - Home Setup Solutions (Evan, Calgary) - REALTOR VERSION
+// Call script steps - Home Setup Solutions (Evan, Vancouver) - REALTOR VERSION
 const REALTOR_SCRIPT = [
   {
     step: 1,
@@ -111,7 +111,7 @@ const REALTOR_SCRIPT = [
   {
     step: 2,
     title: "Introduction",
-    script: "Great! This is Evan from Home Setup Solutions. I work with realtors in Calgary to help get listings show-ready fast. Do you have a quick minute?",
+    script: "Great! This is Evan from Home Setup Solutions. I work with realtors in Vancouver to help get listings show-ready fast. Do you have a quick minute?",
     responses: ["Sure, go ahead", "Not right now", "Tell me more"],
     nextStep: { "Sure, go ahead": 3, "Not right now": -5, "Tell me more": 3 }
   },

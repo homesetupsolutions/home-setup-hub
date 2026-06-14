@@ -29,7 +29,7 @@ const features = [
 
 const testimonials = [
   { name: "Sarah M.", text: "Amazing service! Evan was professional and thorough. Highly recommend!", rating: 5 },
-  { name: "Mike T.", text: "Best cleaning service in Calgary. My house has never looked better.", rating: 5 },
+  { name: "Mike T.", text: "Best cleaning service in Vancouver. My house has never looked better.", rating: 5 },
   { name: "Jennifer L.", text: "Quick, reliable, and affordable. Will definitely book again!", rating: 5 },
 ];
 
@@ -39,15 +39,15 @@ const Book = () => {
   return (
     <>
       <Helmet>
-        <title>Book Online | TV Mounting & Smart Home Calgary | Home Setup Solutions</title>
+        <title>Book Online | TV Mounting & Smart Home Vancouver | Home Setup Solutions</title>
         <meta
           name="description"
-          content="Book your TV mounting, smart home, WiFi, security camera, handyman, or cleaning appointment online. Serving Calgary, Airdrie, Cochrane & Okotoks. Easy scheduling, satisfaction guaranteed."
+          content="Book your TV mounting, smart home, WiFi, security camera, handyman, or cleaning appointment online. Serving Vancouver, Burnaby, Surrey & Richmond. Easy scheduling, satisfaction guaranteed."
         />
-        <meta name="keywords" content="book TV mounting Calgary, schedule smart home install, online booking handyman Calgary, home setup appointment, book cleaning Calgary, schedule security camera install, same-day booking Calgary, weekend appointments available" />
+        <meta name="keywords" content="book TV mounting Vancouver, schedule smart home install, online booking handyman Vancouver, home setup appointment, book cleaning Vancouver, schedule security camera install, same-day booking Vancouver, weekend appointments available" />
         <link rel="canonical" href="https://homesetupsolutions.ca/book" />
-        <meta property="og:title" content="Book Online | Home Setup Solutions Calgary" />
-        <meta property="og:description" content="Schedule TV mounting, smart home, WiFi, or handyman services in Calgary. Book 24/7 online." />
+        <meta property="og:title" content="Book Online | Home Setup Solutions Vancouver" />
+        <meta property="og:description" content="Schedule TV mounting, smart home, WiFi, or handyman services in Vancouver. Book 24/7 online." />
         <meta property="og:url" content="https://homesetupsolutions.ca/book" />
       </Helmet>
       <Layout>

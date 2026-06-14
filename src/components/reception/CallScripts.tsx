@@ -120,7 +120,7 @@ const OUTBOUND_CUSTOMER_SCRIPT = [
   {
     step: 2,
     title: "Introduction",
-    script: "Great! This is [Your Name] calling from Home Setup Solutions in Calgary. We help homeowners with deep cleaning, handyman work, and heavy lifting. Do you have a quick minute to chat?",
+    script: "Great! This is [Your Name] calling from Home Setup Solutions in Vancouver. We help homeowners with deep cleaning, handyman work, and heavy lifting. Do you have a quick minute to chat?",
     responses: ["Sure, go ahead", "Not right now", "What services do you offer?"],
     nextStep: { "Sure, go ahead": 3, "Not right now": -5, "What services do you offer?": 3 }
   },
@@ -183,7 +183,7 @@ const REALTOR_SCRIPT = [
   {
     step: 2,
     title: "Introduction",
-    script: "Great! This is [Your Name] from Home Setup Solutions. We work with realtors in Calgary to help get listings show-ready fast. Do you have a quick minute?",
+    script: "Great! This is [Your Name] from Home Setup Solutions. We work with realtors in Vancouver to help get listings show-ready fast. Do you have a quick minute?",
     responses: ["Sure, go ahead", "Not right now", "Tell me more"],
     nextStep: { "Sure, go ahead": 3, "Not right now": -5, "Tell me more": 3 }
   },

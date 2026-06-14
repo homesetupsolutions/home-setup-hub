@@ -11,12 +11,12 @@ const AmazonWishlist = () => {
   return (
     <>
       <Helmet>
-        <title>Support Us | Amazon Wishlist | Home Setup Solutions Calgary</title>
+        <title>Support Us | Amazon Wishlist | Home Setup Solutions Vancouver</title>
         <meta
           name="description"
-          content="Support Home Setup Solutions Calgary by shopping our Amazon Wishlist. Help your local home technology installers get the tools and equipment needed to serve you better!"
+          content="Support Home Setup Solutions Vancouver by shopping our Amazon Wishlist. Help your local home technology installers get the tools and equipment needed to serve you better!"
         />
-        <meta name="keywords" content="support local business Calgary, Amazon wishlist, Home Setup Solutions donation, help Calgary handyman, support home tech installer" />
+        <meta name="keywords" content="support local business Vancouver, Amazon wishlist, Home Setup Solutions donation, help Vancouver handyman, support home tech installer" />
       </Helmet>
       <Layout>
         <section className="py-16 md:py-24">
@@ -115,7 +115,7 @@ const AmazonWishlist = () => {
                 <h2 className="text-xl font-semibold mb-4">Why We Have a Wishlist</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <p>
-                    As a local Calgary business, we're always looking for ways to improve our services 
+                    As a local Vancouver business, we're always looking for ways to improve our services 
                     and expand our capabilities. Our Amazon Wishlist contains tools, equipment, and 
                     supplies that help us:
                   </p>

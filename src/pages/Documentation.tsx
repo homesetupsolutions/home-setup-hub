@@ -98,7 +98,7 @@ const Documentation = () => {
   return (
     <Layout>
       <Helmet>
-        <title>Documentation & Guides | Home Setup Solutions Calgary</title>
+        <title>Documentation & Guides | Home Setup Solutions Vancouver</title>
         <meta name="description" content="Complete guides for Home Setup Solutions customers, admins, and staff. Learn how to book services, manage appointments, and use the platform." />
         <meta name="robots" content="noindex, follow" />
       </Helmet>

@@ -142,9 +142,9 @@ export default function CustomerPortal() {
   return (
     <>
       <Helmet>
-        <title>My Appointments | Customer Portal | Home Setup Solutions Calgary</title>
-        <meta name="description" content="View upcoming appointments, track your installer's location, book new home setup services, and manage your account with Home Setup Solutions Calgary." />
-        <meta name="keywords" content="my appointments, customer portal, track installer, book service Calgary, Home Setup Solutions account" />
+        <title>My Appointments | Customer Portal | Home Setup Solutions Vancouver</title>
+        <meta name="description" content="View upcoming appointments, track your installer's location, book new home setup services, and manage your account with Home Setup Solutions Vancouver." />
+        <meta name="keywords" content="my appointments, customer portal, track installer, book service Vancouver, Home Setup Solutions account" />
       </Helmet>
       <Layout>
         <section className="py-12 md:py-20">

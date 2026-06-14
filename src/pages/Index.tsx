@@ -20,48 +20,48 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Home Setup Solutions | TV Mounting & Smart Home Installation Calgary</title>
+        <title>Home Setup Solutions | TV Mounting & Smart Home Installation Vancouver</title>
         <meta
           name="description"
-          content="Calgary's top-rated TV mounting, smart home setup, WiFi installation, security cameras, handyman & cleaning services. Serving Calgary, Airdrie, Cochrane & Okotoks. Book online 24/7!"
+          content="Vancouver's top-rated TV mounting, smart home setup, WiFi installation, security cameras, handyman & cleaning services. Serving Vancouver, Burnaby, Surrey & Richmond. Book online 24/7!"
         />
-        <meta name="keywords" content="TV mounting Calgary, smart home installation Calgary, WiFi setup Calgary, security camera install Calgary, handyman Calgary, home cleaning Calgary, Airdrie technician, Cochrane home setup, Okotoks TV install, home theater installation Calgary, computer repair Calgary, network setup Alberta, cable management Calgary, in-wall wiring Calgary, smart lighting Calgary, Google Home setup Calgary, Alexa installation Calgary, Ring doorbell install, Sonos setup Calgary, surround sound installation, furniture assembly Calgary, deep cleaning Calgary, move-in cleaning Calgary, move-out cleaning, home automation Calgary, tech support Calgary, same-day handyman Calgary, emergency TV mount, professional installer Calgary, home technology services Alberta, affordable handyman near me, best TV mounting service Calgary NE, TV mounting Calgary NW, TV mounting Calgary SE, TV mounting Calgary SW, Airdrie handyman, Cochrane smart home, Okotoks cleaning service, Chestermere home setup, High River technician, Canmore TV mounting, Banff home services" />
+        <meta name="keywords" content="TV mounting Vancouver, smart home installation Vancouver, WiFi setup Vancouver, security camera install Vancouver, handyman Vancouver, home cleaning Vancouver, Burnaby technician, Surrey home setup, Coquitlam TV install, home theater installation Vancouver, computer repair Vancouver, network setup British Columbia, cable management Vancouver, in-wall wiring Vancouver, smart lighting Vancouver, Google Home setup Vancouver, Alexa installation Vancouver, Ring doorbell install, Sonos setup Vancouver, surround sound installation, furniture assembly Vancouver, deep cleaning Vancouver, move-in cleaning Vancouver, move-out cleaning, home automation Vancouver, tech support Vancouver, same-day handyman Vancouver, emergency TV mount, professional installer Vancouver, home technology services British Columbia, affordable handyman near me, best TV mounting service Vancouver East, TV mounting Vancouver West, TV mounting Burnaby, TV mounting Richmond, Burnaby handyman, Surrey smart home, Coquitlam cleaning service, Richmond home setup, Langley technician, Abbotsford TV mounting, North Vancouver home services" />
         <link rel="canonical" href="https://homesetupsolutions.ca" />
-        <meta property="og:title" content="Home Setup Solutions | Calgary TV Mounting & Smart Home Installation" />
-        <meta property="og:description" content="Professional TV mounting, smart home, WiFi, security camera, and handyman services in Calgary. Online booking available 24/7." />
+        <meta property="og:title" content="Home Setup Solutions | Vancouver TV Mounting & Smart Home Installation" />
+        <meta property="og:description" content="Professional TV mounting, smart home, WiFi, security camera, and handyman services in Vancouver. Online booking available 24/7." />
         <meta property="og:url" content="https://homesetupsolutions.ca" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="en_CA" />
-        <meta name="twitter:title" content="Home Setup Solutions | Calgary Home Tech Installers" />
-        <meta name="twitter:description" content="TV mounting, smart home, WiFi & security camera installation in Calgary. Book online 24/7." />
+        <meta name="twitter:title" content="Home Setup Solutions | Vancouver Home Tech Installers" />
+        <meta name="twitter:description" content="TV mounting, smart home, WiFi & security camera installation in Vancouver. Book online 24/7." />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "LocalBusiness",
           "name": "Home Setup Solutions",
-          "description": "Professional home technology installation services in Calgary. TV mounting, smart home setup, WiFi, security cameras, handyman and cleaning.",
+          "description": "Professional home technology installation services in Vancouver. TV mounting, smart home setup, WiFi, security cameras, handyman and cleaning.",
           "url": "https://homesetupsolutions.ca",
           "telephone": "+15878994357",
           "email": "admin@homesetupsolutions.ca",
           "address": {
             "@type": "PostalAddress",
-            "addressLocality": "Calgary",
-            "addressRegion": "AB",
+            "addressLocality": "Vancouver",
+            "addressRegion": "BC",
             "addressCountry": "CA"
           },
           "geo": {
             "@type": "GeoCoordinates",
-            "latitude": "51.0447",
-            "longitude": "-114.0719"
+            "latitude": "49.2827",
+            "longitude": "-123.1207"
           },
           "areaServed": [
-            { "@type": "City", "name": "Calgary" },
-            { "@type": "City", "name": "Airdrie" },
-            { "@type": "City", "name": "Cochrane" },
-            { "@type": "City", "name": "Okotoks" },
-            { "@type": "City", "name": "Chestermere" },
-            { "@type": "City", "name": "High River" },
-            { "@type": "City", "name": "Canmore" },
-            { "@type": "City", "name": "Banff" }
+            { "@type": "City", "name": "Vancouver" },
+            { "@type": "City", "name": "Burnaby" },
+            { "@type": "City", "name": "Surrey" },
+            { "@type": "City", "name": "Coquitlam" },
+            { "@type": "City", "name": "Richmond" },
+            { "@type": "City", "name": "Langley" },
+            { "@type": "City", "name": "Abbotsford" },
+            { "@type": "City", "name": "North Vancouver" }
           ],
           "openingHoursSpecification": {
             "@type": "OpeningHoursSpecification",
@@ -94,7 +94,7 @@ const Index = () => {
           "@context": "https://schema.org",
           "@type": "FAQPage",
           "mainEntity": [
-            {"@type": "Question", "name": "What areas do you service?", "acceptedAnswer": {"@type": "Answer", "text": "We provide services throughout Calgary and all communities within a 150 km radius, including Airdrie, Cochrane, Chestermere, Okotoks, High River, Canmore, Banff, and nearby areas."}},
+            {"@type": "Question", "name": "What areas do you service?", "acceptedAnswer": {"@type": "Answer", "text": "We provide services throughout Vancouver and all communities within a 150 km radius, including Burnaby, Surrey, Richmond, Coquitlam, North Vancouver, Langley, Abbotsford, and nearby areas."}},
             {"@type": "Question", "name": "How do I book an appointment?", "acceptedAnswer": {"@type": "Answer", "text": "You can book an appointment through our online booking system by clicking Book Now on our website. You can also call us at 1-833-230-2933 or text 1-587-899-4357."}},
             {"@type": "Question", "name": "What is your cancellation policy?", "acceptedAnswer": {"@type": "Answer", "text": "We require 24 hours notice for cancellations. Cancellations made with less than 24 hours notice may incur a $40 cancellation fee."}},
             {"@type": "Question", "name": "Do you provide warranties on your work?", "acceptedAnswer": {"@type": "Answer", "text": "Yes! We offer a 30-day satisfaction guarantee on all installations. If something isn't right, we'll come back and fix it at no additional charge."}},
