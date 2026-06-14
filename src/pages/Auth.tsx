@@ -181,11 +181,11 @@ export default function Auth() {
   return (
     <>
       <Helmet>
-        <title>{isCustomer ? 'Customer Login | Home Setup Solutions Calgary' : 'Staff Login | Home Setup Solutions'}</title>
+        <title>{isCustomer ? 'Customer Login | Home Setup Solutions Vancouver' : 'Staff Login | Home Setup Solutions'}</title>
         <meta name="description" content={isCustomer 
-          ? "Log in to your Home Setup Solutions customer portal. View appointments, track your installer, and book new services in Calgary." 
+          ? "Log in to your Home Setup Solutions customer portal. View appointments, track your installer, and book new services in Vancouver." 
           : "Staff portal login for Home Setup Solutions team members."} />
-        <meta name="keywords" content="Home Setup Solutions login, customer portal, book appointment Calgary, manage appointments" />
+        <meta name="keywords" content="Home Setup Solutions login, customer portal, book appointment Vancouver, manage appointments" />
       </Helmet>
       
       <div className="min-h-screen bg-background flex items-center justify-center p-4">

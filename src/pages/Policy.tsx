@@ -6,12 +6,12 @@ const Policy = () => {
   return (
     <>
       <Helmet>
-        <title>Privacy Policy & Terms | Home Setup Solutions Calgary</title>
+        <title>Privacy Policy & Terms | Home Setup Solutions Vancouver</title>
         <meta
           name="description"
-          content="Read our privacy policy, terms of service, SMS policy, and cancellation policy for Home Setup Solutions Calgary. 30-day workmanship warranty on all installations."
+          content="Read our privacy policy, terms of service, SMS policy, and cancellation policy for Home Setup Solutions Vancouver. 30-day workmanship warranty on all installations."
         />
-        <meta name="keywords" content="Home Setup Solutions policy, cancellation policy Calgary, privacy policy home services, terms of service handyman Calgary, SMS policy, warranty home installation" />
+        <meta name="keywords" content="Home Setup Solutions policy, cancellation policy Vancouver, privacy policy home services, terms of service handyman Vancouver, SMS policy, warranty home installation" />
         <link rel="canonical" href="https://homesetupsolutions.ca/policy" />
       </Helmet>
       <Layout>

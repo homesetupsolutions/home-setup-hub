@@ -12,8 +12,8 @@ const NotFound = () => {
   return (
     <>
       <Helmet>
-        <title>Page Not Found | Home Setup Solutions Calgary</title>
-        <meta name="description" content="This page doesn't exist. Visit Home Setup Solutions for TV mounting, smart home installation, and handyman services in Calgary." />
+        <title>Page Not Found | Home Setup Solutions Vancouver</title>
+        <meta name="description" content="This page doesn't exist. Visit Home Setup Solutions for TV mounting, smart home installation, and handyman services in Vancouver." />
         <meta name="robots" content="noindex, follow" />
       </Helmet>
       <div className="flex min-h-screen items-center justify-center bg-muted">

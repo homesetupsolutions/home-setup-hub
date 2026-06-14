@@ -216,9 +216,9 @@ export function HeroSection() {
             transition={{ duration: 1, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
             className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 md:mb-16 leading-relaxed"
           >
-            Calgary's trusted experts for TV mounting, smart home installation, WiFi setup, 
+            Vancouver's trusted experts for TV mounting, smart home installation, WiFi setup, 
             security cameras, home theater, handyman services, and professional cleaning. 
-            Serving Calgary, Airdrie, Cochrane, Okotoks &amp; surrounding areas.
+            Serving Vancouver, Burnaby, Surrey, Richmond &amp; surrounding areas.
           </motion.p>
 
           <motion.div

@@ -10,7 +10,7 @@ import {
 const faqs = [
   {
     question: "What areas do you service?",
-    answer: "We provide services throughout Calgary and all communities within a 150 km radius, including Airdrie, Cochrane, Chestermere, Okotoks, High River, Canmore, Banff, and nearby areas. For locations outside our service area, please contact us to discuss options.",
+    answer: "We provide services throughout Vancouver and all communities within a 150 km radius, including Burnaby, Surrey, Richmond, Coquitlam, North Vancouver, Langley, Abbotsford, and nearby areas. For locations outside our service area, please contact us to discuss options.",
   },
   {
     question: "How do I book an appointment?",
