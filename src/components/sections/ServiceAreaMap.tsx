@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { MapPin, Check, Phone } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { serviceCities } from "@/data/serviceCities";
 
 const serviceAreas = [
   {
@@ -177,6 +179,20 @@ export function ServiceAreaMap() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center mt-12"
         >
+          <div className="mb-10">
+            <p className="text-sm uppercase tracking-wider text-muted-foreground mb-3">Dedicated city pages</p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {serviceCities.map((c) => (
+                <Link
+                  key={c.slug}
+                  to={`/service-areas/${c.slug}`}
+                  className="px-4 py-2 rounded-full glass-card text-sm hover:text-primary transition-colors"
+                >
+                  {c.name}, BC
+                </Link>
+              ))}
+            </div>
+          </div>
           <p className="text-lg font-medium text-foreground mb-2">
             Don't see your area? We may still be able to help!
           </p>
