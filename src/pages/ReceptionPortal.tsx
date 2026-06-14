@@ -209,7 +209,7 @@ export default function ReceptionPortal() {
                   </div>
                   <div className="flex items-center gap-2">
                     <MessageSquare className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium">Text: 1-587-899-HELP (4357)</span>
+                    <span className="text-sm font-medium">Text: 1-672-965-8555</span>
                   </div>
                   <a href="/docs/call_script.zip" download>
                     <Button variant="outline" size="sm" className="gap-2">
@@ -281,7 +281,7 @@ export default function ReceptionPortal() {
         <footer className="border-t py-6 mt-auto">
           <div className="container mx-auto px-4">
             <p className="text-center text-sm text-muted-foreground">
-              Home Setup Solutions Reception Portal • Main: 1-833-230-2933 • Text: 1-587-899-HELP (4357)
+              Home Setup Solutions Reception Portal • Main: 1-833-230-2933 • Text: 1-672-965-8555
             </p>
           </div>
         </footer>

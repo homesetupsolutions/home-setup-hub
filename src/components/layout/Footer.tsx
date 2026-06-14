@@ -113,13 +113,13 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="sms:15878994357"
+                  href="sms:16729658555"
                   className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-all duration-300 group"
                 >
                   <div className="w-10 h-10 rounded-xl glass flex items-center justify-center group-hover:border-primary/40 transition-all duration-300">
                     <MessageSquare className="w-5 h-5" />
                   </div>
-                  <span>Text: 1-587-899-HELP (4357)</span>
+                  <span>Text: 1-672-965-8555</span>
                 </a>
               </li>
               <li>

@@ -25,7 +25,7 @@ const ServiceArea = () => {
     name: `Home Setup Solutions — ${city.name}`,
     description,
     url,
-    telephone: "+15878994357",
+    telephone: "+16729658555",
     email: "admin@homesetupsolutions.ca",
     address: {
       "@type": "PostalAddress",

@@ -40,7 +40,7 @@ const Index = () => {
           "name": "Home Setup Solutions",
           "description": "Professional home technology installation services in Vancouver. TV mounting, smart home setup, WiFi, security cameras, handyman and cleaning.",
           "url": "https://homesetupsolutions.ca",
-          "telephone": "+15878994357",
+          "telephone": "+16729658555",
           "email": "admin@homesetupsolutions.ca",
           "address": {
             "@type": "PostalAddress",
@@ -95,7 +95,7 @@ const Index = () => {
           "@type": "FAQPage",
           "mainEntity": [
             {"@type": "Question", "name": "What areas do you service?", "acceptedAnswer": {"@type": "Answer", "text": "We provide services throughout Vancouver and all communities within a 150 km radius, including Burnaby, Surrey, Richmond, Coquitlam, North Vancouver, Langley, Abbotsford, and nearby areas."}},
-            {"@type": "Question", "name": "How do I book an appointment?", "acceptedAnswer": {"@type": "Answer", "text": "You can book an appointment through our online booking system by clicking Book Now on our website. You can also call us at 1-833-230-2933 or text 1-587-899-4357."}},
+            {"@type": "Question", "name": "How do I book an appointment?", "acceptedAnswer": {"@type": "Answer", "text": "You can book an appointment through our online booking system by clicking Book Now on our website. You can also call us at 1-833-230-2933 or text 1-672-965-8555."}},
             {"@type": "Question", "name": "What is your cancellation policy?", "acceptedAnswer": {"@type": "Answer", "text": "We require 24 hours notice for cancellations. Cancellations made with less than 24 hours notice may incur a $40 cancellation fee."}},
             {"@type": "Question", "name": "Do you provide warranties on your work?", "acceptedAnswer": {"@type": "Answer", "text": "Yes! We offer a 30-day satisfaction guarantee on all installations. If something isn't right, we'll come back and fix it at no additional charge."}},
             {"@type": "Question", "name": "What payment methods do you accept?", "acceptedAnswer": {"@type": "Answer", "text": "We accept all major credit cards (Visa, Mastercard, American Express), debit cards, e-transfer, and cash."}},
