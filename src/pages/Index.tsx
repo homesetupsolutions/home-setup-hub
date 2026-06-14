@@ -50,8 +50,8 @@ const Index = () => {
           },
           "geo": {
             "@type": "GeoCoordinates",
-            "latitude": "51.0447",
-            "longitude": "-114.0719"
+            "latitude": "49.2827",
+            "longitude": "-123.1207"
           },
           "areaServed": [
             { "@type": "City", "name": "Vancouver" },
