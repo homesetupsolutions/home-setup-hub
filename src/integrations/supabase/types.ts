@@ -53,6 +53,7 @@ export type Database = {
           id: string
           is_pinned: boolean
           messages: Json
+          region: string
           skill: string
           summary: string | null
           title: string | null
@@ -64,6 +65,7 @@ export type Database = {
           id?: string
           is_pinned?: boolean
           messages?: Json
+          region?: string
           skill?: string
           summary?: string | null
           title?: string | null
@@ -75,6 +77,7 @@ export type Database = {
           id?: string
           is_pinned?: boolean
           messages?: Json
+          region?: string
           skill?: string
           summary?: string | null
           title?: string | null
@@ -90,6 +93,7 @@ export type Database = {
           created_at: string
           id: string
           is_active: boolean
+          region: string
           tags: string[] | null
           title: string
           updated_at: string
@@ -101,6 +105,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
+          region?: string
           tags?: string[] | null
           title: string
           updated_at?: string
@@ -112,6 +117,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
+          region?: string
           tags?: string[] | null
           title?: string
           updated_at?: string
@@ -126,6 +132,7 @@ export type Database = {
           id: string
           importance: number
           memory: string
+          region: string
           user_id: string
         }
         Insert: {
@@ -134,6 +141,7 @@ export type Database = {
           id?: string
           importance?: number
           memory: string
+          region?: string
           user_id: string
         }
         Update: {
@@ -142,6 +150,7 @@ export type Database = {
           id?: string
           importance?: number
           memory?: string
+          region?: string
           user_id?: string
         }
         Relationships: []
@@ -157,6 +166,7 @@ export type Database = {
           duration_minutes: number
           id: string
           notes: string | null
+          region: string
           reminder_hour_sent: boolean | null
           reminder_morning_sent: boolean | null
           scheduled_at: string
@@ -177,6 +187,7 @@ export type Database = {
           duration_minutes?: number
           id?: string
           notes?: string | null
+          region?: string
           reminder_hour_sent?: boolean | null
           reminder_morning_sent?: boolean | null
           scheduled_at: string
@@ -197,6 +208,7 @@ export type Database = {
           duration_minutes?: number
           id?: string
           notes?: string | null
+          region?: string
           reminder_hour_sent?: boolean | null
           reminder_morning_sent?: boolean | null
           scheduled_at?: string
@@ -220,6 +232,7 @@ export type Database = {
           id: string
           notes: string | null
           phone_number: string
+          region: string
           status: string
           user_id: string
         }
@@ -233,6 +246,7 @@ export type Database = {
           id?: string
           notes?: string | null
           phone_number: string
+          region?: string
           status?: string
           user_id: string
         }
@@ -246,6 +260,7 @@ export type Database = {
           id?: string
           notes?: string | null
           phone_number?: string
+          region?: string
           status?: string
           user_id?: string
         }
@@ -339,6 +354,7 @@ export type Database = {
           full_name: string | null
           id: string
           phone: string | null
+          region: string
           updated_at: string
           user_id: string
         }
@@ -349,6 +365,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone?: string | null
+          region?: string
           updated_at?: string
           user_id: string
         }
@@ -359,6 +376,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone?: string | null
+          region?: string
           updated_at?: string
           user_id?: string
         }
