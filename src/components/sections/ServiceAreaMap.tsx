@@ -5,33 +5,33 @@ import { Button } from "@/components/ui/button";
 
 const serviceAreas = [
   {
-    region: "NW Calgary",
-    cities: ["Brentwood", "Bowness", "Tuscany", "Varsity", "Dalhousie", "Edgemont", "Hamptons", "Scenic Acres"],
+    region: "Vancouver & North Shore",
+    cities: ["Downtown", "Kitsilano", "Mount Pleasant", "Kerrisdale", "Dunbar", "North Vancouver", "West Vancouver", "Lions Bay"],
     featured: true,
   },
   {
-    region: "NE Calgary",
-    cities: ["Bridgeland", "Renfrew", "Marlborough", "Saddle Ridge", "Skyview Ranch", "Cityscape", "Cornerstone"],
+    region: "Burnaby & Tri-Cities",
+    cities: ["Burnaby", "New Westminster", "Coquitlam", "Port Coquitlam", "Port Moody", "Anmore", "Belcarra"],
     featured: true,
   },
   {
-    region: "SW Calgary",
-    cities: ["Marda Loop", "Altadore", "Mount Royal", "Killarney", "Aspen Woods", "Signal Hill", "Springbank Hill"],
+    region: "Richmond & South Delta",
+    cities: ["Richmond", "Steveston", "Delta", "Ladner", "Tsawwassen"],
     featured: true,
   },
   {
-    region: "SE Calgary",
-    cities: ["Inglewood", "Mahogany", "Auburn Bay", "McKenzie Towne", "Copperfield", "New Brighton", "Cranston"],
+    region: "Surrey & South Fraser",
+    cities: ["Surrey", "White Rock", "Cloverdale", "Langley City", "Langley Township", "South Surrey"],
     featured: true,
   },
   {
-    region: "Downtown & Inner City",
-    cities: ["Downtown", "Beltline", "Mission", "Kensington", "Sunnyside", "Eau Claire", "Victoria Park"],
+    region: "Fraser Valley",
+    cities: ["Maple Ridge", "Pitt Meadows", "Mission", "Abbotsford", "Chilliwack", "Agassiz", "Hope"],
     featured: true,
   },
   {
-    region: "Surrounding Communities",
-    cities: ["Airdrie", "Cochrane", "Chestermere", "Okotoks", "High River", "Strathmore", "Crossfield"],
+    region: "Sea-to-Sky & Sunshine Coast",
+    cities: ["Squamish", "Whistler", "Bowen Island", "Gibsons", "Sechelt"],
     featured: true,
   },
 ];
@@ -57,7 +57,7 @@ export function ServiceAreaMap() {
             Service <span className="text-gradient-orange">Areas</span>
           </h2>
           <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            We proudly serve Calgary and all communities within a 150 km radius. Check if we're in your area!
+            Proudly serving Metro Vancouver, the Fraser Valley, Sea-to-Sky and the Sunshine Coast — every Canadian community within a 150 km radius. Check if we're in your area!
           </p>
         </motion.div>
 
