@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     question: "How do I book an appointment?",
-    answer: "You can book an appointment through our online booking system by clicking 'Book Now' on our website. You can also call us at 1-833-230-2933 or text 1-587-899-4357. We offer flexible scheduling including evenings and weekends.",
+    answer: "You can book an appointment through our online booking system by clicking 'Book Now' on our website. You can also call us at 1-833-230-2933 or text 1-672-965-8555. We offer flexible scheduling including evenings and weekends.",
   },
   {
     question: "What is your cancellation policy?",

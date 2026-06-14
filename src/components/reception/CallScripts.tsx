@@ -102,7 +102,7 @@ const INCOMING_SCRIPT = [
   {
     step: 8,
     title: "Closing",
-    script: "You're all set! You'll receive a confirmation text shortly. Feel free to text us at 1-587-899-HELP (4357) if you have any questions. Have a great day!",
+    script: "You're all set! You'll receive a confirmation text shortly. Feel free to text us at 1-672-965-8555 if you have any questions. Have a great day!",
     responses: ["Goodbye"],
     nextStep: { "Goodbye": -3 }
   }
