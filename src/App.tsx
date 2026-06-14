@@ -17,6 +17,7 @@ import CustomerPortal from "./pages/CustomerPortal";
 import ReceptionPortal from "./pages/ReceptionPortal";
 import SupervisorPortal from "./pages/SupervisorPortal";
 import AmazonWishlist from "./pages/AmazonWishlist";
+import ServiceArea from "./pages/ServiceArea";
 import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
               <Route path="/reception" element={<ReceptionPortal />} />
               <Route path="/supervisor" element={<SupervisorPortal />} />
               <Route path="/wishlist" element={<AmazonWishlist />} />
+              <Route path="/service-areas/:slug" element={<ServiceArea />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
