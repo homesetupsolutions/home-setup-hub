@@ -554,7 +554,27 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      assigned_staff_locations: {
+        Row: {
+          current_location: Json | null
+          id: string | null
+          location_updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          current_location?: Json | null
+          id?: string | null
+          location_updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          current_location?: Json | null
+          id?: string | null
+          location_updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_user_role: {
