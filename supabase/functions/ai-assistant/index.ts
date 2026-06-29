@@ -264,7 +264,7 @@ serve(async (req) => {
         .eq("is_active", true).order("display_order");
 
       const { data: staffDetails } = await supabase.from("staff_details")
-        .select("user_id, is_active, hourly_rate").eq("is_active", true);
+        .select("user_id, is_active").eq("is_active", true);
 
       if (appointments?.length) {
         fullContext += "\n\n═══════════════════════════════════════\n📅 APPOINTMENTS\n═══════════════════════════════════════\n";
