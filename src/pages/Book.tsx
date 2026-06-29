@@ -165,7 +165,7 @@ const Book = () => {
                 className="inline-flex items-center gap-2 bg-background text-foreground px-6 py-3 rounded-lg font-medium hover:bg-background/90 transition-colors"
               >
                 <Phone className="w-5 h-5" />
-                (672) 965-8555
+                (778) 989-4357
               </a>
               <a
                 href="mailto:admin@homesetupsolutions.ca"
