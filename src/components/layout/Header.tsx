@@ -154,11 +154,11 @@ export function Header() {
                   <span>1-833-230-2933</span>
                 </a>
                 <a
-                  href="sms:16729658555"
+                  href="sms:17789894357"
                   className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:text-primary"
                 >
                   <MessageSquare className="w-5 h-5" />
-                  <span>Text: 1-672-965-8555</span>
+                  <span>Text: 1-778-989-4357</span>
                 </a>
                 
                 {/* Mobile Login Buttons */}

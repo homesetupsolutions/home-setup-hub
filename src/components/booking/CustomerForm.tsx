@@ -81,7 +81,7 @@ export function CustomerForm({ customerInfo, onChange }: CustomerFormProps) {
             type="tel"
             value={customerInfo.phone}
             onChange={(e) => handleChange('phone', e.target.value)}
-            placeholder="(672) 965-8555"
+            placeholder="(778) 989-4357"
             required
           />
         </div>
