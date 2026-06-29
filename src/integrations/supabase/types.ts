@@ -421,12 +421,35 @@ export type Database = {
         }
         Relationships: []
       }
+      staff_compensation: {
+        Row: {
+          created_at: string
+          hourly_rate: number | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          hourly_rate?: number | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          hourly_rate?: number | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       staff_details: {
         Row: {
           availability: Json | null
           created_at: string
           current_location: Json | null
-          hourly_rate: number | null
           id: string
           is_active: boolean
           location_updated_at: string | null
@@ -438,7 +461,6 @@ export type Database = {
           availability?: Json | null
           created_at?: string
           current_location?: Json | null
-          hourly_rate?: number | null
           id?: string
           is_active?: boolean
           location_updated_at?: string | null
@@ -450,7 +472,6 @@ export type Database = {
           availability?: Json | null
           created_at?: string
           current_location?: Json | null
-          hourly_rate?: number | null
           id?: string
           is_active?: boolean
           location_updated_at?: string | null
