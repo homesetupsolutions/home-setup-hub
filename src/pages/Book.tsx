@@ -161,7 +161,7 @@ const Book = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a
-                href="tel:+16729658555"
+                href="tel:+17789894357"
                 className="inline-flex items-center gap-2 bg-background text-foreground px-6 py-3 rounded-lg font-medium hover:bg-background/90 transition-colors"
               >
                 <Phone className="w-5 h-5" />

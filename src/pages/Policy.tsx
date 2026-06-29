@@ -143,7 +143,7 @@ const Policy = () => {
                   </p>
                   <ul className="list-none pl-0 space-y-1">
                     <li><strong className="text-foreground">Phone:</strong> 833-230-2933 (Toll Free)</li>
-                    <li><strong className="text-foreground">Text:</strong> 1-672-965-8555</li>
+                    <li><strong className="text-foreground">Text:</strong> 1-778-989-4357</li>
                     <li><strong className="text-foreground">Email:</strong> admin@homesetupsolutions.ca</li>
                   </ul>
                   <p className="text-sm mt-4 border-t border-border pt-4">

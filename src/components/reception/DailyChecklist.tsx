@@ -42,7 +42,7 @@ const DEFAULT_CHECKLIST: Omit<ChecklistItem, 'completed' | 'notes'>[] = [
   // Opening Tasks
   { id: 'check-voicemail', title: 'Check Voicemail', description: 'Review and return any overnight voicemails', category: 'opening', icon: Phone },
   { id: 'check-email', title: 'Check Email Inbox', description: 'Review booking requests and customer inquiries', category: 'opening', icon: Mail },
-  { id: 'check-sms', title: 'Check Text Messages', description: 'Reply to customer texts from 1-672-965-8555', category: 'opening', icon: MessageSquare },
+  { id: 'check-sms', title: 'Check Text Messages', description: 'Reply to customer texts from 1-778-989-4357', category: 'opening', icon: MessageSquare },
   { id: 'review-schedule', title: 'Review Today\'s Schedule', description: 'Review all appointments for the day with staff', category: 'opening', icon: Calendar },
   { id: 'confirm-appointments', title: 'Send Appointment Reminders', description: 'Text/call customers with appointments today', category: 'opening', icon: Bell },
   { id: 'print-schedules', title: 'Print Staff Schedules', description: 'Print daily schedule for each technician', category: 'opening', icon: Printer },

@@ -229,7 +229,7 @@ export function IntegrationsPanel() {
                 <p className="font-medium">SMS / Text Line</p>
                 <p className="text-sm text-muted-foreground">Call Centric</p>
               </div>
-              <p className="font-mono font-bold">1-672-965-8555</p>
+              <p className="font-mono font-bold">1-778-989-4357</p>
             </div>
           </div>
         </CardContent>
